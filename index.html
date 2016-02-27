@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Packaging Script from C</title>
+	</head>
+	<body>
+		<div id="box-input-screen" style="position:relative;">
+			<div id="box-input-screen-header">
+				<h3>Boxes <button onclick="addBoxInputs()">Add New Box Type</button></h3>
+			</div>
+			<div class="box-inputs">
+				<input placeholder="lbl" name="lbl" value="box1" />
+				<input placeholder="dim1" name="dim1" value="1" />
+				<input placeholder="dim2" name="dim2" value="2" />
+				<input placeholder="dim3" name="dim3" value="3" />
+				<input placeholder="boxn" name="boxn" value="1" />
+			</div>
+		</div>
+		<hr />
+		<div id="main_box_dimensions">
+			<button onclick="main();">Calculate</button>
+			<label>Container X: </label><input id="strxx" placeholder="strxx" value="1" />
+			<label>Container Y: </label><input id="stryy" placeholder="stryy" value="3" />
+			<label>Container Z: </label><input id="strzz" placeholder="strzz" value="3" />
+		</div>
+		<hr />
+		<div id="output" style="min-width:670px;">
+			<div>Report</div>
+			<textarea id="screen" style="min-width:670px;min-height:300px;padding:10px;"></textarea>
+		</div>
+		<script src="pack1.js"></script>
+		<script>
+			var addBoxInputs = (function(){
+				var scr = document.getElementById('box-input-screen');
+				var inputNames = ['lbl', 'dim1', 'dim2', 'dim3', 'boxn'];
+
+				return function(){
+					var boxInputs = document.createElement('div');
+						boxInputs.classList.add('box-inputs');
+					inputNames.forEach(function(a,b){
+						var inp = document.createElement('input');
+							inp.setAttribute('placeholder', a);
+							inp.setAttribute('name', a);
+						boxInputs.appendChild(inp);
+					});
+					scr.appendChild(boxInputs);
+				};
+			}());
+		</script>
+	</body>
+</html>

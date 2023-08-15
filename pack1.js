@@ -840,7 +840,9 @@ var findsmallestz = function(){
 	scrapmemb = scrapfirst;
 	smallestz = scrapmemb;
 
-	while ( !scrapmemb.pos == null ){
+	//Fix overlapping issure. The solution is provided by luenib (https://github.com/luenib). For more details please check: https://github.com/keremdemirer/3dbinpackingjs/issues/3#issuecomment-318681140
+	//while ( !scrapmemb.pos == null ){
+	while (scrapmemb.pos != null) {	
     	if ( scrapmemb.pos.cumz < smallestz.cumz ){
 			smallestz = scrapmemb.pos;
     	}
@@ -970,7 +972,8 @@ var graphunpackedout = function()
   var n = "";
   if (!unpacked)
   {
-    strox = boxlist[cboxi].cox;
+    //strox = boxlist[cboxi].cox;
+    strcox = boxlist[cboxi].cox; //The fix is provided by luenib (https://github.com/luenib). For more details please check: https://github.com/keremdemirer/3dbinpackingjs/issues/3#issuecomment-318681140
     strcoy = boxlist[cboxi].coy;
     strcoz = boxlist[cboxi].coz;
     strpackx = boxlist[cboxi].packx;
@@ -1140,7 +1143,7 @@ var report = function(){
 	packedy = 0;
 	packing = 1;
 
-// layerthickness = layers[bestite].layerdim;
+ layerthickness = layers[bestite].layerdim;
 	remainpy = py;
 	remainpz = pz;
 
@@ -1184,10 +1187,12 @@ var report = function(){
 	}
 	unpacked = 0;
 
-	printf("\n");
+	
+	printf("\n\n *** DETAILS OF THE PACKED ***\n");
+	printf("no","|", "dim1", "dim2", "dim3", "|","COORD_X", "COORD_Y", "COORD_Z", "|","PACK_DIM1", "PACK_DIM2","PACK_DIM3");
 	for (n = 1; n <= tbn; n++) {
     	if (boxlist[n].packst) {
-    		printf(n, boxlist[n].dim1, boxlist[n].dim2, boxlist[n].dim3, boxlist[n].cox, boxlist[n].coy, boxlist[n].coz, boxlist[n].packx, boxlist[n].packy, boxlist[n].packz);
+    		printf(n, "|", boxlist[n].dim1, boxlist[n].dim2, boxlist[n].dim3, "|",boxlist[n].cox, boxlist[n].coy, boxlist[n].coz, "|", boxlist[n].packx, boxlist[n].packy, boxlist[n].packz);
     	}
 	}
 	printf("TOTAL NUMBER OF ITERATIONS DONE    :", itenum);

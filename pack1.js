@@ -98,6 +98,7 @@ function boxinfo(){
   	this.vol = null;
 };
 
+var bestboxes = [];
 var boxlist = new Array();
 boxlist[0] = new boxinfo();
 
@@ -127,10 +128,10 @@ Compability functions for converting from C to Javascript by Can Bayraktar
 // Console replacement (also console.log can be used)
 var sc = document.getElementById('screen');
 var printf = function(){
-	for(i = 0; i < arguments.length; i+=1){
-		sc.innerHTML += arguments[i] + ' ';
+	for(var i = 0; i < arguments.length; i+=1){
+		sc.value += arguments[i] + ' ';
 	}
-	sc.innerHTML += '\n';
+	sc.value += '\n';
 }
 
 // Ascii to integer
@@ -179,7 +180,13 @@ var qsort = function(items, left, right) {
 //********************************************************
 
 function main(){
-	initialize(); 		console.log("initialized.");
+	try {
+		initialize();
+	} catch (error) {
+		sc.value = error.message;
+		return 1;
+	}
+	console.log("initialized.");
 	execiterations(); 	console.log("execiterations done.");
 	report();			console.log("report printed.");
 	return 0;
@@ -193,11 +200,11 @@ var initialize = function(){
 	inputboxlist();
 
 	temp = 1.0;
-	totalvolume = temp * xx * yy * zz;
+	totalvolume = positiveNumber(temp * xx * yy * zz, "Container volume");
 
 	totalboxvol = 0.0;
 	for (x=1; x <= tbn; x++) {
-	totalboxvol = totalboxvol + boxlist[x].vol;
+	totalboxvol = positiveNumber(totalboxvol + boxlist[x].vol, "Total box volume");
 	}
 
 	scrapfirst = new scrappad();
@@ -205,6 +212,11 @@ var initialize = function(){
 	scrapfirst.pre = null;
 	scrapfirst.pos = null;
 	bestvolume = 0.0;
+	bestpackednum = 0;
+	bestvariant = 1;
+	bestite = 0;
+	percentageused = 0;
+	bestboxes = boxlist.map(copybox);
 	packingbest = 0;
 	hundredpercent = 0;
 	itenum = 0;
@@ -216,6 +228,21 @@ var initialize = function(){
 // READS THE PALLET AND BOX SET DATA ENTERED BY THE USER FROM
 // THE INPUT FILE
 //**********************************************************************
+
+// Copy values rather than inheriting mutable packing state from another item.
+var copybox = function(box){
+	var copy = new boxinfo();
+	Object.keys(copy).forEach(function(key){ copy[key] = box[key]; });
+	return copy;
+};
+
+var positiveNumber = function(value, name){
+	var number = Number(value);
+	if (!Number.isFinite(number) || number <= 0) {
+		throw new Error(name + ' must be a positive finite number.');
+	}
+	return number;
+};
 
 var inputboxlist = function(){
 	var n,
@@ -229,29 +256,31 @@ var inputboxlist = function(){
 		strzz = "";
 
 	tbn = 1;
+	boxlist = [new boxinfo()];
 
 	strxx = document.getElementById("strxx").value;
     stryy = document.getElementById("stryy").value;
 	strzz = document.getElementById("strzz").value;
 
-	xx = atoi(strxx);
-	yy = atoi(stryy);
-	zz = atoi(strzz);
+	xx = positiveNumber(strxx, "Container X");
+	yy = positiveNumber(stryy, "Container Y");
+	zz = positiveNumber(strzz, "Container Z");
 
 	var bi = document.getElementsByClassName('box-inputs');
 
 	for(i = 0; i < bi.length; i+=1){
 		boxlist[tbn] = new boxinfo();
-		boxlist[tbn].dim1 = atoi(bi[i].children.dim1.value);
-		boxlist[tbn].dim2 = atoi(bi[i].children.dim2.value);
-		boxlist[tbn].dim3 = atoi(bi[i].children.dim3.value);
+		boxlist[tbn].dim1 = positiveNumber(bi[i].children.dim1.value, "Box dim1");
+		boxlist[tbn].dim2 = positiveNumber(bi[i].children.dim2.value, "Box dim2");
+		boxlist[tbn].dim3 = positiveNumber(bi[i].children.dim3.value, "Box dim3");
 
-		boxlist[tbn].vol = boxlist[tbn].dim1 * boxlist[tbn].dim2 * boxlist[tbn].dim3;
-		n = atoi(bi[i].children.boxn.value);
+		boxlist[tbn].vol = positiveNumber(boxlist[tbn].dim1 * boxlist[tbn].dim2 * boxlist[tbn].dim3, "Box volume");
+		n = positiveNumber(bi[i].children.boxn.value, "Box quantity");
+		if (!Number.isSafeInteger(n)) throw new Error('Box quantity must be a positive safe integer.');
 		boxlist[tbn].n = n;
 
 		for(j = 1; j < n; j+=1){
-			boxlist[tbn+j] = Object.create(boxlist[tbn]);
+			boxlist[tbn+j] = copybox(boxlist[tbn]);
 		}
 		tbn += n;
 	}
@@ -350,6 +379,7 @@ var execiterations = function(){
 	        	bestvariant = variant;
 	        	bestite = itelayer;
 	        	bestpackednum = packednumbox;
+				bestboxes = boxlist.map(copybox);
 	    	}
 
 	    	if (hundredpercent) break;
@@ -371,6 +401,7 @@ var listcanditlayers = function(){
 		layereval;
 
 		layerlistlen = 0;
+		layers = [new layerlist()];
 
 	for (x = 1; x <= tbn; x++){
 		for(y = 1; y <= 3; y++){
@@ -587,8 +618,8 @@ var packlayer = function(){
 				}
 			} else if ( smallestz.pre.cumx < px - smallestz.cumx ) {
 				if ( smallestz.cumz + cboxz == smallestz.pre.cumz) {
-					smallestz.cumx = smallestz.cumx - cboxx;
 					boxlist[cboxi].cox = smallestz.cumx - cboxx;
+					smallestz.cumx = smallestz.cumx - cboxx;
 				} else {
 					boxlist[cboxi].cox = smallestz.pre.cumx;
 					smallestz.pre.pos = new scrappad();
@@ -601,8 +632,8 @@ var packlayer = function(){
         		}
 			} else {
         		if ( smallestz.cumz + cboxz == smallestz.pre.cumz ) {
-					smallestz.pre.cumx = smallestz.pre.cumx + cboxx;
 					boxlist[cboxi].cox = smallestz.pre.cumx;
+					smallestz.pre.cumx = smallestz.pre.cumx + cboxx;
         		} else {
 					boxlist[cboxi].cox = smallestz.cumx - cboxx;
 					smallestz.pos.pre = new scrappad();
@@ -671,7 +702,7 @@ var findlayer = function( thickness )
    var exdim, dimdif, dimen2, dimen3, y, z;
   var layereval, eval;
   layerthickness = 0;
-  eval = 1000000;
+  eval = Infinity;
   for (x=1; x <= tbn; x++)
   {
     if (boxlist[x].packst) continue;
@@ -734,17 +765,16 @@ var findlayer = function( thickness )
 var findbox = function( hmx,  hy,  hmy,  hz,  hmz)
 {
    var y;
-  bfx = 32767; bfy = 32767; bfz = 32767;
-  bbfx = 32767; bbfy = 32767; bbfz = 32767;
+  bfx = Infinity; bfy = Infinity; bfz = Infinity;
+  bbfx = Infinity; bbfy = Infinity; bbfz = Infinity;
   boxi = 0; bboxi = 0;
   for (y = 1; y <= tbn; y = y + boxlist[y].n)
   {
-    for (x = y; x < x + boxlist[y].n - 1; x++)
+    for (x = y; x < y + boxlist[y].n; x++)
     {
       if (!boxlist[x].packst) break;
     }
-    if (boxlist[x].packst) continue;
-    if (x > tbn) return;
+    if (x >= y + boxlist[y].n || x > tbn) continue;
     analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim1, boxlist[x].dim2, boxlist[x].dim3);
     if ( (boxlist[x].dim1 == boxlist[x].dim3) && (boxlist[x].dim3 == boxlist[x].dim2) ) continue;
     analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim1, boxlist[x].dim3, boxlist[x].dim2);
@@ -840,7 +870,7 @@ var findsmallestz = function(){
 	scrapmemb = scrapfirst;
 	smallestz = scrapmemb;
 
-	while ( !scrapmemb.pos == null ){
+	while (scrapmemb.pos != null){
     	if ( scrapmemb.pos.cumz < smallestz.cumz ){
 			smallestz = scrapmemb.pos;
     	}
@@ -970,7 +1000,7 @@ var graphunpackedout = function()
   var n = "";
   if (!unpacked)
   {
-    strox = boxlist[cboxi].cox;
+    strcox = boxlist[cboxi].cox;
     strcoy = boxlist[cboxi].coy;
     strcoz = boxlist[cboxi].coz;
     strpackx = boxlist[cboxi].packx;
@@ -1085,7 +1115,7 @@ var outputboxlist = function()
 
 
 //*******************************************************************
-// USING THE PARAMETERS FOUND, PACKS THE BEST SOLUTION FOUND
+// RESTORES THE BEST SOLUTION FOUND
 // AND REPORS TO THE CONSOLE AND TO A TEXT FILE
 //*******************************************************************
 
@@ -1117,10 +1147,10 @@ var report = function(){
 	strpy = py;
 	strpz = pz;
 
-	percentagepackedbox = bestvolume * 100 / totalboxvol;
+	percentagepackedbox = totalboxvol ? bestvolume * 100 / totalboxvol : 0;
 	percentageused = bestvolume * 100 / totalvolume;
 
-	sc.innerHTML = "";
+	sc.value = "";
 	printf("TOTAL NUMBER OF ITERATIONS DONE                       :", itenum);
 	printf("BEST SOLUTION FOUND AT ITERATION                      :", bestite, "OF VARIANT", bestvariant);
 	printf("TOTAL NUMBER OF BOXES                                 :", tbn);
@@ -1133,46 +1163,16 @@ var report = function(){
 	printf("WHILE PALLET ORIENTATION X - Y - Z                    :", px, py, pz);
 	printf("---------------------------------------------------------------------------------------------\n");
 
-	listcanditlayers();
-	layers[0].layereval= -1;
-	qsort(layers);
-	packedvolume = 0.0;
-	packedy = 0;
-	packing = 1;
-
-// layerthickness = layers[bestite].layerdim;
-	remainpy = py;
-	remainpz = pz;
-
-	for (x = 1; x <= tbn; x++){
-    	boxlist[x].packst = 0;
+	// Report the saved winner; replaying can diverge from the searched solution.
+	boxlist = bestboxes.map(copybox);
+	packedvolume = bestvolume;
+	packednumbox = bestpackednum;
+	for (cboxi = 1; cboxi <= tbn; cboxi++) {
+		if (boxlist[cboxi].packst) {
+			graphunpackedout();
+			outputboxlist();
+		}
 	}
-
-	do {
-	    layerinlayer = 0;
-	    layerdone = 0;
-	    packlayer();
-	    packedy = packedy + layerthickness;
-	    remainpy = py - packedy;
-
-		if (layerinlayer) {
-			prepackedy = packedy;
-			preremainpy = remainpy;
-			remainpy = layerthickness - prelayer;
-			packedy = packedy - layerthickness + prelayer;
-			remainpz = lilz;
-			layerthickness = layerinlayer;
-			layerdone = 0;
-			packlayer();
-			packedy = prepackedy;
-			remainpy = preremainpy;
-			remainpz = pz;
-    	}
-
-		if (!quit) {
-    		findlayer(remainpy);
-    	}
-  	} while (packing && !quit);
 
 	printf("\n\n *** LIST OF UNPACKED BOXES ***\n");
 	unpacked = 1;
@@ -1196,7 +1196,7 @@ var report = function(){
 	printf("PACKED NUMBER OF BOXES             :", bestpackednum);
 	printf("TOTAL VOLUME OF ALL BOXES          :", totalboxvol);
 	printf("PALLET VOLUME                      :",totalvolume);
-	printf("BEST SOLUTION'S VOLUME UTILIZATION : "+bestvolume+" OUT OF", bestvolume, totalvolume);
+	printf("BEST SOLUTION'S VOLUME UTILIZATION : "+bestvolume+" OUT OF", totalvolume);
 	printf("PERCENTAGE OF PALLET VOLUME USED   :", percentageused);
 	printf("PERCENTAGE OF PACKEDBOXES (VOLUME) :", percentagepackedbox);
 	printf("WHILE PALLET ORIENTATION           : X="+px+"; Y="+py+"; Z="+pz);

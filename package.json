@@ -31,7 +31,8 @@
     "CHANGELOG.md",
     "LICENSE-STATUS.md",
     "demo/",
-    "sitemap.xml"
+    "sitemap.xml",
+    "docs/"
   ],
   "scripts": {
     "test": "node --test",

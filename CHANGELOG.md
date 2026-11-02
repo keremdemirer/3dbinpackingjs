@@ -16,10 +16,11 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Focused project overview with a visual banner, organized API/demo/testing guides,
+  contributor instructions, and structured issue/PR templates.
 - Complete-result parity fixtures from the pre-optimization solver for 176
   benchmark/seeded cases, including settling, and an alternating-order timing
   comparison with raw samples and environment/source hashes.
-
 - Optional `settle: true` downward post-pass in original Y coordinates, preserving
   packed volume, identities and rotation rules. Fixes the reported upright
   floating stack (base heights 1/3/5 become 0/2/4). Enabled by a demo checkbox;
@@ -27,29 +28,24 @@ No npm version or GitHub release has been published by these changes.
 - Settling regression/property checks and before/after corpus benchmark reports.
 - Search and social metadata, canonical URL, sitemap, project/algorithm/API overview,
   software structured data, social preview artwork, and clearer repository introduction.
-
 - Direct base-contact diagnostics in benchmark reports and the demo, including
   the reported 78.125% arrangement. Warnings and box inspection expose partial
   or absent contact without claiming physical stability or changing the solver.
-
 - Reproducible performance/quality benchmark corpus with independent geometry
   validation, bounded worker execution, raw timing reports, constructive full-fill
   witnesses, and a bounded exact integer-grid oracle for tiny instances.
 - Recorded quality baseline, profiling/order-sensitivity experiments, and a CI
   packed-volume regression check with downloadable reports and no timing gate.
-
 - Per-item `rotation` rules: free rotation (default), upright with height on Y,
   or fixed X/Y/Z dimensions, enforced during layer selection, scoring, placement,
   and internal-axis transformations. Constrained results record their rule.
 - Rotation controls and a “Keep it upright” example in the interactive demo.
 - A live GitHub Pages demo, served from `master`, and a plain-static `.nojekyll` marker.
-
 - Interactive 3D browser demo for [issue #5], with orbit/pan/zoom, mouse/touch/
   keyboard controls, box inspection, four examples, utilization and unpacked-item
   summaries, JSON export, and PNG export. Works without a server or CDN.
 - Viewer geometry/control tests, WebGL fallback, and demo assets in the package
   archive. Changes to inputs disable exports until the result is recalculated.
-
 - Standalone `pack({ container, items })` API for CommonJS, Node.js ES modules,
   and plain browser scripts, with structured placements, unpacked instances,
   item IDs, coordinates, dimensions, volumes, counts, and diagnostics. [#12]

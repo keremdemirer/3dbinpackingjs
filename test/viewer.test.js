@@ -79,9 +79,15 @@ test('legacy form adapter emits successful results and input errors for the demo
   vm.runInContext(fs.readFileSync(path.join(__dirname,'../pack1.js'),'utf8'),context);
   assert.equal(context.main(),0);
   assert.equal(events[0].type,'packing:result'); assert.equal(events[0].detail.placements[0].id,'<label>');
+  fields.settle={checked:true};
+  assert.equal(context.main(),0);
+  assert.deepEqual(events.at(-1).detail.diagnostics.settling,{movedCount:0,totalDrop:0});
+  fields.settle.checked=false;
+  assert.equal(context.main(),0);
+  assert.equal(events.at(-1).detail.diagnostics.settling,undefined);
   fields.strxx.value='0';
   assert.equal(context.main(),1);
-  assert.equal(events[1].type,'packing:error'); assert.match(events[1].detail,/positive/);
+  assert.equal(events.at(-1).type,'packing:error'); assert.match(events.at(-1).detail,/positive/);
 });
 
 function viewerHarness(available=true) {

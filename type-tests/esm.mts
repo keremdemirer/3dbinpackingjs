@@ -21,3 +21,5 @@ const rotation: RotationRule = 'upright';
 pack({ container, items: [{ width: 1, height: 1, depth: 1, rotation }] });
 // @ts-expect-error Rotation rules are a closed set of named modes.
 pack({ container, items: [{ width: 1, height: 1, depth: 1, rotation: 'sideways' }] });
+
+pack({ container, items: [], settle: true }).diagnostics.settling?.totalDrop;

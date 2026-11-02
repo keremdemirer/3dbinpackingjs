@@ -22,6 +22,8 @@ export interface Item extends Dimensions {
 }
 
 export interface PackInput {
+  /** Lower packed boxes along original -Y after search. Defaults to false; not a stability model. */
+  readonly settle?: boolean;
   readonly container: Readonly<Dimensions>;
   readonly items: ReadonlyArray<Readonly<Item>>;
 }
@@ -54,6 +56,12 @@ export interface UnpackedItem extends ItemInstance {}
 export interface PackDiagnostics {
   /** Number of initial-layer search trials. */
   iterations: number;
+  /** Present only when settle is true, including empty/no-fit results. */
+  settling?: {
+    movedCount: number;
+    /** Sum of vertical distances moved, in the input dimension unit. */
+    totalDrop: number;
+  };
 }
 
 export interface PackResult {

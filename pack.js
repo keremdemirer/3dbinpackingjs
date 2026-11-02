@@ -6,6 +6,31 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function() {
 'use strict';
 
+// Process bottom-up in original Y coordinates. Earlier boxes can only move down,
+// so the highest overlapping top face below the original base is the first stop.
+// Positive footprint area is required: touching an edge cannot block a fall.
+function settlePlacements(placements) {
+  var settled = [];
+  var movedCount = 0, totalDrop = 0;
+  placements.slice().sort(function(a, b) { return a.position.y - b.position.y; }).forEach(function(item) {
+    var p = item.position, d = item.dimensions, landing = 0;
+    settled.forEach(function(below) {
+      var q = below.position, e = below.dimensions;
+      if (p.x < q.x + e.width && q.x < p.x + d.width &&
+          p.z < q.z + e.depth && q.z < p.z + d.depth) {
+        landing = Math.max(landing, q.y + e.height);
+      }
+    });
+    if (landing < p.y) {
+      movedCount++;
+      totalDrop += p.y - landing;
+      p.y = landing;
+    }
+    settled.push(item);
+  });
+  return { movedCount: movedCount, totalDrop: totalDrop };
+}
+
 function pack(input) {
 var packing, layerdone, evened, variant, bestvariant, hundredpercent, quit;
 var boxx, boxy, boxz, boxi, bboxx, bboxy, bboxz, bboxi;
@@ -190,6 +215,9 @@ var container;
 function readInput() {
   if (!input || typeof input !== 'object' || Array.isArray(input)) {
     throw new TypeError('pack expects an object with container and items.');
+  }
+  if (input.settle !== undefined && typeof input.settle !== 'boolean') {
+    throw new TypeError('settle must be a boolean.');
   }
   container = dimensions(input.container, 'container');
   if (!Array.isArray(input.items)) throw new TypeError('items must be an array.');
@@ -876,6 +904,8 @@ for (var index = 1; index <= tbn; index++) {
     unpacked.push(entry);
   }
 }
+var diagnostics = { iterations: itenum };
+if (input.settle === true) diagnostics.settling = settlePlacements(placements);
 return {
   container: container,
   placements: placements,
@@ -886,7 +916,7 @@ return {
   totalItemVolume: totalboxvol,
   packedVolume: bestvolume,
   utilization: bestvolume / totalvolume,
-  diagnostics: { iterations: itenum }
+  diagnostics: diagnostics
 };
 }
 

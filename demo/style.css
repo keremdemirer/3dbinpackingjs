@@ -621,3 +621,7 @@ canvas:active {
   font-size: 11px;
   line-height: 1.6;
 }
+
+.settle-option { display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600; margin-top:24px; }
+.settle-option input { width:17px; height:17px; margin:0; accent-color:var(--teal); }
+.settle-help { margin:8px 0 20px; }

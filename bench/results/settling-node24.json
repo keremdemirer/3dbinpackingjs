@@ -1,0 +1,2062 @@
+{
+  "createdAt": "2026-11-02T14:00:18.171Z",
+  "environment": {
+    "node": "v24.22.1",
+    "v8": "13.6.233.17-node.58",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M1 Max"
+  },
+  "solverHash": "98f3cdc3474a4ef3ed2907ac17ef73042a35ccee3f5fb5b3cdb89416fa387627",
+  "parameters": {
+    "samples": 7,
+    "warmup": 2,
+    "timeoutMs": 30000
+  },
+  "cases": [
+    {
+      "id": "empty",
+      "before": {
+        "ok": true,
+        "id": "empty",
+        "family": "control",
+        "inputHash": "3a741cc4a11e20ce4a7430be7ea0b7de63f6a332891dc14033633db01856b822",
+        "instances": 0,
+        "types": 0,
+        "packedVolume": 0,
+        "packedCount": 0,
+        "utilization": 0,
+        "volumeUpperBound": 0,
+        "baseContact": {
+          "full": 0,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 0,
+        "resultHash": "0290f1ff2bec9f57a1da1abc78abcd00679e76b8cb260a52fb67608617bbc1e7",
+        "timing": {
+          "samples": [
+            0.02862499999999102,
+            0.024416000000002214,
+            0.02933299999999406,
+            0.030292000000002872,
+            0.028208999999989715,
+            0.02170900000000131,
+            0.032457999999991216
+          ],
+          "medianMs": 0.02862499999999102,
+          "p95Ms": 0.032457999999991216,
+          "minMs": 0.02170900000000131
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "empty",
+        "family": "control",
+        "inputHash": "298b7eef133a28c0bf213246f1b352ea141f905b5ce82ddbb1a98e5a39f95c89",
+        "instances": 0,
+        "types": 0,
+        "packedVolume": 0,
+        "packedCount": 0,
+        "utilization": 0,
+        "volumeUpperBound": 0,
+        "baseContact": {
+          "full": 0,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 0,
+        "resultHash": "59013509643d18a58d452f09d579996ef8ff105967188a50faa793878f8d3316",
+        "timing": {
+          "samples": [
+            0.03012499999999818,
+            0.02329199999999787,
+            0.028290999999995847,
+            0.024958999999995513,
+            0.0264580000000052,
+            0.02050000000001262,
+            0.03104200000001356
+          ],
+          "medianMs": 0.0264580000000052,
+          "p95Ms": 0.03104200000001356,
+          "minMs": 0.02050000000001262
+        }
+      }
+    },
+    {
+      "id": "no-fit",
+      "before": {
+        "ok": true,
+        "id": "no-fit",
+        "family": "control",
+        "inputHash": "6e72fe7209e6612ae046884745c0a3bd55304da23852ef91806930cb56a041f6",
+        "instances": 1,
+        "types": 1,
+        "packedVolume": 0,
+        "packedCount": 0,
+        "utilization": 0,
+        "volumeUpperBound": 8,
+        "baseContact": {
+          "full": 0,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 0,
+        "resultHash": "6bfc8a83a37002f526d8648b7f69b6cf5b1d238c51e195aa7dfc5b4a0825b922",
+        "timing": {
+          "samples": [
+            0.04666600000000187,
+            0.039332999999999174,
+            0.03900000000000148,
+            0.04512499999999875,
+            0.05174999999999841,
+            0.03324999999999534,
+            0.03245800000000543
+          ],
+          "medianMs": 0.039332999999999174,
+          "p95Ms": 0.05174999999999841,
+          "minMs": 0.03245800000000543
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "no-fit",
+        "family": "control",
+        "inputHash": "8e84fcf116815bfd7f485c34fa0cc28b09324c53e539f5abf02c22f9da1eaba0",
+        "instances": 1,
+        "types": 1,
+        "packedVolume": 0,
+        "packedCount": 0,
+        "utilization": 0,
+        "volumeUpperBound": 8,
+        "baseContact": {
+          "full": 0,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 0,
+        "resultHash": "dd17d0ee09d9e6b4faf5b654683a06d8755bd92d471486a9baaa3fb7e59130e4",
+        "timing": {
+          "samples": [
+            0.03899999999998727,
+            0.04170899999999733,
+            0.039291999999989,
+            0.04608300000001009,
+            0.04279099999999403,
+            0.03170800000000895,
+            0.02841599999999289
+          ],
+          "medianMs": 0.039291999999989,
+          "p95Ms": 0.04608300000001009,
+          "minMs": 0.02841599999999289
+        }
+      }
+    },
+    {
+      "id": "exact-cubes",
+      "before": {
+        "ok": true,
+        "id": "exact-cubes",
+        "family": "known-fill",
+        "inputHash": "ed4cd84b6963e3fc92aa488a9855d0b928f8e78d2da54f53bc96c7267d990611",
+        "instances": 64,
+        "types": 1,
+        "packedVolume": 512,
+        "packedCount": 64,
+        "utilization": 1,
+        "volumeUpperBound": 512,
+        "baseContact": {
+          "full": 64,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "proven-full-container",
+          "complete": true,
+          "volume": 512
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "9cb657afdd8074214180d2c158e9cbf66ab9bec6a04084b82d4b268edb325568",
+        "timing": {
+          "samples": [
+            1.353334000000018,
+            1.1504579999999862,
+            1.2873749999999973,
+            0.9320419999999956,
+            0.6442499999999995,
+            0.6099999999999852,
+            0.5597499999999798
+          ],
+          "medianMs": 0.9320419999999956,
+          "p95Ms": 1.353334000000018,
+          "minMs": 0.5597499999999798
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "exact-cubes",
+        "family": "known-fill",
+        "inputHash": "8ca2c32dac272b4677e7e0bf497f97821337ab337cec14cbf6eb0ec621129172",
+        "instances": 64,
+        "types": 1,
+        "packedVolume": 512,
+        "packedCount": 64,
+        "utilization": 1,
+        "volumeUpperBound": 512,
+        "baseContact": {
+          "full": 64,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "proven-full-container",
+          "complete": true,
+          "volume": 512
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "f4c6d8b1336b14f8d6bcda0037d0b7c3d3339c8df6ec39ea0f7cbdf6d0edbb57",
+        "timing": {
+          "samples": [
+            1.3933749999999918,
+            1.1397499999999923,
+            1.3076670000000092,
+            0.9757079999999974,
+            0.6338330000000099,
+            0.6758330000000115,
+            0.640749999999997
+          ],
+          "medianMs": 0.9757079999999974,
+          "p95Ms": 1.3933749999999918,
+          "minMs": 0.6338330000000099
+        }
+      }
+    },
+    {
+      "id": "cut-fill-12",
+      "before": {
+        "ok": true,
+        "id": "cut-fill-12",
+        "family": "known-fill",
+        "inputHash": "393da40b710841522b38abd71454572e11aa3c2ac899b9b1fee281714cddde7f",
+        "instances": 12,
+        "types": 12,
+        "packedVolume": 912,
+        "packedCount": 11,
+        "utilization": 0.95,
+        "volumeUpperBound": 960,
+        "baseContact": {
+          "full": 11,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.95,
+        "reference": {
+          "kind": "proven-full-container",
+          "complete": true,
+          "volume": 960
+        },
+        "referenceCoverage": 0.95,
+        "iterations": 34,
+        "resultHash": "ffefd26a49b6c52dc9e021cbd06a06457ddd8ce6af765a057cc93260cb96b723",
+        "timing": {
+          "samples": [
+            1.640749999999997,
+            1.2842919999999935,
+            1.6475840000000233,
+            1.0882919999999956,
+            1.1479170000000067,
+            0.9752500000000168,
+            0.9439999999999884
+          ],
+          "medianMs": 1.1479170000000067,
+          "p95Ms": 1.6475840000000233,
+          "minMs": 0.9439999999999884
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "cut-fill-12",
+        "family": "known-fill",
+        "inputHash": "8b4c7af11fbb602445f79e1e13f440f29ef8dd31febabf585586932f65d96dfa",
+        "instances": 12,
+        "types": 12,
+        "packedVolume": 912,
+        "packedCount": 11,
+        "utilization": 0.95,
+        "volumeUpperBound": 960,
+        "baseContact": {
+          "full": 11,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.95,
+        "reference": {
+          "kind": "proven-full-container",
+          "complete": true,
+          "volume": 960
+        },
+        "referenceCoverage": 0.95,
+        "iterations": 34,
+        "resultHash": "7c20622cb0a806f69593a4ff5e0e81992fcad47fa529ae960ad9374ae4f4bddc",
+        "timing": {
+          "samples": [
+            2.837167000000022,
+            1.837709000000018,
+            1.950207999999975,
+            1.3062080000000265,
+            1.394124999999974,
+            0.9885409999999979,
+            0.9747920000000363
+          ],
+          "medianMs": 1.394124999999974,
+          "p95Ms": 2.837167000000022,
+          "minMs": 0.9747920000000363
+        }
+      }
+    },
+    {
+      "id": "cut-fill-24",
+      "before": {
+        "ok": true,
+        "id": "cut-fill-24",
+        "family": "known-fill",
+        "inputHash": "b075de92de8346699ab14e22b5b3b6cc1012c2ad43499c02b953543b555db209",
+        "instances": 24,
+        "types": 24,
+        "packedVolume": 882,
+        "packedCount": 22,
+        "utilization": 0.91875,
+        "volumeUpperBound": 960,
+        "baseContact": {
+          "full": 21,
+          "partial": 1,
+          "none": 0
+        },
+        "boundCoverage": 0.91875,
+        "reference": {
+          "kind": "proven-full-container",
+          "complete": true,
+          "volume": 960
+        },
+        "referenceCoverage": 0.91875,
+        "iterations": 52,
+        "resultHash": "168efbe20f69844e22ebdb894af2060b332ab2ae244e969e939cff633c7daa7c",
+        "timing": {
+          "samples": [
+            4.803457999999978,
+            4.19070899999997,
+            5.763458000000014,
+            4.711208999999997,
+            4.037833000000035,
+            3.7986250000000155,
+            3.7539999999999623
+          ],
+          "medianMs": 4.19070899999997,
+          "p95Ms": 5.763458000000014,
+          "minMs": 3.7539999999999623
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "cut-fill-24",
+        "family": "known-fill",
+        "inputHash": "1cc027eb2ac7640d19a8409f1a589b957053fc4941af3e66fb989f7d28261e84",
+        "instances": 24,
+        "types": 24,
+        "packedVolume": 882,
+        "packedCount": 22,
+        "utilization": 0.91875,
+        "volumeUpperBound": 960,
+        "baseContact": {
+          "full": 21,
+          "partial": 1,
+          "none": 0
+        },
+        "boundCoverage": 0.91875,
+        "reference": {
+          "kind": "proven-full-container",
+          "complete": true,
+          "volume": 960
+        },
+        "referenceCoverage": 0.91875,
+        "iterations": 52,
+        "resultHash": "0b94356ce87ff252e283ad8810094789faeaee9db349a83631891cd8d79bb41d",
+        "timing": {
+          "samples": [
+            4.6844580000000065,
+            4.489874999999984,
+            5.809665999999993,
+            4.7756669999999986,
+            4.107666999999992,
+            4.413416999999981,
+            4.025624999999991
+          ],
+          "medianMs": 4.489874999999984,
+          "p95Ms": 5.809665999999993,
+          "minMs": 4.025624999999991
+        }
+      }
+    },
+    {
+      "id": "reported-overhang",
+      "before": {
+        "ok": true,
+        "id": "reported-overhang",
+        "family": "base-contact",
+        "inputHash": "6bbf837f1d7d56ab390483c017896203ec75bfba1a8bb552686bda62e56d53ca",
+        "instances": 19,
+        "types": 3,
+        "packedVolume": 750,
+        "packedCount": 19,
+        "utilization": 0.78125,
+        "volumeUpperBound": 750,
+        "baseContact": {
+          "full": 17,
+          "partial": 2,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "8338b33f12d0800b0367dc34d447f054fd23e02b71fe70a005bc30e9dae6c342",
+        "timing": {
+          "samples": [
+            0.32900000000000773,
+            0.2872499999999718,
+            0.29899999999997817,
+            0.2864590000000362,
+            0.19633299999998144,
+            0.17762499999997772,
+            0.183667000000014
+          ],
+          "medianMs": 0.2864590000000362,
+          "p95Ms": 0.32900000000000773,
+          "minMs": 0.17762499999997772
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "reported-overhang",
+        "family": "base-contact",
+        "inputHash": "4fb81d09cbd83960385e18e0cd180a7d9150eafc37279444b9d54d58db0b137d",
+        "instances": 19,
+        "types": 3,
+        "packedVolume": 750,
+        "packedCount": 19,
+        "utilization": 0.78125,
+        "volumeUpperBound": 750,
+        "baseContact": {
+          "full": 17,
+          "partial": 2,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "f52ec53cc64ef46a8726415618f2e7b705ae5e3ac0f4bca89c52d9c8e54b841a",
+        "timing": {
+          "samples": [
+            0.3551249999999868,
+            0.3154170000000249,
+            0.35670799999996916,
+            0.29270800000000463,
+            0.1991249999999809,
+            0.5852080000000228,
+            0.24099999999998545
+          ],
+          "medianMs": 0.3154170000000249,
+          "p95Ms": 0.5852080000000228,
+          "minMs": 0.1991249999999809
+        }
+      }
+    },
+    {
+      "id": "issue-6",
+      "before": {
+        "ok": true,
+        "id": "issue-6",
+        "family": "historical",
+        "inputHash": "3d8e9a52a83ed3c8df10053a6004a125189d279905eb7aadb3b4dd211e2fc209",
+        "instances": 130,
+        "types": 1,
+        "packedVolume": 2475000,
+        "packedCount": 110,
+        "utilization": 0.7080037897511946,
+        "volumeUpperBound": 2925000,
+        "baseContact": {
+          "full": 110,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.8461538461538461,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 10,
+        "resultHash": "59595cfe7e3b8deb8be12c6200c4bfd7909870296f8e231d3214b229cb22b171",
+        "timing": {
+          "samples": [
+            20.724958000000015,
+            18.011333000000036,
+            40.68383300000005,
+            36.78766699999994,
+            40.574457999999936,
+            37.25675000000001,
+            37.710459000000014
+          ],
+          "medianMs": 37.25675000000001,
+          "p95Ms": 40.68383300000005,
+          "minMs": 18.011333000000036
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "issue-6",
+        "family": "historical",
+        "inputHash": "021a176bf7c9fe615daf0881ab219661058d06eb361f5a9e2cb16cc51e6da641",
+        "instances": 130,
+        "types": 1,
+        "packedVolume": 2475000,
+        "packedCount": 110,
+        "utilization": 0.7080037897511946,
+        "volumeUpperBound": 2925000,
+        "baseContact": {
+          "full": 110,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.8461538461538461,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 10,
+        "resultHash": "014a773f9e736a0d74cf2a968c6cd7379e785c2f8428abe2c915fd12d0bbb3f5",
+        "timing": {
+          "samples": [
+            19.14874999999995,
+            19.457457999999974,
+            90.672458,
+            86.59187500000007,
+            90.03899999999999,
+            90.01020799999992,
+            91.2579589999998
+          ],
+          "medianMs": 90.01020799999992,
+          "p95Ms": 91.2579589999998,
+          "minMs": 19.14874999999995
+        }
+      }
+    },
+    {
+      "id": "paper-example",
+      "before": {
+        "ok": true,
+        "id": "paper-example",
+        "family": "historical",
+        "inputHash": "fa7860dcdc0c26b19e7829c023a5a8ec7bff5d4e69164fdc8fa88a070247f909",
+        "instances": 9,
+        "types": 3,
+        "packedVolume": 838656,
+        "packedCount": 6,
+        "utilization": 1,
+        "volumeUpperBound": 838656,
+        "baseContact": {
+          "full": 6,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 4,
+        "resultHash": "fb91792fea6df0f2b7b375aa6ceb7d1a0fd3ac7738caaa8b16826b534eea6add",
+        "timing": {
+          "samples": [
+            0.2355840000000171,
+            0.6981250000001182,
+            0.2503340000000662,
+            0.1851249999999709,
+            0.13154099999997015,
+            0.11674999999991087,
+            0.10966699999994489
+          ],
+          "medianMs": 0.1851249999999709,
+          "p95Ms": 0.6981250000001182,
+          "minMs": 0.10966699999994489
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "paper-example",
+        "family": "historical",
+        "inputHash": "e4e501b426daafb64fb656302b36991eccfc1ae0fec72690eb5e2af3a1834a75",
+        "instances": 9,
+        "types": 3,
+        "packedVolume": 838656,
+        "packedCount": 6,
+        "utilization": 1,
+        "volumeUpperBound": 838656,
+        "baseContact": {
+          "full": 6,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 4,
+        "resultHash": "d8282fa3b936243cd1d75e321ff3f203b6021e048d3e5db6bd8de023fcc1c75c",
+        "timing": {
+          "samples": [
+            0.1805420000000595,
+            0.5293330000001788,
+            0.18583300000000236,
+            0.14724999999998545,
+            0.13733399999978246,
+            0.12112499999989268,
+            0.11141599999996288
+          ],
+          "medianMs": 0.14724999999998545,
+          "p95Ms": 0.5293330000001788,
+          "minMs": 0.11141599999996288
+        }
+      }
+    },
+    {
+      "id": "upright-swap",
+      "before": {
+        "ok": true,
+        "id": "upright-swap",
+        "family": "rotation",
+        "inputHash": "8a1c69e07114b5df23f68549d247129e66c34c27a4419c9301a05babe171acbd",
+        "instances": 1,
+        "types": 1,
+        "packedVolume": 24,
+        "packedCount": 1,
+        "utilization": 1,
+        "volumeUpperBound": 24,
+        "baseContact": {
+          "full": 1,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "73977a92c30e1155bea0d5fadb7de7d56247665ca14b5a7632fc78594ca1bb31",
+        "timing": {
+          "samples": [
+            0.06391600000006292,
+            0.06520799999998417,
+            0.09533299999998235,
+            0.11374999999998181,
+            0.08279100000004291,
+            0.06087499999989632,
+            0.04616700000019591
+          ],
+          "medianMs": 0.06520799999998417,
+          "p95Ms": 0.11374999999998181,
+          "minMs": 0.04616700000019591
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "upright-swap",
+        "family": "rotation",
+        "inputHash": "e90005ddaf11cab5b0c471869a669d6fdc57d6f31659a5224700b235d76e36c4",
+        "instances": 1,
+        "types": 1,
+        "packedVolume": 24,
+        "packedCount": 1,
+        "utilization": 1,
+        "volumeUpperBound": 24,
+        "baseContact": {
+          "full": 1,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "4b366e892d44c1a2873ae1edc7b8f4dd7e1fe7c4ae433d6f1383dc375809ecc1",
+        "timing": {
+          "samples": [
+            0.05887499999994361,
+            0.07999999999992724,
+            0.09466700000007222,
+            0.069374999999809,
+            0.08541700000000674,
+            0.06845900000007532,
+            0.05050000000005639
+          ],
+          "medianMs": 0.069374999999809,
+          "p95Ms": 0.09466700000007222,
+          "minMs": 0.05050000000005639
+        }
+      }
+    },
+    {
+      "id": "fixed-no-fit",
+      "before": {
+        "ok": true,
+        "id": "fixed-no-fit",
+        "family": "rotation",
+        "inputHash": "dd63233473137fea8a1cf30acd3e2a629d844846c7e6671eace8847decd1f519",
+        "instances": 1,
+        "types": 1,
+        "packedVolume": 0,
+        "packedCount": 0,
+        "utilization": 0,
+        "volumeUpperBound": 24,
+        "baseContact": {
+          "full": 0,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 0,
+        "resultHash": "3d6fde6481d145ed4107198b7a57f0749794fdb6932a0b8829f27fed997f7ccd",
+        "timing": {
+          "samples": [
+            0.052541999999903055,
+            0.04779099999996106,
+            0.048125000000027285,
+            0.05341699999985394,
+            0.04599999999982174,
+            0.0369580000001406,
+            0.03358400000001893
+          ],
+          "medianMs": 0.04779099999996106,
+          "p95Ms": 0.05341699999985394,
+          "minMs": 0.03358400000001893
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "fixed-no-fit",
+        "family": "rotation",
+        "inputHash": "d6057ba5ba826abdec5d4df422d75256f067040427dbcee77188190ed7c95f73",
+        "instances": 1,
+        "types": 1,
+        "packedVolume": 0,
+        "packedCount": 0,
+        "utilization": 0,
+        "volumeUpperBound": 24,
+        "baseContact": {
+          "full": 0,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 0,
+        "resultHash": "51d7ed7a88e7dd148fdd365ed39072d9676edfc55ef4afd6a1219739643b69c1",
+        "timing": {
+          "samples": [
+            0.06858299999998962,
+            0.06004199999983939,
+            0.06354200000009769,
+            0.06566700000007586,
+            0.05979099999990467,
+            0.05037500000003092,
+            0.051375000000007276
+          ],
+          "medianMs": 0.06004199999983939,
+          "p95Ms": 0.06858299999998962,
+          "minMs": 0.05037500000003092
+        }
+      }
+    },
+    {
+      "id": "quantity-100",
+      "before": {
+        "ok": true,
+        "id": "quantity-100",
+        "family": "quantity-scaling",
+        "inputHash": "b5c34c91d6cb5236e508b79e2ae52d4e47ffe58021c9850ccb9b6dd9c98ce6d5",
+        "instances": 100,
+        "types": 1,
+        "packedVolume": 800,
+        "packedCount": 100,
+        "utilization": 0.1,
+        "volumeUpperBound": 800,
+        "baseContact": {
+          "full": 100,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "56a4b77ae9864f456cba2e0b1ed9f46a6b86ca085ee85254af38e13c1604c384",
+        "timing": {
+          "samples": [
+            0.5099999999999909,
+            0.4661670000000413,
+            0.5691249999999854,
+            0.6207919999999376,
+            0.31083399999988615,
+            0.29320800000004965,
+            0.3605000000000018
+          ],
+          "medianMs": 0.4661670000000413,
+          "p95Ms": 0.6207919999999376,
+          "minMs": 0.29320800000004965
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "quantity-100",
+        "family": "quantity-scaling",
+        "inputHash": "d133792d7b95b147b455f67a0788f6f6ef5d3add7efd1d5c6b1e8a7ed17ba093",
+        "instances": 100,
+        "types": 1,
+        "packedVolume": 800,
+        "packedCount": 100,
+        "utilization": 0.1,
+        "volumeUpperBound": 800,
+        "baseContact": {
+          "full": 100,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "912ae71281cd3fd30c483fa9c63c96147187a6dc8aff951922f6efe84630f72b",
+        "timing": {
+          "samples": [
+            1.1695830000001024,
+            0.9124170000000049,
+            1.0435420000001159,
+            0.7478330000001279,
+            0.5401659999999993,
+            0.5464160000001357,
+            0.4854579999998805
+          ],
+          "medianMs": 0.7478330000001279,
+          "p95Ms": 1.1695830000001024,
+          "minMs": 0.4854579999998805
+        }
+      }
+    },
+    {
+      "id": "types-100",
+      "before": {
+        "ok": true,
+        "id": "types-100",
+        "family": "type-scaling",
+        "inputHash": "1c9a66ec7988362204bbb8db5ab8663be23a66be3cdd4c748843b3a648d4892c",
+        "instances": 100,
+        "types": 100,
+        "packedVolume": 800,
+        "packedCount": 100,
+        "utilization": 0.1,
+        "volumeUpperBound": 800,
+        "baseContact": {
+          "full": 100,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "f22f639cc71a9184b939fc44eebd98001bae086cff6a4a07f4eb0201a05f51f5",
+        "timing": {
+          "samples": [
+            1.2876249999999345,
+            1.3798329999999623,
+            1.830791999999974,
+            1.2832499999999527,
+            1.2985410000001139,
+            1.1903330000000096,
+            0.9371670000000449
+          ],
+          "medianMs": 1.2876249999999345,
+          "p95Ms": 1.830791999999974,
+          "minMs": 0.9371670000000449
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "types-100",
+        "family": "type-scaling",
+        "inputHash": "096416d44fe7c6f925df0856dcad25783445d257988d8e93d262c0826e5c40b2",
+        "instances": 100,
+        "types": 100,
+        "packedVolume": 800,
+        "packedCount": 100,
+        "utilization": 0.1,
+        "volumeUpperBound": 800,
+        "baseContact": {
+          "full": 100,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "bff075ce6a9cf02ac0f6679ee95569352f94f80a4454b8877c3ce3eaf5befa93",
+        "timing": {
+          "samples": [
+            1.4483750000001692,
+            1.287417000000005,
+            2.0231250000001637,
+            1.3297910000001139,
+            1.5187499999999545,
+            1.2023329999999532,
+            1.1981670000000122
+          ],
+          "medianMs": 1.3297910000001139,
+          "p95Ms": 2.0231250000001637,
+          "minMs": 1.1981670000000122
+        }
+      }
+    },
+    {
+      "id": "quantity-300",
+      "before": {
+        "ok": true,
+        "id": "quantity-300",
+        "family": "quantity-scaling",
+        "inputHash": "7412ec59176be72ed5ec114f91c1bd89914a66e3885cf9b65f1871444138e387",
+        "instances": 300,
+        "types": 1,
+        "packedVolume": 2400,
+        "packedCount": 300,
+        "utilization": 0.3,
+        "volumeUpperBound": 2400,
+        "baseContact": {
+          "full": 300,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "1ca59cb97a82c2cd6f60a132c7528e83360941d274618cd9b293c803aaf1b404",
+        "timing": {
+          "samples": [
+            4.972082999999884,
+            5.65037499999994,
+            13.504832999999962,
+            10.832832999999937,
+            10.36866699999996,
+            10.436583999999812,
+            10.442332999999962
+          ],
+          "medianMs": 10.436583999999812,
+          "p95Ms": 13.504832999999962,
+          "minMs": 4.972082999999884
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "quantity-300",
+        "family": "quantity-scaling",
+        "inputHash": "6963daf62b84b1af1d53976a9e5b612a241215e313beac05de514b17be04d801",
+        "instances": 300,
+        "types": 1,
+        "packedVolume": 2400,
+        "packedCount": 300,
+        "utilization": 0.3,
+        "volumeUpperBound": 2400,
+        "baseContact": {
+          "full": 300,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "c79298d9854edbc41c4da5c85f071c2abfe13832e732348e438409767b74e80d",
+        "timing": {
+          "samples": [
+            4.619374999999991,
+            4.466333000000077,
+            8.038958999999977,
+            5.657832999999982,
+            5.331957999999986,
+            4.808125000000018,
+            4.953000000000202
+          ],
+          "medianMs": 4.953000000000202,
+          "p95Ms": 8.038958999999977,
+          "minMs": 4.466333000000077
+        }
+      }
+    },
+    {
+      "id": "types-300",
+      "before": {
+        "ok": true,
+        "id": "types-300",
+        "family": "type-scaling",
+        "inputHash": "721975ab201b7652561842a2c15682df43519051a2b5e0d17ba5783aa4200fee",
+        "instances": 300,
+        "types": 300,
+        "packedVolume": 2400,
+        "packedCount": 300,
+        "utilization": 0.3,
+        "volumeUpperBound": 2400,
+        "baseContact": {
+          "full": 300,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "41b0ce3cb4541cd324a881203a43f343713d0eb6ebacd4ae9645d7b7e00765eb",
+        "timing": {
+          "samples": [
+            8.011792000000014,
+            8.227208999999903,
+            19.741083000000117,
+            15.747709000000214,
+            15.344249999999647,
+            15.129500000000007,
+            15.120417000000089
+          ],
+          "medianMs": 15.129500000000007,
+          "p95Ms": 19.741083000000117,
+          "minMs": 8.011792000000014
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "types-300",
+        "family": "type-scaling",
+        "inputHash": "5f182d8b61382e7ae2c10ac589da3c78482a9085ec56240ae22ecac441760449",
+        "instances": 300,
+        "types": 300,
+        "packedVolume": 2400,
+        "packedCount": 300,
+        "utilization": 0.3,
+        "volumeUpperBound": 2400,
+        "baseContact": {
+          "full": 300,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "7e88b97c1f227fc7efe70edfd0d371e17971df8e449a38de6f513ec0eddbd3cf",
+        "timing": {
+          "samples": [
+            6.472708000000239,
+            6.320334000000003,
+            10.644459000000097,
+            9.301707999999962,
+            7.741958000000068,
+            7.5497910000003685,
+            7.622917000000143
+          ],
+          "medianMs": 7.622917000000143,
+          "p95Ms": 10.644459000000097,
+          "minMs": 6.320334000000003
+        }
+      }
+    },
+    {
+      "id": "mixed-24",
+      "before": {
+        "ok": true,
+        "id": "mixed-24",
+        "family": "mixed",
+        "inputHash": "bc4d78e372cbad211d60b524facf45556871c632c27d6a704aca30ba304bce56",
+        "instances": 46,
+        "types": 24,
+        "packedVolume": 4016,
+        "packedCount": 46,
+        "utilization": 0.5229166666666667,
+        "volumeUpperBound": 4016,
+        "baseContact": {
+          "full": 35,
+          "partial": 6,
+          "none": 5
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "07929353bf7e080da1488df907c6e34a39d873b5a55d1479a3ebd8b9ad5431ca",
+        "timing": {
+          "samples": [
+            1.9980829999999514,
+            1.621291999999812,
+            1.6382079999998496,
+            1.1459580000000642,
+            0.8038750000000618,
+            1.0184580000000096,
+            0.7645419999998921
+          ],
+          "medianMs": 1.1459580000000642,
+          "p95Ms": 1.9980829999999514,
+          "minMs": 0.7645419999998921
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "mixed-24",
+        "family": "mixed",
+        "inputHash": "fe65d7d9e8b68462aec5cd15ae7b30fdaf7ca39d0b3c02905da345e197772b33",
+        "instances": 46,
+        "types": 24,
+        "packedVolume": 4016,
+        "packedCount": 46,
+        "utilization": 0.5229166666666667,
+        "volumeUpperBound": 4016,
+        "baseContact": {
+          "full": 38,
+          "partial": 8,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 1,
+        "resultHash": "047baae5d60f9b6cecd8a2129a02019d109ef2876fa7e0c5482fe40de38ab421",
+        "timing": {
+          "samples": [
+            1.9736250000000837,
+            1.55462499999976,
+            1.5662499999998545,
+            1.0400419999996302,
+            0.7833750000004329,
+            1.0659590000000208,
+            0.7851660000001175
+          ],
+          "medianMs": 1.0659590000000208,
+          "p95Ms": 1.9736250000000837,
+          "minMs": 0.7833750000004329
+        }
+      }
+    },
+    {
+      "id": "mixed-48",
+      "before": {
+        "ok": true,
+        "id": "mixed-48",
+        "family": "mixed",
+        "inputHash": "c993a930bedb5fedfe9d38009badd18ebbf69f1ac1adbff6aab5e98161d3b512",
+        "instances": 104,
+        "types": 48,
+        "packedVolume": 7641,
+        "packedCount": 60,
+        "utilization": 0.994921875,
+        "volumeUpperBound": 7680,
+        "baseContact": {
+          "full": 59,
+          "partial": 1,
+          "none": 0
+        },
+        "boundCoverage": 0.994921875,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 60,
+        "resultHash": "c12ae1fc9133a0f77fd0349376a5a7daa8992b5fd763b97d4d8f8234fde7e4ba",
+        "timing": {
+          "samples": [
+            38.70162500000015,
+            39.89170800000011,
+            153.442458,
+            165.0113339999998,
+            152.23820899999964,
+            161.48833299999978,
+            159.01600000000008
+          ],
+          "medianMs": 153.442458,
+          "p95Ms": 165.0113339999998,
+          "minMs": 38.70162500000015
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "mixed-48",
+        "family": "mixed",
+        "inputHash": "68a11a0656b5c8727e1045e741a9613ddf3cfa596bd4ce61d5b88874fdf89513",
+        "instances": 104,
+        "types": 48,
+        "packedVolume": 7641,
+        "packedCount": 60,
+        "utilization": 0.994921875,
+        "volumeUpperBound": 7680,
+        "baseContact": {
+          "full": 59,
+          "partial": 1,
+          "none": 0
+        },
+        "boundCoverage": 0.994921875,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 60,
+        "resultHash": "13b22ee78f850f108019e0869dc9c7d2aa37d7acd6c8a0bd18f168a3cba080f2",
+        "timing": {
+          "samples": [
+            38.79545800000005,
+            38.82270800000015,
+            91.13475000000017,
+            86.236042,
+            96.95633300000009,
+            90.44733299999962,
+            84.3576250000001
+          ],
+          "medianMs": 86.236042,
+          "p95Ms": 96.95633300000009,
+          "minMs": 38.79545800000005
+        }
+      }
+    },
+    {
+      "id": "mixed-96",
+      "before": {
+        "ok": true,
+        "id": "mixed-96",
+        "family": "mixed",
+        "inputHash": "37c1594faca907a5bc3d6f29d681a7528ded92d206ff3fa049bb2b16279bfd28",
+        "instances": 204,
+        "types": 96,
+        "packedVolume": 7680,
+        "packedCount": 54,
+        "utilization": 1,
+        "volumeUpperBound": 7680,
+        "baseContact": {
+          "full": 54,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 12,
+        "resultHash": "3fd5b828a75ff68e60161d51727afb302315899baad43ab09b460a993f05064f",
+        "timing": {
+          "samples": [
+            31.69716600000038,
+            31.455832999999984,
+            150.47950000000037,
+            153.93895900000007,
+            144.10420800000065,
+            138.4317919999994,
+            136.31304100000034
+          ],
+          "medianMs": 138.4317919999994,
+          "p95Ms": 153.93895900000007,
+          "minMs": 31.455832999999984
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "mixed-96",
+        "family": "mixed",
+        "inputHash": "b3d40c5011883c0928dc2efd40480a2484b45624e912355612eb39bf3a1cbfe0",
+        "instances": 204,
+        "types": 96,
+        "packedVolume": 7680,
+        "packedCount": 54,
+        "utilization": 1,
+        "volumeUpperBound": 7680,
+        "baseContact": {
+          "full": 54,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 12,
+        "resultHash": "e597f898b75b63c005a6b23eda5ec13ba9b1aca45ba8252383468b878d92a325",
+        "timing": {
+          "samples": [
+            29.46179200000006,
+            29.87262499999997,
+            76.58949999999913,
+            71.54133299999921,
+            69.1961250000004,
+            71.531833,
+            71.01216599999952
+          ],
+          "medianMs": 71.01216599999952,
+          "p95Ms": 76.58949999999913,
+          "minMs": 29.46179200000006
+        }
+      }
+    },
+    {
+      "id": "rules-48",
+      "before": {
+        "ok": true,
+        "id": "rules-48",
+        "family": "mixed-rules",
+        "inputHash": "2e02f8c280244b3d5686d1028a55df82a72e9e82b6293891c0221deb310b8e25",
+        "instances": 90,
+        "types": 48,
+        "packedVolume": 7451,
+        "packedCount": 46,
+        "utilization": 0.9701822916666667,
+        "volumeUpperBound": 7680,
+        "baseContact": {
+          "full": 41,
+          "partial": 4,
+          "none": 1
+        },
+        "boundCoverage": 0.9701822916666667,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 66,
+        "resultHash": "53109528753fe279d2beceeb13b1b5fe9a600a35939f727bbf28876fe4daef09",
+        "timing": {
+          "samples": [
+            28.87683300000026,
+            28.14441700000043,
+            78.18191699999988,
+            73.33299999999963,
+            76.44204200000058,
+            76.39437500000076,
+            73.84841700000015
+          ],
+          "medianMs": 73.84841700000015,
+          "p95Ms": 78.18191699999988,
+          "minMs": 28.14441700000043
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "rules-48",
+        "family": "mixed-rules",
+        "inputHash": "fbce04405ce11916f46e697760d8ae99af937b12593f98529f7b9be4597260d8",
+        "instances": 90,
+        "types": 48,
+        "packedVolume": 7451,
+        "packedCount": 46,
+        "utilization": 0.9701822916666667,
+        "volumeUpperBound": 7680,
+        "baseContact": {
+          "full": 42,
+          "partial": 4,
+          "none": 0
+        },
+        "boundCoverage": 0.9701822916666667,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 66,
+        "resultHash": "7a1cdffe0323f40955cbbfb4a48c19eed02b1cedc85cb8990153fe79155fd029",
+        "timing": {
+          "samples": [
+            24.41137499999968,
+            24.937167000000045,
+            53.41083299999991,
+            46.93883300000016,
+            48.54791599999953,
+            49.31579099999999,
+            48.17399999999998
+          ],
+          "medianMs": 48.17399999999998,
+          "p95Ms": 53.41083299999991,
+          "minMs": 24.41137499999968
+        }
+      }
+    },
+    {
+      "id": "tiny-cubes-no-room",
+      "before": {
+        "ok": true,
+        "id": "tiny-cubes-no-room",
+        "family": "tiny-exact",
+        "inputHash": "43f02a8788fb803aeba23feb1d818192964f8f4cf34c6fd625d299e45647587a",
+        "instances": 2,
+        "types": 1,
+        "packedVolume": 8,
+        "packedCount": 1,
+        "utilization": 0.4444444444444444,
+        "volumeUpperBound": 16,
+        "baseContact": {
+          "full": 1,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.5,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 8,
+          "states": 6
+        },
+        "referenceCoverage": 1,
+        "iterations": 6,
+        "resultHash": "16f2799cc75075630b3e45efdaf9be7738a8991b6aea8b0c9eaff46643a7b900",
+        "timing": {
+          "samples": [
+            0.10545799999999872,
+            0.12266700000054698,
+            0.13445899999987887,
+            0.09962499999983265,
+            0.08720899999934772,
+            0.48700000000008004,
+            0.0900419999998121
+          ],
+          "medianMs": 0.10545799999999872,
+          "p95Ms": 0.48700000000008004,
+          "minMs": 0.08720899999934772
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-cubes-no-room",
+        "family": "tiny-exact",
+        "inputHash": "1fd44206441b8c9e84ec0af1a5e723589bc0c0fc570833476f1918194212f006",
+        "instances": 2,
+        "types": 1,
+        "packedVolume": 8,
+        "packedCount": 1,
+        "utilization": 0.4444444444444444,
+        "volumeUpperBound": 16,
+        "baseContact": {
+          "full": 1,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.5,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 8,
+          "states": 6
+        },
+        "referenceCoverage": 1,
+        "iterations": 6,
+        "resultHash": "b1694bc11f29fbfd2c59f37d467cf4b4c854a6afc88123d7814c96bfafc396c2",
+        "timing": {
+          "samples": [
+            0.10775000000012369,
+            0.11620899999979883,
+            0.13812499999949068,
+            0.10924999999951979,
+            0.08916700000008859,
+            0.45174999999926513,
+            0.08695800000077725
+          ],
+          "medianMs": 0.10924999999951979,
+          "p95Ms": 0.45174999999926513,
+          "minMs": 0.08695800000077725
+        }
+      }
+    },
+    {
+      "id": "tiny-5",
+      "before": {
+        "ok": true,
+        "id": "tiny-5",
+        "family": "tiny-exact",
+        "inputHash": "79dc09ada8ec0b0d84b5c390c8afee10bc478841a6163f1335c0417476828ce8",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 3,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 3,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "0ee308ac596b2988a143ad34176a08cfd120cfc599a66328e21e5afd590c63e2",
+        "timing": {
+          "samples": [
+            0.1422499999998763,
+            0.12479100000018661,
+            0.12579199999981938,
+            0.5683339999995951,
+            0.10258299999986775,
+            0.09783399999923859,
+            0.09837500000048749
+          ],
+          "medianMs": 0.12479100000018661,
+          "p95Ms": 0.5683339999995951,
+          "minMs": 0.09783399999923859
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-5",
+        "family": "tiny-exact",
+        "inputHash": "0d21ce22806da8f912b6636bfc96353ca292bb54031ca02b3b77ed0e10905bbc",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 3,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 3,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "b9ed0044d6e3ccad5ce6a50653b72c5b69b90c2be0e3cc7e0e4e80df2da4fa38",
+        "timing": {
+          "samples": [
+            0.14379199999984849,
+            0.1334999999999127,
+            0.12274999999954161,
+            0.4880409999996118,
+            0.1198340000000826,
+            0.1001670000005106,
+            0.11004099999991013
+          ],
+          "medianMs": 0.12274999999954161,
+          "p95Ms": 0.4880409999996118,
+          "minMs": 0.1001670000005106
+        }
+      }
+    },
+    {
+      "id": "tiny-17",
+      "before": {
+        "ok": true,
+        "id": "tiny-17",
+        "family": "tiny-exact",
+        "inputHash": "bbb70cb74b0dd62e5871e2084c69aaf33f139a0cb7d4691d5940cfea3d62fd7b",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 2,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 2,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "12a5bcbdf7b5b0eed6b8ed3d4ad4f4e1bdfa72d241af721777e2f6ac13695c76",
+        "timing": {
+          "samples": [
+            0.20216600000003382,
+            0.12491599999975733,
+            0.11912499999925785,
+            0.11495899999954418,
+            0.10283299999991868,
+            0.09625000000050932,
+            0.08516700000018318
+          ],
+          "medianMs": 0.11495899999954418,
+          "p95Ms": 0.20216600000003382,
+          "minMs": 0.08516700000018318
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-17",
+        "family": "tiny-exact",
+        "inputHash": "60e4f5423fec4bcdaae5d77debebcd13127b53f7c4fe32835a79f9278c39e6d3",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 2,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 2,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "9062acc53100e61c99bdd0d460d2768de61a56eacc241fc59f0fedfd6c17162a",
+        "timing": {
+          "samples": [
+            0.1114159999997355,
+            0.1023750000003929,
+            0.09054199999991397,
+            0.5415409999995973,
+            0.08883399999922403,
+            0.063083000000006,
+            0.06270799999947485
+          ],
+          "medianMs": 0.09054199999991397,
+          "p95Ms": 0.5415409999995973,
+          "minMs": 0.06270799999947485
+        }
+      }
+    },
+    {
+      "id": "tiny-29",
+      "before": {
+        "ok": true,
+        "id": "tiny-29",
+        "family": "tiny-exact",
+        "inputHash": "5d3003f75f38e9933850538cc71ec2c974fd09ec671485206296362dca73ffac",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 16,
+        "packedCount": 5,
+        "utilization": 0.8888888888888888,
+        "volumeUpperBound": 16,
+        "baseContact": {
+          "full": 5,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 16,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "6a8cb937622a74d9d6754090a576d6c1bff4e1009a9606bfc372dcf05443b147",
+        "timing": {
+          "samples": [
+            0.12837500000023283,
+            0.10099999999965803,
+            0.10716599999977916,
+            0.4599159999997937,
+            0.0785409999998592,
+            0.06649999999990541,
+            0.0608749999992142
+          ],
+          "medianMs": 0.10099999999965803,
+          "p95Ms": 0.4599159999997937,
+          "minMs": 0.0608749999992142
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-29",
+        "family": "tiny-exact",
+        "inputHash": "899808fabacafa725d1f3b98cd65805d85ab1900764a1bfa0ffb3404ac1bc178",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 16,
+        "packedCount": 5,
+        "utilization": 0.8888888888888888,
+        "volumeUpperBound": 16,
+        "baseContact": {
+          "full": 5,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 16,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "38fdf690fe9a971f4ed09e2e28c42152295423c20eee87c25fcd71187b32d959",
+        "timing": {
+          "samples": [
+            0.14116699999976845,
+            0.11270799999965675,
+            0.09641600000031758,
+            0.5245000000004438,
+            0.07954200000040146,
+            0.07666700000027049,
+            0.06845799999973678
+          ],
+          "medianMs": 0.09641600000031758,
+          "p95Ms": 0.5245000000004438,
+          "minMs": 0.06845799999973678
+        }
+      }
+    },
+    {
+      "id": "tiny-41",
+      "before": {
+        "ok": true,
+        "id": "tiny-41",
+        "family": "tiny-exact",
+        "inputHash": "dc8b6154740d5f0c92dc23dc6c96a1a30ca833253891e492b14ebd6025b37450",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 1,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 1,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 2,
+        "resultHash": "c98668373a0b040722b15ecd87ca1f475cce77ab2621e8af175c49d5b30a90e1",
+        "timing": {
+          "samples": [
+            0.12066599999980099,
+            0.10674999999991996,
+            0.1156250000003638,
+            0.1123330000000351,
+            0.12775000000056025,
+            0.07845799999995506,
+            0.07012500000018917
+          ],
+          "medianMs": 0.1123330000000351,
+          "p95Ms": 0.12775000000056025,
+          "minMs": 0.07012500000018917
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-41",
+        "family": "tiny-exact",
+        "inputHash": "106c836bd00c2c19e7bb414c8e266cf960533b0d26468c721bed4c966f3a7696",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 1,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 1,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 2,
+        "resultHash": "6f04ff8f6aabc227516620bd673fd63caf995d42686d2da8b8f3ff76af3e8057",
+        "timing": {
+          "samples": [
+            0.11529199999949924,
+            0.10462499999994179,
+            0.10504100000071048,
+            0.5137920000006488,
+            0.09087499999986903,
+            0.0830839999998716,
+            0.0639999999993961
+          ],
+          "medianMs": 0.10462499999994179,
+          "p95Ms": 0.5137920000006488,
+          "minMs": 0.0639999999993961
+        }
+      }
+    },
+    {
+      "id": "tiny-53",
+      "before": {
+        "ok": true,
+        "id": "tiny-53",
+        "family": "tiny-exact",
+        "inputHash": "b833e4050b35e5578c7b18d686c0055fd2f5d385d4a6d7b7d62e8acee4853cdf",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 15,
+        "packedCount": 2,
+        "utilization": 0.8333333333333334,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 2,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.8333333333333334,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 15,
+          "states": 23
+        },
+        "referenceCoverage": 1,
+        "iterations": 16,
+        "resultHash": "32cccbcc0d664e9f4a7e1ea5b51d21ff6f32ad19fc31cfc7589faa7e465f83a2",
+        "timing": {
+          "samples": [
+            0.2770409999993717,
+            0.23116699999991397,
+            0.21666699999968841,
+            0.1930419999998776,
+            0.2514579999997295,
+            0.1696670000001177,
+            0.1715409999997064
+          ],
+          "medianMs": 0.21666699999968841,
+          "p95Ms": 0.2770409999993717,
+          "minMs": 0.1696670000001177
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-53",
+        "family": "tiny-exact",
+        "inputHash": "cba78e585d01d48bd6b64973f57d210d8846e90a115b2ec5c8dc98ed34fab9fe",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 15,
+        "packedCount": 2,
+        "utilization": 0.8333333333333334,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 2,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 0.8333333333333334,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 15,
+          "states": 23
+        },
+        "referenceCoverage": 1,
+        "iterations": 16,
+        "resultHash": "bce5e8531980ff069af5a9236d1b60206b08a4a60bef057bd83a6fde2274fd30",
+        "timing": {
+          "samples": [
+            0.39741699999922275,
+            0.3464169999997466,
+            0.33679099999972095,
+            0.3096659999991971,
+            0.2862089999998716,
+            0.2546670000001541,
+            0.25120800000058807
+          ],
+          "medianMs": 0.3096659999991971,
+          "p95Ms": 0.39741699999922275,
+          "minMs": 0.25120800000058807
+        }
+      }
+    },
+    {
+      "id": "tiny-67",
+      "before": {
+        "ok": true,
+        "id": "tiny-67",
+        "family": "tiny-exact",
+        "inputHash": "e67d609f3e2f4ff4715319aafbc43b1da0efcd10df89496d01e70c0d5ba5c25a",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 2,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 2,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "daa64c7be389cedc2cdf1d80921f9ee70426fbd284dab8148d9d7f15cfa2772b",
+        "timing": {
+          "samples": [
+            0.11470900000040274,
+            0.09850000000005821,
+            0.09658299999955489,
+            0.4920830000000933,
+            0.09799999999995634,
+            0.06816600000001927,
+            0.053958999999849766
+          ],
+          "medianMs": 0.09799999999995634,
+          "p95Ms": 0.4920830000000933,
+          "minMs": 0.053958999999849766
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "tiny-67",
+        "family": "tiny-exact",
+        "inputHash": "008f29a01a986d60fcdf3f2cd401f319682677540c24bd9ced12d6ededf1fb5e",
+        "instances": 5,
+        "types": 5,
+        "packedVolume": 18,
+        "packedCount": 2,
+        "utilization": 1,
+        "volumeUpperBound": 18,
+        "baseContact": {
+          "full": 2,
+          "partial": 0,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": {
+          "kind": "integer-grid-optimum",
+          "complete": true,
+          "volume": 18,
+          "states": 5
+        },
+        "referenceCoverage": 1,
+        "iterations": 1,
+        "resultHash": "40b11e94c3bff1ab84e181c741382c72ed83fc333502c71423220c963b526687",
+        "timing": {
+          "samples": [
+            0.1373329999996713,
+            0.11924999999973807,
+            0.11591700000008132,
+            0.5609169999997903,
+            0.15545900000051915,
+            0.11320800000066811,
+            0.11137499999949796
+          ],
+          "medianMs": 0.11924999999973807,
+          "p95Ms": 0.5609169999997903,
+          "minMs": 0.11137499999949796
+        }
+      }
+    },
+    {
+      "id": "reported-upright-gap",
+      "before": {
+        "ok": true,
+        "id": "reported-upright-gap",
+        "family": "base-contact",
+        "inputHash": "ae51d2cb64ecb2ec70dcadef4b0fe3ddab9c57100a67e804e131f4c194a2eb8a",
+        "instances": 19,
+        "types": 3,
+        "packedVolume": 750,
+        "packedCount": 19,
+        "utilization": 0.78125,
+        "volumeUpperBound": 750,
+        "baseContact": {
+          "full": 18,
+          "partial": 0,
+          "none": 1
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 14,
+        "resultHash": "594499d0afe7345206187f9a8cdfb73ed7341b053af5201345ccd17dac09c37c",
+        "timing": {
+          "samples": [
+            1.7351669999998194,
+            1.4404590000003736,
+            1.6455830000004426,
+            1.165208999999777,
+            0.8870419999993828,
+            0.8240829999995185,
+            0.7634160000006887
+          ],
+          "medianMs": 1.165208999999777,
+          "p95Ms": 1.7351669999998194,
+          "minMs": 0.7634160000006887
+        }
+      },
+      "after": {
+        "ok": true,
+        "id": "reported-upright-gap",
+        "family": "base-contact",
+        "inputHash": "e9f3dc4395a2a0cc0e8fbe06e3d2191f4cbc479ba6eb29c3fc354074603e8d8b",
+        "instances": 19,
+        "types": 3,
+        "packedVolume": 750,
+        "packedCount": 19,
+        "utilization": 0.78125,
+        "volumeUpperBound": 750,
+        "baseContact": {
+          "full": 18,
+          "partial": 1,
+          "none": 0
+        },
+        "boundCoverage": 1,
+        "reference": null,
+        "referenceCoverage": null,
+        "iterations": 14,
+        "resultHash": "963dcd705fb37b8259052b4c1d6694c3513cb2dfb2b1c086217e2bf6e8daee44",
+        "timing": {
+          "samples": [
+            1.7933750000001965,
+            1.5351670000000013,
+            1.6456250000001091,
+            1.0946660000008706,
+            0.8852080000006026,
+            0.8150420000001759,
+            0.7599159999999756
+          ],
+          "medianMs": 1.0946660000008706,
+          "p95Ms": 1.7933750000001965,
+          "minMs": 0.7599159999999756
+        }
+      }
+    }
+  ]
+}

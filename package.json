@@ -1,5 +1,15 @@
 {
   "name": "3dbinpackingjs",
   "private": true,
-  "scripts": { "test": "node --test" }
+  "scripts": {
+    "test": "node --test"
+  },
+  "main": "./pack.js",
+  "exports": {
+    ".": {
+      "import": "./pack.mjs",
+      "require": "./pack.js",
+      "default": "./pack.js"
+    }
+  }
 }

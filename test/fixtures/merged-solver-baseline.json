@@ -1,0 +1,19 @@
+{
+  "commit": "02361958d6839611d677bb101bec2a63701c074c",
+  "description": "SHA-256 of [packed count, packed volume, iterations, per-instance packed flag / position / dimensions] from the merged browser solver. Seeded corpus uses seed 0x3db1 and 250 cases.",
+  "fixtures": {
+    "default example": "18ae6c9fb65538310825a1c1ae40ff7a27e57cc86ba59780d83a470d59833369",
+    "issue #3 overlap": "87c7a6bc42c1a32023d2d66d674448e32f5013df9bc2d831f04a5d0a1afdad79",
+    "issue #3 column": "3c663a3e7bc9a272fa053a049a3f014d2069af6c04ca8450a881bb39cf274a23",
+    "three separate unit cubes": "424bb24550b837e318bdb829dcc507c37b1986a2d846f49d8fe430fb9c5dd8db",
+    "issue #3 seven-box example": "bf9840545a4e66869034b5a7f56371a9ed38a71144359c1b6e68612b7233ac18",
+    "issue #4 paper example": "eb1102ee3ecf61c984cbd729923d736183c105d1a6f961cada2aef123d9d3f23",
+    "issue #6": "270e7c8e6d96451e20b50150b90f5d86507caf0cf7f11dfea341fa13261eda17",
+    "exhausted quantity group": "c7573988c7ec6d5025e5f0769aa3a475200531dac27a21cad04c4ebacae0703b",
+    "empty input": "0f78e9986c5c5c50a38c6ede40e460c22babac892119f1a2b1258ae2d46dacbe",
+    "no fit": "e4d1db76d5bc665bdd94561e3e00e5b38ace794d494b32cac1ab5b44012e0254",
+    "dimensions above old fit sentinel": "6e86d93f639657106f78880592e44d3ae817ee11adc46e2697fbe0e9db28842e",
+    "decimal exact fit": "38d2df8426b8c2175e3b7ad1c18bc24bdee0cdc21b21363d90b416526b2fdade"
+  },
+  "seeded": "9a269692c4fa3a4ceb7e8b76f6f230ed0264f690f3ca3374007e89349301abe6"
+}

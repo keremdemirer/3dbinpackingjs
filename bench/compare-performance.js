@@ -60,7 +60,7 @@ if(!isMainThread) {
       beforeSolverHash:hash(fs.readFileSync(beforeSource)),afterSolverHash:hash(fs.readFileSync(afterSource)),cases};
     if(values.output) {
       fs.mkdirSync(path.dirname(values.output),{recursive:true});fs.writeFileSync(values.output,JSON.stringify(report,null,2)+'\n');
-      const lines=['# Packed-prefix cursor performance comparison','',`Runtime: ${report.environment.node}; ${report.environment.platform}/${report.environment.arch}; ${report.environment.cpu}.`,
+      const lines=['# Solver performance comparison','',`Runtime: ${report.environment.node}; ${report.environment.platform}/${report.environment.arch}; ${report.environment.cpu}.`,
         `${parameters.rounds} rounds; ${parameters.warmup} warmups + ${parameters.samples} samples per mode/case in a fresh worker. Mode order alternates each round. Only pack() is timed; every result is validated outside timing and complete result hashes must match.`,
         '','Medians pool measured samples across rounds. Speedup >1 indicates faster in this run; timings are machine-dependent observations, not CI budgets. Inspect individual round samples before generalizing.',
         '','| Case | Before median ms | After median ms | Speedup |','| --- | ---: | ---: | ---: |'];

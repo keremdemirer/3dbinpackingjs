@@ -213,3 +213,44 @@ quantity-100/300 cases improved by 1.24×/1.10×; mixed-48 and rules-48 were aro
 to the isolated scanning workload, not every packing problem. Layer-search costs
 remain a separate performance opportunity. These are local measurements, not
 portable guarantees.
+
+## Repeated layer-height score cache
+
+Within `findlayer`, several unpacked candidates can offer the same layer height.
+An eligible candidate has `heightDifference(candidate, height) === 0`, including
+upright/fixed items in their current internal-axis variant. Each candidate's
+score excludes itself, but that removes only a zero term. The other terms are
+summed in the same instance order. Caching the first score for a height preserves
+floating-point addition order and strict-less-than tie handling; no aggregate
+subtraction or candidate reordering is used.
+
+The cache belongs to one `findlayer` call. It must not survive placement changes,
+new calls, or orientation variants. Eligible-height and footprint checks remain
+unchanged. For U unpacked instances and C eligible candidate occurrences, score
+work changes from O(C × U) to O(H × U), where H is the number of distinct eligible
+heights. Other candidate traversal and fit checks remain. Extra temporary memory
+is O(H), released after the selection call; no cross-call cache is introduced.
+
+Reproduce against the merged quantity-cursor version:
+
+```sh
+git show 4d00fcc:pack.js > ../packing-before-layer-cache.js
+npm run bench:compare -- --baseline-source ../packing-before-layer-cache.js --output bench/results/layer-current.json
+```
+
+The recorded Node 24 / Apple M1 Max comparison is `bench/results/layer-cache-node24.*`:
+3 rounds with alternating mode order; 20 warmups and 15 measured calls per mode
+in fresh workers. Every measured/warmup result is independently validated outside
+timing, and complete hashes must match the reference. Both source hashes,
+environment and raw per-round samples are included.
+
+Mixed-48 improved from 78.121 to 23.259 ms (3.36×), rules-48 from 45.240 to
+17.604 ms (2.57×), and the historical issue-6 workload from 33.194 to 1.614 ms
+(20.57×). Single-row workloads have little layer-search work and were slightly
+slower in this run: 1.261 → 1.281 ms and 3.668 → 3.820 ms. These local observations
+are not universal speed guarantees or CI thresholds.
+
+The unchanged 176 full-result fixtures still match. Focused tests additionally
+compare cached selection with uncached ordered scoring while changing packed
+flags, thickness, all six internal variants, rotation restrictions, footprint
+eligibility, and decimal-valued sums. They add no decimal precision policy.

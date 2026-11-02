@@ -171,3 +171,45 @@ The original quality baseline stays unchanged. Recorded timings include search
 and the optional O(n²) settling post-pass; they do not isolate its cost. Compare
 raw samples and environments, not a single ratio. Zero absent contact is not a
 stability guarantee. Reports are in `bench/results/settling-node24.*`.
+
+## Packed-prefix cursor comparison
+
+`findbox` used to restart at the beginning of each item's expanded quantity
+group on every lookup. The cursor skips that packed prefix once per trial while
+retaining the exact first-unpacked choice and type order. Packing flags only
+change from unpacked to packed during a trial. Every new trial resets both flags
+and cursors; singleton groups use a direct flag check. Other group traversal,
+orientation scoring, and layer searches are unchanged.
+
+To compare against the merged pre-optimization source, save its standalone core
+outside the checkout and run the comparison (Node.js 22+):
+
+```sh
+git show 3de3cf3:pack.js > ../packing-before-cursor.js
+npm run bench:compare -- --baseline-source ../packing-before-cursor.js --warmup 20 --samples 15 --output bench/results/cursor-current.json
+```
+
+Only load trusted source files: the comparison executes the supplied baseline.
+Each mode/case runs in a fresh worker, with 3 rounds and alternating before/after
+order. Every result is independently validated outside the timed call. Complete
+result hashes must match between modes, including identities, placement order,
+rotations, settling diagnostics and search trial counts. Input hashes are checked
+for mutation. Reports include both solver hashes, environment, raw per-round
+samples, and pooled medians. The worker deadline is 30 seconds per mode/case.
+The original corpus and quality baseline are unchanged. Timings are observations,
+not a CI performance gate; startup/JIT/GC/thermal effects can still affect results.
+
+The recorded comparison is `bench/results/cursor-node24.*`. The 176 full-result
+parity fixtures in `test/fixtures/performance-parity.json` were generated from
+merged commit `3de3cf3` before changing the solver, rather than from the optimized
+implementation. Their cases include all 25 benchmarks, 60 seeded mixed-rule
+requests with repeated IDs and quantities, 1000/3000-instance single-row loads that isolate packed-prefix scanning, and the
+upright floating-stack regression, each with settling disabled and enabled.
+
+On the recorded Apple M1 Max / Node 24 run, the isolated 1000/3000-box rows
+improved from 4.845/37.913 ms to 1.236/3.601 ms (3.92×/10.53×). Existing grouped
+quantity-100/300 cases improved by 1.24×/1.10×; mixed-48 and rules-48 were around
+1.01×, too small to treat as a robust general speedup. The largest gains belong
+to the isolated scanning workload, not every packing problem. Layer-search costs
+remain a separate performance opportunity. These are local measurements, not
+portable guarantees.

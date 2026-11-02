@@ -62,6 +62,7 @@ function boxinfo(){
 };
 
 var bestboxes = [];
+var nextUnpacked = [];
 var boxlist = new Array();
 boxlist[0] = new boxinfo();
 
@@ -306,6 +307,8 @@ var execiterations = function(){
 			remainpy = py;
 			remainpz = pz;
 			packednumbox = 0;
+			// Packing flags are monotone within a trial; cursors must reset between trials.
+			nextUnpacked = [];
 
 			for (x = 1; x <= tbn; x++)
 			{
@@ -666,11 +669,17 @@ var findbox = function( hmx,  hy,  hmy,  hz,  hmz)
   boxi = 0; bboxi = 0;
   for (y = 1; y <= tbn; y = y + boxlist[y].n)
   {
-    for (x = y; x < y + boxlist[y].n; x++)
-    {
-      if (!boxlist[x].packst) break;
+    // Keep the original first-unpacked choice and item-type order without
+    // rescanning the packed prefix of this quantity group on every lookup.
+    if (boxlist[y].n === 1) {
+      if (boxlist[y].packst) continue;
+      x = y;
+    } else {
+      x = nextUnpacked[y] === undefined ? y : nextUnpacked[y];
+      while (x < y + boxlist[y].n && boxlist[x].packst) x++;
+      nextUnpacked[y] = x;
+      if (x >= y + boxlist[y].n || x > tbn) continue;
     }
-    if (x >= y + boxlist[y].n || x > tbn) continue;
     boxlist[x].orientations.forEach(function(size) {
       analyzebox(hmx, hy, hmy, hz, hmz, size[0], size[1], size[2]);
     });

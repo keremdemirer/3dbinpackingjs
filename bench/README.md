@@ -254,3 +254,35 @@ The unchanged 176 full-result fixtures still match. Focused tests additionally
 compare cached selection with uncached ordered scoring while changing packed
 flags, thickness, all six internal variants, rotation restrictions, footprint
 eligibility, and decimal-valued sums. They add no decimal precision policy.
+
+## Extended-search quality experiment
+
+Run `npm run bench:quality -- --output bench/results/extended-current.json` to
+compare standard and extended search. The default is 3 rounds of 2 warmups and
+7 measured calls per mode/case, alternating mode order in fresh bounded workers.
+Every call is validated outside timing. The report fails on a volume regression,
+invalid geometry, changed round fingerprints, or more than twice the standard
+trial count. A 30-second worker deadline covers each complete case/mode run;
+this benchmark deadline is not a public API timeout.
+
+The standard 25-case corpus and its volume baseline remain unchanged. The quality
+suite adds 20 generated 12/24-piece constructive fills with seeds held out from
+policy selection. Each witness is independently validated. Initial experiments
+with fit-score and continuation-layer rankings identified a width/volume-first
+policy for layer-growing boxes; it is used only in the optional second pass.
+The standard fitting-box ranking remains unchanged. The second pass updates the
+saved winner only for strictly larger volume, so every standard result remains
+a fallback. Bound-reaching results skip the extra pass, including empty inputs.
+
+The recorded Node 24 / Apple M1 Max report is `bench/results/extended-node24.*`.
+Five of 45 cases improve: the original 12-piece case (912 → 960, 95% → 100%)
+and four of 20 held-out cases. The original 24-piece case stays at 882/960
+(91.875%). These results do not establish universal quality or optimality.
+The measured 12-piece cost was 1.060 → 1.643 ms; mixed-48 was 26.356 → 48.698 ms
+with no quality gain. Raw per-round samples, search passes/trials, source and
+input hashes, reference coverage, and contact diagnostics are in the JSON report.
+
+Extended search optimizes packed volume, not item count or physical support.
+More volume can mean fewer boxes or worse contact, and settling does not certify
+stability. The API and demo default to standard search; users opt into the extra
+work. CI runs a one-sample comparison and uploads results without a timing gate.

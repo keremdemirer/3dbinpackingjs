@@ -23,3 +23,7 @@ pack({ container, items: [{ width: 1, height: 1, depth: 1, rotation }] });
 pack({ container, items: [{ width: 1, height: 1, depth: 1, rotation: 'sideways' }] });
 
 pack({ container, items: [], settle: true }).diagnostics.settling?.totalDrop;
+
+import type { SearchMode } from '3dbinpackingjs';
+const search: SearchMode = 'extended';
+pack({ container, items: [], search }).diagnostics.search?.passes;

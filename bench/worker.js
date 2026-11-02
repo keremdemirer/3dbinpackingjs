@@ -38,6 +38,6 @@ try {
     instances:result.totalCount,types:input.items.length,...quality,baseContact,
     boundCoverage:quality.volumeUpperBound?quality.packedVolume/quality.volumeUpperBound:1,
     reference,referenceCoverage:reference?.complete?(reference.volume?quality.packedVolume/reference.volume:1):null,
-    iterations:result.diagnostics.iterations,resultHash:fingerprint,
+    iterations:result.diagnostics.iterations,...(result.diagnostics.search?{search:result.diagnostics.search}:{}),resultHash:fingerprint,
     timing:{samples:times,medianMs:percentile(sorted,0.5),p95Ms:percentile(sorted,0.95),minMs:sorted[0]}});
 } catch(error) {parentPort.postMessage({ok:false,id:workerData.entry.id,error:error.stack});}

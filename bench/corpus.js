@@ -59,4 +59,4 @@ function corpus() {
     position:{x:(i%4)*2,y:(Math.floor(i/4)%4)*2,z:Math.floor(i/16)*2},dimensions:dims(2,2,2)}))};
   return cases;
 }
-module.exports = { corpus };
+module.exports = { corpus, tiling };

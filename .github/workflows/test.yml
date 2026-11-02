@@ -17,6 +17,7 @@ jobs:
       - run: npm run check
       - run: npm run bench:check -- --output bench/results/ci.json
       - run: npm run bench:settling -- --samples 1 --warmup 0 --output bench/results/ci-settling.json
+      - run: npm run bench:quality -- --samples 1 --warmup 0 --rounds 1 --output bench/results/ci-quality.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -26,4 +27,6 @@ jobs:
             bench/results/ci.md
             bench/results/ci-settling.json
             bench/results/ci-settling.md
+            bench/results/ci-quality.json
+            bench/results/ci-quality.md
           if-no-files-found: ignore

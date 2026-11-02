@@ -34,3 +34,9 @@ const moved: number | undefined = settled.diagnostics.settling?.movedCount;
 void moved;
 // @ts-expect-error Settling requires a boolean.
 api.pack({ ...input, settle: 'yes' });
+
+const extended = api.pack({ ...input, search: 'extended' });
+const passes: 1 | 2 | undefined = extended.diagnostics.search?.passes;
+void passes;
+// @ts-expect-error Unknown search modes are rejected.
+api.pack({ ...input, search: 'unlimited' });

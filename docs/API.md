@@ -48,6 +48,7 @@ the error in its report field.
 - `items`: an array of objects with the same three dimension fields, optional
   `id`, optional `quantity` (defaults to `1`), and optional `rotation` (defaults
   to `"free"`). An empty array is allowed.
+- `search`: `"standard"` (default) or `"extended"`. See search effort below.
 - `settle`: optional boolean, defaults to `false`. See downward settling below.
 - Dimensions must be positive finite numbers in one consistent unit. API values
   are not coerced from strings. Computed volumes must stay positive and finite.
@@ -80,6 +81,40 @@ search, even when the solver changes its internal layer axes. They describe
 axis-aligned dimensions, not labeled faces, weight, or physical stability.
 Invalid rule values throw `TypeError`. Omitting the rule preserves the previous
 free-rotation behavior and result shape.
+
+### Search effort
+
+Set `search: 'extended'` to try an alternative layer-growing box policy when the
+standard search leaves unused achievable volume:
+
+```js
+const result = pack({
+  container: { width: 12, height: 10, depth: 8 },
+  items, // Your box types, dimensions, quantities, and rotation rules
+  search: 'extended'
+});
+console.log(result.diagnostics.search); // { mode: 'extended', passes: 1 | 2 }
+```
+
+The standard pass always runs first. If it reaches the smaller of requested
+volume and container volume, no second pass is needed. Otherwise the second pass
+prioritizes width fit, then box volume, when choosing a box taller than the
+current layer. Only a strictly larger packed volume replaces the saved standard
+winner; equal-volume ties retain the original arrangement. Settling, if enabled,
+runs once after the final winner is chosen.
+
+This is a deterministic two-policy search, not lookahead or an exact solver.
+It runs at most two full search passes, and `diagnostics.iterations` counts trials
+across both. A pass count is not a wall-clock deadline: difficult inputs may take
+longer, and the synchronous call can still block the browser. The objective is
+packed volume, so a larger-volume result need not contain more boxes or have
+better support. Extended search does not guarantee improvement or optimality.
+
+The recorded 12-piece known-fill case improves from 95% to 100%; the 24-piece
+case remains at 91.875%. Four of 20 held-out full-fill cases also improve. See
+[quality measurements](https://github.com/keremdemirer/3dbinpackingjs/blob/master/bench/results/extended-node24.md)
+for timing costs and remaining gaps. Standard is the default and retains the
+previous output shape; `diagnostics.search` appears only in extended mode.
 
 ### Optional downward settling
 
@@ -120,7 +155,8 @@ boxes and `totalDrop` sums their vertical distances in the input unit.
 | `totalCount`, `packedCount` | Requested and packed instance counts. |
 | `containerVolume`, `totalItemVolume`, `packedVolume` | Volumes in cubic input units. |
 | `utilization` | Packed volume / container volume, as a fraction (multiply by 100 for a percentage). |
-| `diagnostics.iterations` | Number of initial-layer search trials. |
+| `diagnostics.iterations` | Initial-layer trials across all executed search passes. |
+| `diagnostics.search` | Extended mode only: selected mode and number of passes executed. |
 
 Each record contains `id`, `itemIndex` (zero-based input array index),
 `instanceIndex` (zero-based within that item's quantity), and `dimensions`.

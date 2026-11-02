@@ -41,6 +41,8 @@ var packedy, prepackedy, layerthickness, itelayer, preremainpy;
 var bestite, packednumbox, bestpackednum, packedvolume, bestvolume;
 var totalvolume, totalboxvol, temp;
 var hasRotationRules = false;
+var preferWideLayers = false;
+var searchMode;
 // Each row maps internal axes back to the caller's original X/Y/Z axes.
 var variantAxes = [null, [0,1,2], [2,1,0], [1,2,0], [1,0,2], [0,2,1], [2,0,1]];
 
@@ -216,6 +218,11 @@ var container;
 function readInput() {
   if (!input || typeof input !== 'object' || Array.isArray(input)) {
     throw new TypeError('pack expects an object with container and items.');
+  }
+  var requestedSearch = input.search;
+  searchMode = requestedSearch === undefined ? 'standard' : requestedSearch;
+  if (searchMode !== 'standard' && searchMode !== 'extended') {
+    throw new TypeError('search must be standard or extended.');
   }
   if (input.settle !== undefined && typeof input.settle !== 'boolean') {
     throw new TypeError('settle must be a boolean.');
@@ -739,6 +746,22 @@ var analyzebox = function( hmx,  hy,  hmy,  hz,  hmz,  dim1,  dim2,  dim3)
     }
     else
     {
+      // The optional second pass favors wide layer-growing boxes, then volume.
+      // Keep the legacy fitting-box ranking and default oversize ranking intact.
+      if (preferWideLayers) {
+        var volume = boxlist[x].vol;
+        var selectedVolume = bboxi ? boxlist[bboxi].vol : 0;
+        var widthGap = hmx - dim1, heightExcess = dim2 - hy;
+        var depthGap = Math.abs(hz - dim3);
+        if (widthGap < bbfx ||
+            (widthGap === bbfx && (volume > selectedVolume ||
+             (volume === selectedVolume && (heightExcess < bbfy ||
+              (heightExcess === bbfy && depthGap < bbfz)))))) {
+          bboxx = dim1; bboxy = dim2; bboxz = dim3;
+          bbfx = widthGap; bbfy = heightExcess; bbfz = depthGap; bboxi = x;
+        }
+        return;
+      }
       if (dim2 - hy < bbfy)
       {
         bboxx = dim1;
@@ -897,6 +920,13 @@ var volumecheck = function()
 
 initialize();
 execiterations();
+var searchPasses = 1;
+if (searchMode === 'extended' && bestvolume < Math.min(totalvolume, totalboxvol)) {
+  preferWideLayers = true;
+  searchPasses++;
+  // Keep the saved standard winner. Only a strictly larger volume replaces it.
+  execiterations();
+}
 
 // Map the saved winner back to the caller's original container axes.
 var axes = variantAxes[bestvariant];
@@ -923,6 +953,7 @@ for (var index = 1; index <= tbn; index++) {
   }
 }
 var diagnostics = { iterations: itenum };
+if (searchMode === 'extended') diagnostics.search = { mode: 'extended', passes: searchPasses };
 if (input.settle === true) diagnostics.settling = settlePlacements(placements);
 return {
   container: container,

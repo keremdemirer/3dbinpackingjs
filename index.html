@@ -87,10 +87,13 @@
         <form id="packing-form">
           <div class="section-heading"><h2>Your load</h2><span class="step">01 / INPUT</span></div>
           <label class="field-label" for="example">Start with an example</label>
-          <select id="example"><option value="mixed">Mixed cartons</option><option value="exact">An exact fit</option><option value="partial">More boxes than space</option><option value="orientation">Keep it upright</option><option value="regression">Three-box regression</option></select>
+          <select id="example"><option value="mixed">Mixed cartons</option><option value="knownfill">Known full-container fit</option><option value="exact">An exact fit</option><option value="partial">More boxes than space</option><option value="orientation">Keep it upright</option><option value="regression">Three-box regression</option></select>
           <section aria-labelledby="container-heading"><h3 id="container-heading">Container</h3><p class="helper">Use the same unit for every dimension.</p>
             <div class="dimensions"><label>Width <span>X</span><input id="strxx" type="number" min="0.000001" step="any" required value="12"></label><label>Height <span>Y</span><input id="stryy" type="number" min="0.000001" step="any" required value="10"></label><label>Depth <span>Z</span><input id="strzz" type="number" min="0.000001" step="any" required value="8"></label></div>
           </section>
+          <label class="field-label" for="search">Search effort</label>
+          <select id="search"><option value="standard">Standard search</option><option value="extended">Extended search · extra pass</option></select>
+          <p class="helper">Try another arrangement if needed. Extended search can take longer.</p>
           <section aria-labelledby="items-heading"><div class="section-heading"><h3 id="items-heading">Box types</h3><button id="add-box" class="text-button" type="button">+ Add type</button></div>
             <div class="item-labels" aria-hidden="true"><span>ID</span><span>W</span><span>H</span><span>D</span><span>Qty</span><span></span></div>
             <div id="box-input-screen"></div>

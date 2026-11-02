@@ -11,6 +11,8 @@ No npm version or GitHub release has been published by these changes.
   floating stack (base heights 1/3/5 become 0/2/4). Enabled by a demo checkbox;
   disabled by default in the API. Does not certify stability or remove overhangs.
 - Settling regression/property checks and before/after corpus benchmark reports.
+- Search and social metadata, canonical URL, sitemap, project/algorithm/API overview,
+  software structured data, social preview artwork, and clearer repository introduction.
 
 - Direct base-contact diagnostics in benchmark reports and the demo, including
   the reported 78.125% arrangement. Warnings and box inspection expose partial

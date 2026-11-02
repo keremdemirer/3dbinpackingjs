@@ -1,10 +1,24 @@
-# 3dbinpackingjs
+# 3dbinpackingjs — 3D bin packing in JavaScript
 
-JavaScript conversion of [wknechtel/3d-bin-pack](https://github.com/wknechtel/3d-bin-pack/).
-A single-container, volume-maximizing packing heuristic with a standalone
-JavaScript API and a browser example.
+A JavaScript library for arranging rectangular boxes inside a single container,
+with an interactive 3D packing demo, per-item rotation rules, and a standalone API
+for Node.js and browsers. CommonJS, ES modules, and TypeScript declarations are included.
+
+The solver uses a volume-maximizing EB-AFIT heuristic, converted from
+[wknechtel/3d-bin-pack](https://github.com/wknechtel/3d-bin-pack/). It finds useful
+geometric arrangements; it does not guarantee optimal packing or physical stability.
 
 **[Try the live demo](https://keremdemirer.github.io/3dbinpackingjs/)**
+
+## Explore the project
+
+- [Interactive box-packing demo](https://keremdemirer.github.io/3dbinpackingjs/):
+  enter dimensions and quantities, inspect individual placements, and export JSON or PNG.
+- [Rotation rules](#rotation-rules): free, upright, or fixed per box type.
+- [Performance and quality benchmarks](bench/README.md): reproducible measurements,
+  geometry validation, and known-fill comparisons.
+- [License status and provenance](LICENSE-STATUS.md): upstream permission is unresolved;
+  the package is not published to npm.
 
 ## JavaScript API
 

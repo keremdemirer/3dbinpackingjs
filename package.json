@@ -1,7 +1,7 @@
 {
   "name": "3dbinpackingjs",
   "version": "0.1.0",
-  "description": "Single-container 3D bin packing with an EB-AFIT heuristic, structured results, and a browser example.",
+  "description": "JavaScript 3D bin packing with an EB-AFIT heuristic, rotation rules, a Node.js/browser API, and an interactive demo.",
   "type": "commonjs",
   "private": true,
   "license": "UNLICENSED",
@@ -30,7 +30,8 @@
     "README.md",
     "CHANGELOG.md",
     "LICENSE-STATUS.md",
-    "demo/"
+    "demo/",
+    "sitemap.xml"
   ],
   "scripts": {
     "test": "node --test",
@@ -55,7 +56,12 @@
   "keywords": [
     "3d-bin-packing",
     "bin-packing",
-    "eb-afit"
+    "box-packing",
+    "packing-algorithm",
+    "eb-afit",
+    "javascript",
+    "nodejs",
+    "3d-visualization"
   ],
   "devDependencies": {
     "typescript": "5.9.3"

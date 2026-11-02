@@ -4,10 +4,14 @@
 
 Use the [online demo](https://keremdemirer.github.io/3dbinpackingjs/) or open
 `index.html` directly in a modern browser. No build step, server, CDN, or
-additional runtime dependency is required. Choose one of five examples (mixed
-cartons, exact fit, partial fit, upright rotation, or the three-box regression), or edit the
+additional runtime dependency is required. Choose one of six examples (mixed
+cartons, exact fit, partial fit, upright rotation, the known full-container fit, or the three-box regression), or edit the
 container and add/remove box types, then select **Calculate packing**.
 
+- **Search effort** defaults to Standard. Extended runs one extra search pass
+  when useful and can take longer. Choose **Known full-container fit** to compare
+  the standard 95% result with the extended 100% arrangement. Changing search
+  effort marks the result stale until you calculate again.
 - Set each box type’s rotation rule with its **Rotation** selector. The “Keep it
   upright” example fits with a width/depth swap; choosing Fixed makes it unpacked.
 - Drag to orbit, Shift-drag or right-drag to pan, and scroll to zoom.

@@ -16,6 +16,13 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Optional `search: 'extended'` two-pass search, retaining the standard winner
+  unless the alternate layer-growing policy packs strictly more volume. Standard
+  remains the default; rotations and optional settling apply to both modes.
+- Search-effort demo control and a known-fill example improving from 95% to 100%.
+- Extended-search diagnostics, TypeScript declarations, and a 45-case quality/runtime
+  comparison including 20 held-out known fills. The original 24-piece gap remains.
+
 - Focused project overview with a visual banner, organized API/demo/testing guides,
   contributor instructions, and structured issue/PR templates.
 - Complete-result parity fixtures from the pre-optimization solver for 176

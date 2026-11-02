@@ -3,6 +3,8 @@
   'use strict';
   var examples={
     mixed:{container:[12,10,8],items:[['Carton A',5,4,4,4],['Carton B',3,3,6,5],['Small box',2,2,2,10]]},
+    // Same generated 12-piece known-fill case as bench/corpus.js.
+    knownfill:{container:[12,10,8],items:[["Box 1",11,4,3,1],["Box 2",12,1,8,1],["Box 3",12,1,8,1],["Box 4",12,4,2,1],["Box 5",11,8,1,1],["Box 6",11,8,1,1],["Box 7",11,8,1,1],["Box 8",1,8,6,1],["Box 9",12,2,2,1],["Box 10",12,2,2,1],["Box 11",11,4,1,1],["Box 12",11,4,2,1]]},
     exact:{container:[4,4,4],items:[['Cube',2,2,2,8]]},
     partial:{container:[4,4,4],items:[['Large cube',3,3,3,3],['Small cube',1,1,1,16]]},
     orientation:{container:[4,3,2],items:[['Upright carton',2,3,4,1,'upright']]},

@@ -26,6 +26,7 @@ heuristic, a standalone API, and an interactive 3D demo.
 | Capability | Details |
 | --- | --- |
 | Packing | Single-container EB-AFIT heuristic for rectangular boxes. |
+| Search effort | Standard by default; optional extended search tries a second policy. |
 | Rotation rules | Free, upright, or fixed per box type. |
 | Downward settling | Optional post-pass closes vertical gaps while preserving packed volume. |
 | JavaScript API | CommonJS, ES modules, and plain browser scripts; no runtime dependencies. |
@@ -57,6 +58,9 @@ console.log(result.placements);  // Positions and rotated dimensions
 For ES modules, import from `./pack.mjs`. In a browser, load `pack.js` and call
 `BinPacking.pack(...)`. The solver is synchronous, does not modify input objects,
 and returns independent results. Use one consistent measurement unit.
+
+For an optional second search pass, set `search: 'extended'`; see the
+[quality/runtime tradeoff](docs/API.md#search-effort).
 
 See the [complete input/output reference](docs/API.md),
 [TypeScript usage](docs/API.md#typescript), and

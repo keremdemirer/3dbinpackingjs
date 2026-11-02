@@ -16,6 +16,7 @@
       '*** PACKED BOXES ***',
       'ID | Item index | Instance index | Rotation | X Y Z | Packed width height depth'
     ];
+    if (result.diagnostics.search) lines.splice(1,0,'SEARCH PASSES : ' + result.diagnostics.search.passes);
     result.placements.forEach(function(item) {
       var p = item.position;
       var d = item.dimensions;
@@ -35,6 +36,7 @@
     var screen = document.getElementById('screen');
     try {
       var result = root.BinPacking.pack({
+        search: document.getElementById('search') ? document.getElementById('search').value : undefined,
         settle: document.getElementById('settle') ? document.getElementById('settle').checked : false,
         container: {
           width: Number(document.getElementById('strxx').value),

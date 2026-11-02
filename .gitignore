@@ -4,3 +4,5 @@ bench/results/ci.*
 bench/results/*.cpuprofile
 
 bench/results/ci-settling.*
+
+bench/results/ci-quality.*

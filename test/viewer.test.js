@@ -85,6 +85,13 @@ test('legacy form adapter emits successful results and input errors for the demo
   fields.settle.checked=false;
   assert.equal(context.main(),0);
   assert.equal(events.at(-1).detail.diagnostics.settling,undefined);
+  fields.search={value:'extended'};
+  assert.equal(context.main(),0);
+  assert.equal(events.at(-1).detail.diagnostics.search.passes,1);
+  assert.match(fields.screen.value,/SEARCH PASSES : 1/);
+  fields.search.value='standard';
+  assert.equal(context.main(),0);
+  assert.equal(events.at(-1).detail.diagnostics.search,undefined);
   fields.strxx.value='0';
   assert.equal(context.main(),1);
   assert.equal(events.at(-1).type,'packing:error'); assert.match(events.at(-1).detail,/positive/);

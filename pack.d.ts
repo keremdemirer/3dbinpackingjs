@@ -21,7 +21,12 @@ export interface Item extends Dimensions {
   rotation?: RotationRule;
 }
 
+/** Standard preserves existing decisions; extended tries at most two search passes. */
+export type SearchMode = 'standard' | 'extended';
+
 export interface PackInput {
+  /** Defaults to standard. Extended retains the standard result unless more volume fits. */
+  readonly search?: SearchMode;
   /** Lower packed boxes along original -Y after search. Defaults to false; not a stability model. */
   readonly settle?: boolean;
   readonly container: Readonly<Dimensions>;
@@ -56,6 +61,8 @@ export interface UnpackedItem extends ItemInstance {}
 export interface PackDiagnostics {
   /** Number of initial-layer search trials. */
   iterations: number;
+  /** Present only for extended search. Iterations count trials across both passes. */
+  search?: { mode: 'extended'; passes: 1 | 2 };
   /** Present only when settle is true, including empty/no-fit results. */
   settling?: {
     movedCount: number;

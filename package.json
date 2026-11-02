@@ -42,7 +42,8 @@
     "bench:quick": "node bench/run.js --quick --samples 1 --warmup 0",
     "bench:check": "node bench/run.js --samples 1 --warmup 0 --baseline bench/baseline.json --check-quality",
     "bench:settling": "node bench/settling.js",
-    "bench:compare": "node bench/compare-performance.js"
+    "bench:compare": "node bench/compare-performance.js",
+    "bench:quality": "node bench/quality.js"
   },
   "engines": {
     "node": ">=22"

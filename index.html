@@ -1,53 +1,56 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Packaging Script from C</title>
-	</head>
-	<body>
-		<div id="box-input-screen" style="position:relative;">
-			<div id="box-input-screen-header">
-				<h3>Boxes <button onclick="addBoxInputs()">Add New Box Type</button></h3>
-			</div>
-			<div class="box-inputs">
-				<input placeholder="lbl" name="lbl" value="box1" />
-				<input placeholder="dim1" name="dim1" value="1" />
-				<input placeholder="dim2" name="dim2" value="2" />
-				<input placeholder="dim3" name="dim3" value="3" />
-				<input placeholder="boxn" name="boxn" value="1" />
-			</div>
-		</div>
-		<hr />
-		<div id="main_box_dimensions">
-			<button onclick="main();">Calculate</button>
-			<label>Container X: </label><input id="strxx" placeholder="strxx" value="1" />
-			<label>Container Y: </label><input id="stryy" placeholder="stryy" value="3" />
-			<label>Container Z: </label><input id="strzz" placeholder="strzz" value="3" />
-		</div>
-		<hr />
-		<div id="output" style="min-width:670px;">
-			<div>Report</div>
-			<textarea id="screen" style="min-width:670px;min-height:300px;padding:10px;"></textarea>
-		</div>
-		<script src="pack.js"></script>
-		<script src="pack1.js"></script>
-		<script>
-			var addBoxInputs = (function(){
-				var scr = document.getElementById('box-input-screen');
-				var inputNames = ['lbl', 'dim1', 'dim2', 'dim3', 'boxn'];
-
-				return function(){
-					var boxInputs = document.createElement('div');
-						boxInputs.classList.add('box-inputs');
-					inputNames.forEach(function(a,b){
-						var inp = document.createElement('input');
-							inp.setAttribute('placeholder', a);
-							inp.setAttribute('name', a);
-						boxInputs.appendChild(inp);
-					});
-					scr.appendChild(boxInputs);
-				};
-			}());
-		</script>
-	</body>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D Bin Packing · Interactive demo</title>
+  <link rel="stylesheet" href="demo/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">▧</span><span>3D Bin Packing<small>THE INTERACTIVE WORKBENCH</small></span></a>
+    <a class="repo-link" href="https://github.com/keremdemirer/3dbinpackingjs">View source <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <div class="intro"><div><p class="eyebrow">A LITTLE LESS EMPTY SPACE</p><h1>See how it all fits.</h1><p>Build a load, explore the arrangement, and inspect every box.</p></div><span class="local-badge">● Runs locally in your browser</span></div>
+    <div class="workspace">
+      <aside class="panel inputs-panel">
+        <form id="packing-form">
+          <div class="section-heading"><h2>Your load</h2><span class="step">01 / INPUT</span></div>
+          <label class="field-label" for="example">Start with an example</label>
+          <select id="example"><option value="mixed">Mixed cartons</option><option value="exact">An exact fit</option><option value="partial">More boxes than space</option><option value="regression">Three-box regression</option></select>
+          <section aria-labelledby="container-heading"><h3 id="container-heading">Container</h3><p class="helper">Use the same unit for every dimension.</p>
+            <div class="dimensions"><label>Width <span>X</span><input id="strxx" type="number" min="0.000001" step="any" required value="12"></label><label>Height <span>Y</span><input id="stryy" type="number" min="0.000001" step="any" required value="10"></label><label>Depth <span>Z</span><input id="strzz" type="number" min="0.000001" step="any" required value="8"></label></div>
+          </section>
+          <section aria-labelledby="items-heading"><div class="section-heading"><h3 id="items-heading">Box types</h3><button id="add-box" class="text-button" type="button">+ Add type</button></div>
+            <div class="item-labels" aria-hidden="true"><span>ID</span><span>W</span><span>H</span><span>D</span><span>Qty</span><span></span></div>
+            <div id="box-input-screen"></div>
+          </section>
+          <button id="calculate" class="primary-button" type="submit">Calculate packing <span aria-hidden="true">→</span></button>
+          <p class="helper algorithm-note">Boxes rotate freely. This heuristic finds a useful arrangement; it does not guarantee an optimal or physically supported load.</p>
+        </form>
+      </aside>
+      <div class="results-column">
+        <section class="metrics" aria-label="Packing summary"><div class="metric"><span>Packed boxes</span><strong id="packed-count">—</strong></div><div class="metric"><span>Volume used</span><strong id="utilization">—</strong></div><div class="metric"><span>Unpacked boxes</span><strong id="unpacked-count">—</strong></div></section>
+        <section class="panel viewer-panel" aria-labelledby="viewer-heading">
+          <div class="viewer-heading"><div><h2 id="viewer-heading">The arrangement</h2><p id="view-state">Calculate to see your load</p></div><div class="view-buttons"><button id="zoom-out" type="button" aria-label="Zoom out">−</button><button id="zoom-in" type="button" aria-label="Zoom in">+</button><button id="reset-view" type="button">Reset view</button></div></div>
+          <div class="canvas-wrap"><canvas id="packing-view" tabindex="0" aria-label="Interactive 3D packing view" aria-describedby="view-help">Use the packed-box selector below to inspect the arrangement.</canvas><div class="axis-key" aria-hidden="true"><span class="axis-x">X width</span><span class="axis-y">Y height</span><span class="axis-z">Z depth</span></div></div>
+          <p id="viewer-warning" class="viewer-warning" role="status" hidden></p>
+          <div class="viewer-footer"><p id="view-help">Drag to rotate · Shift-drag to pan · Scroll to zoom<br><span>Touch: drag to rotate, two fingers to pan / pinch. Keyboard: arrows, Shift + arrows, + / −, 0 to reset.</span></p><div class="export-buttons"><button id="export-png" type="button" disabled>Save PNG</button><button id="export-json" type="button" disabled>Export JSON</button></div></div>
+        </section>
+        <p id="status" class="status" role="status" aria-live="polite">Preparing example…</p>
+        <div class="details-grid">
+          <section class="panel inspection" aria-labelledby="inspect-heading"><div class="section-heading"><h2 id="inspect-heading">Inspect a box</h2><span class="step">02 / EXPLORE</span></div><label class="field-label" for="placement-select">Click a box or choose an instance</label><select id="placement-select" disabled><option value="">Select a packed box</option></select><div id="inspection-details" class="inspection-details" aria-live="polite">Select a box to see its position and rotated dimensions.</div></section>
+          <section class="panel breakdown" aria-labelledby="breakdown-heading"><h2 id="breakdown-heading">Load breakdown</h2><div id="legend" class="legend"></div><h3>Unpacked items</h3><div id="unpacked-list" class="unpacked-list">Calculate to see remaining items.</div></section>
+        </div>
+        <details class="panel text-report"><summary>View text report</summary><textarea id="screen" readonly aria-label="Packing text report"></textarea></details>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">3dbinpackingjs <span>Single container. Six rotations. A better view of the space.</span></footer>
+  <script src="pack.js"></script>
+  <script src="pack1.js"></script>
+  <script src="demo/viewer.js"></script>
+  <script src="demo/app.js"></script>
+</body>
 </html>

@@ -124,12 +124,36 @@ For local inspection, `npm pack` creates `3dbinpackingjs-0.1.0.tgz`. A separate
 application can install that file with `npm install /path/to/3dbinpackingjs-0.1.0.tgz`.
 Public npm publication remains disabled pending the license decision.
 
-## Browser example
+## Interactive browser demo
 
-Open `index.html`, enter container dimensions and box types, then select
-**Calculate**. Labels are preserved as item IDs in the report. `pack1.js` reads
-and formats the form; `pack.js` performs the packing. Custom pages that used to
-load only `pack1.js` must now load `pack.js` first.
+Open `index.html` directly in a modern browser. No build step, server, CDN, or
+additional runtime dependency is required. Choose one of four examples (mixed
+cartons, exact fit, partial fit, or the three-box regression), or edit the
+container and add/remove box types, then select **Calculate packing**.
+
+- Drag to orbit, Shift-drag or right-drag to pan, and scroll to zoom.
+- Touch: one finger orbits; two fingers pan and pinch to zoom.
+- With the canvas focused, arrow keys orbit, Shift + arrows pan, + / − zoom,
+  and 0 resets the view. Buttons also provide zoom and reset controls.
+- Click a box to inspect its ID, instance, position, rotated dimensions, and
+  volume. The selector reaches occluded boxes too; the selected box has an
+  orange outline. Colors follow input item type, with an eight-color palette.
+- Summary cards show packed counts and volume utilization. The breakdown lists
+  packed quantities by type and groups unpacked instances.
+- **Export JSON** downloads the API result. **Save PNG** downloads the current
+  3D camera view, including its selected-box outline. Changing inputs disables
+  exports until recalculation; the old view is clearly marked as a previous result.
+
+Rendering uses WebGL with depth testing and original-axis coordinates. If WebGL
+is unavailable, the summary, box selector, text report, and JSON export still
+work. The 3D viewer and PNG export are unavailable in that case. The image is a
+view of the geometry, not a physical stability assessment.
+
+`pack1.js` remains the form/report adapter and emits `packing:result` and
+`packing:error` browser events for the demo. The included page loads `pack.js`,
+`pack1.js`, `demo/viewer.js`, and `demo/app.js` in that order and uses
+`demo/style.css`. Custom pages that only need the original text adapter still
+load `pack.js` before `pack1.js`. The library entry points and solver are unchanged.
 
 ## Limitations
 
@@ -162,3 +186,10 @@ The package test creates an archive, checks its exact contents, installs it in a
 temporary consumer outside the checkout with network access and lifecycle
 scripts disabled, then checks CommonJS/ES module imports and type resolution
 against that installed copy. Temporary files are removed after the test.
+
+Viewer tests cover camera geometry, original-axis scaling, nearest-box ray
+picking (including occlusion and parallel rays), pointer/keyboard/two-pointer
+controls, snapshot callbacks, and unavailable-WebGL fallback. These are unit
+checks with a mocked WebGL context, not GPU-rendering tests. Browser rendering,
+example loading, box inspection, responsive layout, and downloaded PNG/JSON
+outputs were also checked manually during development.

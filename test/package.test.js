@@ -28,6 +28,7 @@ test('packed archive installs and works as an isolated JS and TypeScript depende
     ], root))[0];
     assert.deepEqual(packed.files.map(file => file.path).sort(), [
       'CHANGELOG.md', 'LICENSE-STATUS.md', 'README.md', 'index.html',
+      'demo/app.js', 'demo/style.css', 'demo/viewer.js',
       'pack.d.mts', 'pack.d.ts', 'pack.js', 'pack.mjs', 'pack1.js', 'package.json'
     ].sort());
 

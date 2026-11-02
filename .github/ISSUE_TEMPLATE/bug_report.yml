@@ -1,0 +1,36 @@
+name: Bug report
+description: Report an incorrect result, error, or demo problem.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: Please provide a minimal reproducible request. For packing-quality reports, a known better arrangement is especially useful.
+  - type: textarea
+    id: input
+    attributes:
+      label: Reproduction
+      description: Paste the complete pack() request, or list the demo dimensions, quantities, rotation rules, and settling setting.
+      render: javascript
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the result, error message, or screenshot. Explain whether this concerns overlap, bounds, orientation, base contact, or packing quality.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Node.js or browser version, operating system, and commit if known.
+      placeholder: "Node.js 24 / macOS / commit …"
+    validations:
+      required: true

@@ -1,302 +1,125 @@
-# 3dbinpackingjs — 3D bin packing in JavaScript
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="3dbinpackingjs — 3D bin packing for JavaScript" width="100%">
+</p>
 
-A JavaScript library for arranging rectangular boxes inside a single container,
-with an interactive 3D packing demo, per-item rotation rules, and a standalone API
-for Node.js and browsers. CommonJS, ES modules, and TypeScript declarations are included.
+<p align="center">
+  <a href="https://github.com/keremdemirer/3dbinpackingjs/actions/workflows/test.yml"><img src="https://github.com/keremdemirer/3dbinpackingjs/actions/workflows/test.yml/badge.svg" alt="Correctness tests"></a>
+  <img src="https://img.shields.io/badge/Node.js-22%2B-146653" alt="Node.js 22 or later">
+  <img src="https://img.shields.io/badge/runtime_dependencies-0-146653" alt="Zero runtime dependencies">
+</p>
 
-The solver uses a volume-maximizing EB-AFIT heuristic, converted from
-[wknechtel/3d-bin-pack](https://github.com/wknechtel/3d-bin-pack/). It finds useful
-geometric arrangements; it does not guarantee optimal packing or physical stability.
+# 3dbinpackingjs
 
-**[Try the live demo](https://keremdemirer.github.io/3dbinpackingjs/)**
+Arrange rectangular boxes inside a single container with a JavaScript packing
+heuristic, a standalone API, and an interactive 3D demo.
 
-## Explore the project
+**[Try the demo](https://keremdemirer.github.io/3dbinpackingjs/)** ·
+[API reference](docs/API.md) · [Demo guide](docs/DEMO.md) ·
+[Benchmarks](https://github.com/keremdemirer/3dbinpackingjs/blob/master/bench/README.md) · [Contributing](https://github.com/keremdemirer/3dbinpackingjs/blob/master/CONTRIBUTING.md)
 
-- [Interactive box-packing demo](https://keremdemirer.github.io/3dbinpackingjs/):
-  enter dimensions and quantities, inspect individual placements, and export JSON or PNG.
-- [Rotation rules](#rotation-rules): free, upright, or fixed per box type.
-- [Performance and quality benchmarks](bench/README.md): reproducible measurements,
-  geometry validation, and known-fill comparisons.
-- [License status and provenance](LICENSE-STATUS.md): upstream permission is unresolved;
-  the package is not published to npm.
+> **Project status:** Available from a repository checkout. Not published to npm;
+> upstream licensing is unresolved. Read the [license status](LICENSE-STATUS.md)
+> before adopting or redistributing the code.
+
+## What it does
+
+| Capability | Details |
+| --- | --- |
+| Packing | Single-container EB-AFIT heuristic for rectangular boxes. |
+| Rotation rules | Free, upright, or fixed per box type. |
+| Downward settling | Optional post-pass closes vertical gaps while preserving packed volume. |
+| JavaScript API | CommonJS, ES modules, and plain browser scripts; no runtime dependencies. |
+| TypeScript | Included declarations for Node.js and the browser namespace. |
+| Interactive demo | Inspect placements, rotate the view, and export JSON or PNG. |
+| Validation | Independent geometry checks, seeded regressions, and reproducible benchmarks. |
 
 ## JavaScript API
 
-From a checkout, use CommonJS in Node.js:
+Requires Node.js 22 or later. From the repository root:
 
 ```js
 const { pack } = require('./pack.js');
 
 const result = pack({
-  container: { width: 2, height: 1, depth: 1 },
-  items: [
-    { id: 'sku-A', width: 1, height: 1, depth: 1, quantity: 3 }
-  ]
-});
-
-console.log(result.packedCount); // 2
-console.log(result.unpacked);   // One remaining instance of sku-A
-```
-
-For Node.js ES modules, use `import { pack } from './pack.mjs'`. The package
-entry point also exposes `pack` for CommonJS and ES module consumers. The
-package remains marked `private: true`; version `0.1.0` is an unreleased
-package preparation. See [license status and provenance](LICENSE-STATUS.md) for
-the outstanding license decision and [the changelog](CHANGELOG.md) for changes.
-
-For a browser without a bundler, load the core and use its namespace:
-
-```html
-<script src="pack.js"></script>
-<script>
-  const result = BinPacking.pack({
-    container: { width: 1, height: 2, depth: 3 },
-    items: [{ id: 'box', width: 1, height: 2, depth: 3 }]
-  });
-  console.log(result.placements);
-</script>
-```
-
-The core does not access the DOM, print output, or store shared solver state.
-`pack()` is synchronous. Input objects are not modified, and returned objects
-belong to that call. Invalid input throws `TypeError`; the browser form displays
-the error in its report field.
-
-### Inputs
-
-- `container`: an object with numeric `width`, `height`, and `depth`.
-- `items`: an array of objects with the same three dimension fields, optional
-  `id`, optional `quantity` (defaults to `1`), and optional `rotation` (defaults
-  to `"free"`). An empty array is allowed.
-- `settle`: optional boolean, defaults to `false`. See downward settling below.
-- Dimensions must be positive finite numbers in one consistent unit. API values
-  are not coerced from strings. Computed volumes must stay positive and finite.
-- Quantities must be positive safe integers. Quantities are expanded into
-  individual instances, so memory and runtime grow with the total item count.
-- IDs may be strings or finite numbers. An omitted ID defaults to the item's
-  zero-based array index. Duplicate IDs are allowed: `itemIndex` and
-  `instanceIndex` distinguish every instance.
-
-### Rotation rules
-
-Set `rotation` independently on each item type:
-
-| Rule | Allowed orientations in the original container axes |
-| --- | --- |
-| `"free"` (default) | All six width/height/depth permutations. |
-| `"upright"` | Height stays on Y; width and depth may swap around that axis. |
-| `"fixed"` | Width stays on X, height on Y, and depth on Z. |
-
-```js
-const result = pack({
   container: { width: 4, height: 3, depth: 2 },
-  items: [{ id: 'carton', width: 2, height: 3, depth: 4, rotation: 'upright' }]
-});
-// Fits as 4 × 3 × 2. With rotation: 'fixed', this carton would be unpacked.
-```
-
-The rules remain relative to the **original** container axes throughout the
-search, even when the solver changes its internal layer axes. They describe
-axis-aligned dimensions, not labeled faces, weight, or physical stability.
-Invalid rule values throw `TypeError`. Omitting the rule preserves the previous
-free-rotation behavior and result shape.
-
-### Optional downward settling
-
-Set `settle: true` on the request to close vertical gaps after packing:
-
-```js
-const result = pack({
-  container: { width: 12, height: 10, depth: 8 },
-  items: [{ width: 2, height: 7, depth: 5, quantity: 5, rotation: 'upright' }],
+  items: [{
+    id: 'carton', width: 2, height: 3, depth: 4,
+    quantity: 1, rotation: 'upright'
+  }],
   settle: true
 });
-console.log(result.diagnostics.settling); // { movedCount, totalDrop }
+
+console.log(result.packedCount); // 1
+console.log(result.utilization); // 1 (100%)
+console.log(result.placements);  // Positions and rotated dimensions
 ```
 
-This deterministic post-pass lowers boxes along the original **Y axis**, bottom
-first, until the floor or another box blocks the fall. X/Z coordinates,
-orientations, identities, placement order, packed count, and volume are preserved.
-The API defaults to disabled for compatibility; the demo enables it with a
-“Settle boxes downward” checkbox. Uncheck it to inspect the original arrangement.
-JSON exports and the text report use the same final coordinates as the viewer.
+For ES modules, import from `./pack.mjs`. In a browser, load `pack.js` and call
+`BinPacking.pack(...)`. The solver is synchronous, does not modify input objects,
+and returns independent results. Use one consistent measurement unit.
 
-Settling uses O(n²) footprint checks and O(n) extra storage for n packed boxes.
-It does not repack leftover items, move boxes sideways, or remove overhangs.
-Any positive area of contact stops a fall; weight, balance, strength, and center
-of mass are not modeled. Contact warnings remain relevant after settling.
-`diagnostics.settling` is present only when enabled: `movedCount` counts changed
-boxes and `totalDrop` sums their vertical distances in the input unit.
+See the [complete input/output reference](docs/API.md),
+[TypeScript usage](docs/API.md#typescript), and
+[local package archive instructions](docs/API.md#package-archive).
 
-### Results
+## Rotation rules
 
-`pack()` returns:
-
-| Field | Meaning |
+| Rule | Behavior |
 | --- | --- |
-| `container` | A copy of the input container dimensions. |
-| `placements` | One record per packed instance, in input/instance order. |
-| `unpacked` | One record per unpacked instance, in input/instance order. |
-| `totalCount`, `packedCount` | Requested and packed instance counts. |
-| `containerVolume`, `totalItemVolume`, `packedVolume` | Volumes in cubic input units. |
-| `utilization` | Packed volume / container volume, as a fraction (multiply by 100 for a percentage). |
-| `diagnostics.iterations` | Number of initial-layer search trials. |
+| `free` (default) | Permute width, height, and depth. |
+| `upright` | Keep original height on Y; width/depth may swap. |
+| `fixed` | Preserve all three original axes. |
 
-Each record contains `id`, `itemIndex` (zero-based input array index),
-`instanceIndex` (zero-based within that item's quantity), and `dimensions`.
-Packed records also contain `position: { x, y, z }`, the minimum corner in the
-**original container axes**. Width maps to X, height to Y, and depth to Z.
-Constrained records include `rotation: "upright"` or `rotation: "fixed"` in both
-`placements` and `unpacked`. Free-rotation records omit this field for backward
-compatibility. For packed records, `dimensions` describes the rotated width/height/depth in
-those axes. Unpacked records keep the original dimensions and have no position.
+Rules always refer to the original container axes.
+[Settling is optional](docs/API.md#optional-downward-settling) and defaults to
+`false` in the API; the demo enables it through a checkbox.
 
-A packed record from the example above looks like:
+## Explore the demo
 
-```js
-{
-  id: 'sku-A', itemIndex: 0, instanceIndex: 0,
-  position: { x: 0, y: 0, z: 0 },
-  dimensions: { width: 1, height: 1, depth: 1 }
-}
-```
+[Open the online workbench](https://keremdemirer.github.io/3dbinpackingjs/) or open
+`index.html` locally. Choose an example, edit box quantities and rotation rules,
+and calculate the arrangement. Select a box to inspect its coordinates and base
+contact. See the [demo guide](docs/DEMO.md) for controls and exports.
 
-## TypeScript
+## Limits to keep in mind
 
-Declarations are included for CommonJS, Node.js ES modules, and the browser
-namespace. No separate `@types` package is needed. After installing a local
-package archive, import the function and types from the package name:
+- This heuristic does not guarantee optimal packing.
+- Geometric fit and downward settling do not guarantee physical stability.
+  Weight, balance, and load-bearing strength are not modeled; overhangs may remain.
+- Prefer integer dimensions in consistent units. A general decimal precision
+  policy is not provided.
+- Large synchronous calculations can block the browser UI.
 
-```ts
-import { pack } from '3dbinpackingjs';
-import type { PackInput, PackResult } from '3dbinpackingjs';
-
-const input: PackInput = {
-  container: { width: 2, height: 1, depth: 1 },
-  items: [{ id: 'sku-A', width: 1, height: 1, depth: 1, quantity: 3 }]
-};
-const result: PackResult = pack(input);
-```
-
-Readonly input arrays and frozen dimension/item objects are accepted; results
-are mutable copies. Declarations describe the data shape, while runtime
-validation still checks finite dimensions and valid quantities. Type checks
-cover NodeNext resolution for CommonJS and ES modules. TypeScript browser
-scripts can reference `pack.d.ts` to use `BinPacking` after loading `pack.js`.
-
-## Package archive
-
-Node.js 22 or later is supported; CI runs on Node.js 22 and 24. The runtime has
-no dependencies. The archive includes the core, both module/declaration entry
-points, browser example, README, changelog, and license-status notes. Tests,
-compiler dependencies, and CI configuration are excluded.
-
-For local inspection, `npm pack` creates `3dbinpackingjs-0.1.0.tgz`. A separate
-application can install that file with `npm install /path/to/3dbinpackingjs-0.1.0.tgz`.
-Public npm publication remains disabled pending verified upstream permissions.
-
-## Interactive browser demo
-
-Use the [online demo](https://keremdemirer.github.io/3dbinpackingjs/) or open
-`index.html` directly in a modern browser. No build step, server, CDN, or
-additional runtime dependency is required. Choose one of five examples (mixed
-cartons, exact fit, partial fit, upright rotation, or the three-box regression), or edit the
-container and add/remove box types, then select **Calculate packing**.
-
-- Set each box type’s rotation rule with its **Rotation** selector. The “Keep it
-  upright” example fits with a width/depth swap; choosing Fixed makes it unpacked.
-- Drag to orbit, Shift-drag or right-drag to pan, and scroll to zoom.
-- Touch: one finger orbits; two fingers pan and pinch to zoom.
-- With the canvas focused, arrow keys orbit, Shift + arrows pan, + / − zoom,
-  and 0 resets the view. Buttons also provide zoom and reset controls.
-- Click a box to inspect its ID, instance, position, rotated dimensions, and
-  volume. The selector reaches occluded boxes too; the selected box has an
-  orange outline. Colors follow input item type, with an eight-color palette.
-- Summary cards show packed counts and volume utilization. The breakdown lists
-  packed quantities by type and groups unpacked instances.
-- **Export JSON** downloads the API result. **Save PNG** downloads the current
-  3D camera view, including its selected-box outline. Changing inputs disables
-  exports until recalculation; the old view is clearly marked as a previous result.
-
-Rendering uses WebGL with depth testing and original-axis coordinates. If WebGL
-is unavailable, the summary, box selector, text report, and JSON export still
-work. The 3D viewer and PNG export are unavailable in that case. The image is a
-view of the geometry, not a physical stability assessment.
-
-`pack1.js` remains the form/report adapter and emits `packing:result` and
-`packing:error` browser events for the demo. The included page loads `pack.js`,
-`pack1.js`, `demo/viewer.js`, `demo/support.js`, and `demo/app.js` in that order and uses
-`demo/style.css`. Custom pages that only need the original text adapter still
-load `pack.js` before `pack1.js`. The library entry points and solver are unchanged.
-
-## Limitations
-
-The heuristic does not guarantee optimality. Items rotate according to their
-rotation rules. The solver does not model weight, load bearing, or support.
-Decimal inputs are accepted, but a general decimal precision policy is not yet
-provided; prefer consistent integer units where possible. The solver runs on the
-calling thread; large problems may block the browser UI.
-
-## Correctness checks
-
-With Node.js 22 or later installed, run:
+## Development
 
 ```sh
 npm ci
-npm run check
+npm run check        # Runtime/package tests and TypeScript checks
+npm run bench:check  # Recorded packing-quality baseline
+npm run bench:quick  # Short timing and quality run
 ```
 
-`npm ci` installs the pinned development-only TypeScript compiler. `npm run check`
-runs the runtime/package tests and strict type checks; `npm test` and
-`npm run test:types` can also be run individually. Tests independently check bounds,
-non-overlap, dimensions, instance identities, counts, and volume. They retain the
-historical issue examples and focused skyline regressions, test both the API
-and browser form adapter, and include 250 seeded mixed-box cases. Recorded
-fingerprints from merged correctness release `0236195` verify that extraction
-preserves the same placements and search decisions for that corpus. API checks
-cover imports, invalid input, immutable inputs, and isolated/nested calls.
+Read the [contribution guide](https://github.com/keremdemirer/3dbinpackingjs/blob/master/CONTRIBUTING.md),
+[testing guide](docs/TESTING.md), and [benchmark methodology](https://github.com/keremdemirer/3dbinpackingjs/blob/master/bench/README.md).
+Timing comparisons are observational; CI checks correctness and packed volume.
 
-The package test creates an archive, checks its exact contents, installs it in a
-temporary consumer outside the checkout with network access and lifecycle
-scripts disabled, then checks CommonJS/ES module imports and type resolution
-against that installed copy. Temporary files are removed after the test.
+## Documentation
 
-Viewer tests cover camera geometry, original-axis scaling, nearest-box ray
-picking (including occlusion and parallel rays), pointer/keyboard/two-pointer
-controls, snapshot callbacks, and unavailable-WebGL fallback. These are unit
-checks with a mocked WebGL context, not GPU-rendering tests. Browser rendering,
-example loading, box inspection, responsive layout, and downloaded PNG/JSON
-outputs were also checked manually during development.
+| Guide | Contents |
+| --- | --- |
+| [API reference](docs/API.md) | Inputs, results, rotations, settling, TypeScript, and package archives. |
+| [Demo guide](docs/DEMO.md) | Camera controls, box inspection, exports, and limitations. |
+| [Benchmarks](https://github.com/keremdemirer/3dbinpackingjs/blob/master/bench/README.md) | Reproducible measurements, quality references, and optimization reports. |
+| [Testing](docs/TESTING.md) | Geometry, regressions, package checks, and validation scope. |
+| [Changelog](CHANGELOG.md) | Unreleased changes and integration notes. |
+| [Documentation index](docs/README.md) | Repository layout and site maintenance. |
 
-Rotation tests force all six internal axis variants, independently validate
-allowed dimensions, and cover mixed rules, quantities, repeated dimensions/IDs,
-layer selection/scoring, cubic-container search, invalid rules, and 300 seeded
-mixed-rule cases. Existing free-rotation placement fingerprints remain unchanged.
+## Provenance and license
 
-## GitHub Pages
+The solver is a JavaScript conversion of
+[wknechtel/3d-bin-pack](https://github.com/wknechtel/3d-bin-pack/), derived from
+Erhan Baltacıoğlu’s EB-AFIT work. Keep the upstream attribution intact.
 
-The live demo is served from `master` at the repository root using GitHub Pages.
-Merging changes to `master` updates the hosted demo; unmerged PRs are not deployed.
-The `.nojekyll` marker keeps this a plain static site. All asset URLs are relative,
-so the app works under the `/3dbinpackingjs/` project path.
-
-## Performance and packing quality
-
-From a checkout, run `npm run bench -- --output bench/results/current.json` for
-reproducible timing and quality measurements, or `npm run bench:quick` for a
-shorter run. `npm run bench:check` validates the full corpus against a recorded
-packed-volume baseline; CI runs this check and uploads reports without enforcing
-machine-dependent speed thresholds. Benchmarks and the tiny integer-grid oracle
-are development tools, excluded from the runtime package.
-
-See the [benchmark guide and initial findings](https://github.com/keremdemirer/3dbinpackingjs/blob/master/bench/README.md)
-for methodology, known-fill witnesses, bounded exact references, profiling,
-and recorded results. The initial known-fill cases expose 95.0% and 91.875%
-utilization where a valid 100% arrangement is known, giving future quality
-improvements concrete targets.
-
-The demo and benchmark reports distinguish geometric fit from direct base
-contact. A warning appears for boxes with partial or zero contact under their
-bases, and inspection shows the percentage. This does not check balance,
-strength, load bearing, or the stability of supporting boxes. The solver still
-optimizes geometric volume; it does not enforce a physically supported load.
+The package remains private and `UNLICENSED` pending verified upstream
+permissions. MIT is the preferred future license, but no project-wide license
+grant is currently asserted. See [license status and provenance](LICENSE-STATUS.md).

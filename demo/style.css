@@ -625,3 +625,13 @@ canvas:active {
 .settle-option { display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600; margin-top:24px; }
 .settle-option input { width:17px; height:17px; margin:0; accent-color:var(--teal); }
 .settle-help { margin:8px 0 20px; }
+.page-nav { display:flex; flex-wrap:wrap; gap:12px 24px; margin:0 0 28px; font-size:13px; color:var(--teal); }
+.project-guide { margin-top:32px; padding:32px; line-height:1.7; }
+.project-guide h2 { font-size:24px; margin:30px 0 12px; scroll-margin-top:24px; }
+.project-guide h2:first-of-type { margin-top:0; }
+.project-guide h3 { margin:24px 0 8px; font-size:17px; }
+.project-guide p { max-width:85ch; margin:0 0 16px; color:#52665b; }
+.project-guide a { color:var(--teal); text-underline-offset:3px; }
+.project-guide pre { max-width:100%; overflow-x:auto; padding:20px; border-radius:10px; background:#f2f5f1; font-size:13px; line-height:1.6; }
+.no-script { padding:18px; margin-bottom:24px; }
+@media(max-width:760px) { .project-guide { padding:22px; } .project-guide h2 { font-size:21px; } }

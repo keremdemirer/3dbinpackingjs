@@ -15,8 +15,13 @@ var prelayer, lilz, itenum, layersindex, remainpy, remainpz;
 var packedy, prepackedy, layerthickness, itelayer, preremainpy;
 var bestite, packednumbox, bestpackednum, packedvolume, bestvolume;
 var totalvolume, totalboxvol, temp;
+var hasRotationRules = false;
+// Each row maps internal axes back to the caller's original X/Y/Z axes.
+var variantAxes = [null, [0,1,2], [2,1,0], [1,2,0], [1,0,2], [0,2,1], [2,0,1]];
 
 function boxinfo(){
+	this.rotation = null;
+	this.orientations = null;
 	this.packst = null;
    	this.dim1 = null;
    	this.dim2 = null;
@@ -149,6 +154,37 @@ function dimensions(value, name) {
   };
 }
 
+// Enumerate in the legacy order so free-rotation search decisions remain unchanged.
+function orientationsFor(box, currentVariant) {
+  var w = box.dim1, h = box.dim2, d = box.dim3;
+  var candidates = w === h && h === d ? [[w,h,d]] :
+    [[w,h,d], [w,d,h], [h,w,d], [h,d,w], [d,w,h], [d,h,w]];
+  if (box.rotation === 'free') return candidates;
+  var axes = variantAxes[currentVariant];
+  return candidates.filter(function(size) {
+    var world = [size[axes[0]], size[axes[1]], size[axes[2]]];
+    if (box.rotation === 'fixed') return world[0] === w && world[1] === h && world[2] === d;
+    return world[1] === h && ((world[0] === w && world[2] === d) || (world[0] === d && world[2] === w));
+  });
+}
+
+function canMakeLayer(box, height) {
+  return box.orientations.some(function(size) {
+    return size[1] === height && size[0] <= px && size[2] <= pz;
+  });
+}
+
+function heightDifference(box, height) {
+  if (box.rotation === 'free') {
+    return Math.min(Math.abs(height-box.dim1), Math.abs(height-box.dim2), Math.abs(height-box.dim3));
+  }
+  var difference = Infinity;
+  box.orientations.forEach(function(size) {
+    difference = Math.min(difference, Math.abs(height - size[1]));
+  });
+  return difference;
+}
+
 var identities = [];
 var container;
 function readInput() {
@@ -172,6 +208,11 @@ function readInput() {
     if (typeof id !== 'string' && (typeof id !== 'number' || !Number.isFinite(id))) {
       throw new TypeError('Item id must be a string or finite number.');
     }
+    var rotation = item.rotation === undefined ? 'free' : item.rotation;
+    if (rotation !== 'free' && rotation !== 'upright' && rotation !== 'fixed') {
+      throw new TypeError('Item rotation must be free, upright, or fixed.');
+    }
+    if (rotation !== 'free') hasRotationRules = true;
     var volume = positiveNumber(size.width * size.height * size.depth, 'Box volume');
     for (var instanceIndex = 0; instanceIndex < quantity; instanceIndex++) {
       var box = new boxinfo();
@@ -180,6 +221,8 @@ function readInput() {
       box.dim3 = size.depth;
       box.vol = volume;
       box.n = quantity;
+      box.rotation = rotation;
+      box.orientations = orientationsFor(box, 1);
       boxlist[++tbn] = box;
       identities[tbn] = { id: id, itemIndex: itemIndex, instanceIndex: instanceIndex };
     }
@@ -217,6 +260,7 @@ var execiterations = function(){
 	        	break;
 	    }
 
+	    for (x = 1; x <= tbn; x++) boxlist[x].orientations = orientationsFor(boxlist[x], variant);
 	    listcanditlayers();
 	    layers[0] = new layerlist();
 	    layers[0].layereval = -1;
@@ -283,7 +327,7 @@ var execiterations = function(){
 
 	    }
 	    if (hundredpercent) break;
-	    if ((xx == yy) && (yy == zz)) variant = 6;
+	    if (!hasRotationRules && (xx == yy) && (yy == zz)) variant = 6;
 	}
 }
 
@@ -292,64 +336,29 @@ var execiterations = function(){
 // EACH OF THEM.
 //**********************************************************************
 var listcanditlayers = function(){
-	var same,
-		exdim, dimdif, dimen2, dimen3, y, z, k,
-		layereval;
-
-		layerlistlen = 0;
-		layers = [new layerlist()];
-
-	for (x = 1; x <= tbn; x++){
-		for(y = 1; y <= 3; y++){
-			switch(y){
-    			case 1:
-					exdim = boxlist[x].dim1;
-					dimen2 = boxlist[x].dim2;
-					dimen3 = boxlist[x].dim3;
-					break;
-    			case 2:
-					exdim = boxlist[x].dim2;
-					dimen2 = boxlist[x].dim1;
-					dimen3 = boxlist[x].dim3;
-					break;
-    			case 3:
-					exdim = boxlist[x].dim3;
-					dimen2 = boxlist[x].dim1;
-					dimen3 = boxlist[x].dim2;
-					break;
-			}
-			if ((exdim > py) || (((dimen2 > px) || (dimen3 > pz)) && ((dimen3 > px) || (dimen2 > pz)))) continue;
-			same = 0;
-
-			for (k = 1; k <= layerlistlen; k++){
-    			if (exdim == layers[k].layerdim){
-					same = 1;
-					continue;
-    			}
-			}
-			if (same) continue;
-			layereval = 0;
-
-			for (z = 1; z <= tbn; z++){
-    			if(!(x == z)){
-					dimdif = Math.abs(exdim - boxlist[z].dim1);
-
-					if ( Math.abs(exdim - boxlist[z].dim2) < dimdif ){
-        				dimdif = Math.abs(exdim - boxlist[z].dim2);
-					}
-					if ( Math.abs(exdim - boxlist[z].dim3) < dimdif ){
-        				dimdif = Math.abs(exdim - boxlist[z].dim3);
-					}
-					layereval = layereval + dimdif;
-				}
-			}
-			layers[++layerlistlen] = new layerlist();
-			layers[layerlistlen].layereval = layereval;
-			layers[layerlistlen].layerdim = exdim;
-		}
-	}
-  	return;
-}
+  layerlistlen = 0;
+  layers = [new layerlist()];
+  for (x = 1; x <= tbn; x++) {
+    var heights = [boxlist[x].dim1, boxlist[x].dim2, boxlist[x].dim3];
+    for (var y = 0; y < heights.length; y++) {
+      var height = heights[y];
+      if (height > py || !canMakeLayer(boxlist[x], height)) continue;
+      var same = false;
+      for (var k = 1; k <= layerlistlen; k++) {
+        if (height === layers[k].layerdim) same = true;
+      }
+      if (same) continue;
+      var evaluation = 0;
+      for (var z = 1; z <= tbn; z++) {
+        if (x !== z) evaluation += heightDifference(boxlist[z], height);
+      }
+      var layer = new layerlist();
+      layer.layereval = evaluation;
+      layer.layerdim = height;
+      layers[++layerlistlen] = layer;
+    }
+  }
+};
 
 //**********************************************************************
 // PACKS THE BOXES FOUND AND ARRANGES ALL VARIABLES AND
@@ -593,65 +602,28 @@ var packlayer = function(){
 // BOXES AND THE REMAINING EMPTY SPACE AVAILABLE
 //**********************************************************************
 
-var findlayer = function( thickness )
-{
-   var exdim, dimdif, dimen2, dimen3, y, z;
-  var layereval, bestLayerEval;
+var findlayer = function(thickness) {
   layerthickness = 0;
-  bestLayerEval = Infinity;
-  for (x=1; x <= tbn; x++)
-  {
+  var bestLayerEval = Infinity;
+  for (x = 1; x <= tbn; x++) {
     if (boxlist[x].packst) continue;
-    for( y = 1; y <= 3; y++)
-    {
-      switch(y)
-      {
-        case 1:
-          exdim = boxlist[x].dim1;
-          dimen2 = boxlist[x].dim2;
-          dimen3 = boxlist[x].dim3;
-          break;
-        case 2:
-          exdim = boxlist[x].dim2;
-          dimen2 = boxlist[x].dim1;
-          dimen3 = boxlist[x].dim3;
-          break;
-       case 3:
-          exdim = boxlist[x].dim3;
-          dimen2 = boxlist[x].dim1;
-          dimen3 = boxlist[x].dim2;
-          break;
+    var heights = [boxlist[x].dim1, boxlist[x].dim2, boxlist[x].dim3];
+    for (var y = 0; y < heights.length; y++) {
+      var height = heights[y];
+      if (height > thickness || !canMakeLayer(boxlist[x], height)) continue;
+      var evaluation = 0;
+      for (var z = 1; z <= tbn; z++) {
+        if (x !== z && !boxlist[z].packst) evaluation += heightDifference(boxlist[z], height);
       }
-      layereval = 0;
-      if ( (exdim <= thickness) && (((dimen2 <= px) && (dimen3 <= pz)) || ((dimen3 <= px) && (dimen2 <= pz))) )
-      {
-        for (z = 1; z <= tbn; z++)
-        {
-          if ( !(x == z) && !(boxlist[z].packst))
-          {
-            dimdif = Math.abs(exdim - boxlist[z].dim1);
-            if ( Math.abs(exdim - boxlist[z].dim2) < dimdif )
-            {
-              dimdif = Math.abs(exdim - boxlist[z].dim2);
-            }
-            if ( Math.abs(exdim - boxlist[z].dim3) < dimdif )
-            {
-              dimdif = Math.abs(exdim - boxlist[z].dim3);
-            }
-            layereval = layereval + dimdif;
-          }
-        }
-        if (layereval < bestLayerEval)
-        {
-          bestLayerEval = layereval;
-          layerthickness = exdim;
-        }
+      if (evaluation < bestLayerEval) {
+        bestLayerEval = evaluation;
+        layerthickness = height;
       }
     }
   }
-  if (layerthickness == 0 || layerthickness > remainpy) packing = 0;
+  if (layerthickness === 0 || layerthickness > remainpy) packing = 0;
   return 0;
-}
+};
 
 //**********************************************************************
 // FINDS THE MOST PROPER BOXES BY LOOKING AT ALL SIX POSSIBLE
@@ -671,13 +643,9 @@ var findbox = function( hmx,  hy,  hmy,  hz,  hmz)
       if (!boxlist[x].packst) break;
     }
     if (x >= y + boxlist[y].n || x > tbn) continue;
-    analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim1, boxlist[x].dim2, boxlist[x].dim3);
-    if ( (boxlist[x].dim1 == boxlist[x].dim3) && (boxlist[x].dim3 == boxlist[x].dim2) ) continue;
-    analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim1, boxlist[x].dim3, boxlist[x].dim2);
-    analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim2, boxlist[x].dim1, boxlist[x].dim3);
-    analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim2, boxlist[x].dim3, boxlist[x].dim1);
-    analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim3, boxlist[x].dim1, boxlist[x].dim2);
-    analyzebox(hmx, hy, hmy, hz, hmz, boxlist[x].dim3, boxlist[x].dim2, boxlist[x].dim1);
+    boxlist[x].orientations.forEach(function(size) {
+      analyzebox(hmx, hy, hmy, hz, hmz, size[0], size[1], size[2]);
+    });
   }
 }
 
@@ -885,7 +853,7 @@ initialize();
 execiterations();
 
 // Map the saved winner back to the caller's original container axes.
-var axes = [null, [0,1,2], [2,1,0], [1,2,0], [1,0,2], [0,2,1], [2,0,1]][bestvariant];
+var axes = variantAxes[bestvariant];
 var placements = [];
 var unpacked = [];
 for (var index = 1; index <= tbn; index++) {
@@ -896,6 +864,7 @@ for (var index = 1; index <= tbn; index++) {
     itemIndex: identity.itemIndex,
     instanceIndex: identity.instanceIndex
   };
+  if (box.rotation !== 'free') entry.rotation = box.rotation;
   if (box.packst) {
     var position = [box.cox, box.coy, box.coz];
     var size = [box.packx, box.packy, box.packz];

@@ -48,6 +48,9 @@ test('packed archive installs and works as an isolated JS and TypeScript depende
       assert.equal(result.utilization, 1);
       assert.equal(result.unpacked[0].id, 'archive-item');
       assert.deepEqual(result.placements[1].position, { x: 1, y: 0, z: 0 });
+      const constrained = pack({ container: {width:4,height:3,depth:2}, items: [{width:2,height:3,depth:4,rotation:'upright'}] });
+      assert.equal(constrained.packedCount, 1);
+      assert.equal(constrained.placements[0].rotation, 'upright');
     `;
     run(process.execPath, ['--eval', `
       const assert = require('node:assert/strict');

@@ -6,6 +6,12 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Per-item `rotation` rules: free rotation (default), upright with height on Y,
+  or fixed X/Y/Z dimensions, enforced during layer selection, scoring, placement,
+  and internal-axis transformations. Constrained results record their rule.
+- Rotation controls and a “Keep it upright” example in the interactive demo.
+- A live GitHub Pages demo, served from `master`, and a plain-static `.nojekyll` marker.
+
 - Interactive 3D browser demo for [issue #5], with orbit/pan/zoom, mouse/touch/
   keyboard controls, box inspection, four examples, utilization and unpacked-item
   summaries, JSON export, and PNG export. Works without a server or CDN.
@@ -40,6 +46,7 @@ No npm version or GitHub release has been published by these changes.
 
 ### Publication status
 
+MIT is the preferred license, pending verified upstream permissions.
 The package remains private and marked `UNLICENSED`. Upstream licensing needs
 clarification before public publication; see [license status](LICENSE-STATUS.md).
 

@@ -5,6 +5,7 @@
     mixed:{container:[12,10,8],items:[['Carton A',5,4,4,4],['Carton B',3,3,6,5],['Small box',2,2,2,10]]},
     exact:{container:[4,4,4],items:[['Cube',2,2,2,8]]},
     partial:{container:[4,4,4],items:[['Large cube',3,3,3,3],['Small cube',1,1,1,16]]},
+    orientation:{container:[4,3,2],items:[['Upright carton',2,3,4,1,'upright']]},
     regression:{container:[3,3,3],items:[['Box 1',3,3,2,1],['Box 2',3,2,1,1],['Box 3',3,1,1,1]]}
   };
   var result=null, fresh=false, busy=false, rowId=0, viewAvailable=true;
@@ -32,6 +33,10 @@
     });
     var remove=document.createElement('button'); remove.type='button'; remove.className='remove-box'; remove.textContent='×'; remove.setAttribute('aria-label','Remove box type '+rowId);
     remove.addEventListener('click',function() { row.remove(); stale(); }); row.appendChild(remove);
+    var rotationLabel=document.createElement('label'); rotationLabel.className='rotation-field'; rotationLabel.textContent='Rotation';
+    var rotation=document.createElement('select'); rotation.name='rotation'; rotation.setAttribute('aria-label','Rotation for box type '+rowId);
+    [['free','Free rotation'],['upright','Upright · keep height'],['fixed','Fixed · no rotation']].forEach(function(pair) { rotation.add(new Option(pair[1],pair[0])); });
+    rotation.value=item[5] || 'free'; rotationLabel.appendChild(rotation); row.appendChild(rotationLabel);
     byId('box-input-screen').appendChild(row);
   }
   function loadExample() {
@@ -45,7 +50,7 @@
     if (!result || index<0 || !result.placements[index]) { details.textContent='Select a box to see its position and rotated dimensions.'; return; }
     var item=result.placements[index], title=document.createElement('p'); title.className='selection-id'; title.textContent=String(item.id); details.appendChild(title);
     var dl=document.createElement('dl');
-    [['INSTANCE',(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')'],['POSITION · X / Y / Z',[item.position.x,item.position.y,item.position.z].join(' / ')],
+    [['INSTANCE',(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')'],['ROTATION',item.rotation || 'free'],['POSITION · X / Y / Z',[item.position.x,item.position.y,item.position.z].join(' / ')],
       ['ROTATED · W / H / D',[item.dimensions.width,item.dimensions.height,item.dimensions.depth].join(' / ')],['VOLUME',String(item.dimensions.width*item.dimensions.height*item.dimensions.depth)]].forEach(function(pair) {
       var cell=document.createElement('div'), dt=document.createElement('dt'), dd=document.createElement('dd'); dt.textContent=pair[0]; dd.textContent=pair[1]; cell.append(dt,dd); dl.appendChild(cell);
     }); details.appendChild(dl);
@@ -59,14 +64,14 @@
     selectBox(-1);
     var groups=new Map();
     result.placements.concat(result.unpacked).forEach(function(item) {
-      if (!groups.has(item.itemIndex)) groups.set(item.itemIndex,{id:item.id,packed:0,total:0,unpacked:0,dimensions:item.dimensions});
+      if (!groups.has(item.itemIndex)) groups.set(item.itemIndex,{id:item.id,packed:0,total:0,unpacked:0,dimensions:item.dimensions,rotation:item.rotation});
       var group=groups.get(item.itemIndex); group.total++; if (item.position) group.packed++; else { group.unpacked++; group.dimensions=item.dimensions; }
     });
     var legend=byId('legend'), remaining=byId('unpacked-list'); legend.replaceChildren(); remaining.replaceChildren();
     Array.from(groups.entries()).sort(function(a,b) { return a[0]-b[0]; }).forEach(function(entry) {
       var index=entry[0], group=entry[1], row=document.createElement('div'); row.className='legend-row';
       var swatch=document.createElement('span'); swatch.className='swatch'; swatch.style.background=PackingView.colorFor(index); swatch.setAttribute('aria-hidden','true');
-      var name=document.createElement('span'); name.className='legend-name'; name.textContent=String(group.id);
+      var name=document.createElement('span'); name.className='legend-name'; name.textContent=String(group.id)+(group.rotation?' · '+group.rotation:'');
       var count=document.createElement('span'); count.className='legend-count'; count.textContent=group.packed+' / '+group.total+' packed'; row.append(swatch,name,count); legend.appendChild(row);
       if (group.unpacked) { var note=document.createElement('div'); note.className='unpacked-row'; note.textContent=String(group.id)+' × '+group.unpacked+' · '+[group.dimensions.width,group.dimensions.height,group.dimensions.depth].join(' × '); remaining.appendChild(note); }
     });

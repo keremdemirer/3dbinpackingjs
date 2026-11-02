@@ -18,7 +18,7 @@
         <form id="packing-form">
           <div class="section-heading"><h2>Your load</h2><span class="step">01 / INPUT</span></div>
           <label class="field-label" for="example">Start with an example</label>
-          <select id="example"><option value="mixed">Mixed cartons</option><option value="exact">An exact fit</option><option value="partial">More boxes than space</option><option value="regression">Three-box regression</option></select>
+          <select id="example"><option value="mixed">Mixed cartons</option><option value="exact">An exact fit</option><option value="partial">More boxes than space</option><option value="orientation">Keep it upright</option><option value="regression">Three-box regression</option></select>
           <section aria-labelledby="container-heading"><h3 id="container-heading">Container</h3><p class="helper">Use the same unit for every dimension.</p>
             <div class="dimensions"><label>Width <span>X</span><input id="strxx" type="number" min="0.000001" step="any" required value="12"></label><label>Height <span>Y</span><input id="stryy" type="number" min="0.000001" step="any" required value="10"></label><label>Depth <span>Z</span><input id="strzz" type="number" min="0.000001" step="any" required value="8"></label></div>
           </section>
@@ -27,7 +27,7 @@
             <div id="box-input-screen"></div>
           </section>
           <button id="calculate" class="primary-button" type="submit">Calculate packing <span aria-hidden="true">→</span></button>
-          <p class="helper algorithm-note">Boxes rotate freely. This heuristic finds a useful arrangement; it does not guarantee an optimal or physically supported load.</p>
+          <p class="helper algorithm-note">Set rotation per box type. This heuristic finds a useful arrangement; it does not guarantee an optimal or physically supported load.</p>
         </form>
       </aside>
       <div class="results-column">

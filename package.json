@@ -1,15 +1,58 @@
 {
   "name": "3dbinpackingjs",
+  "version": "0.1.0",
+  "description": "Single-container 3D bin packing with an EB-AFIT heuristic, structured results, and a browser example.",
+  "type": "commonjs",
   "private": true,
-  "scripts": {
-    "test": "node --test"
-  },
+  "license": "UNLICENSED",
   "main": "./pack.js",
+  "types": "./pack.d.ts",
   "exports": {
     ".": {
-      "import": "./pack.mjs",
-      "require": "./pack.js",
+      "import": {
+        "types": "./pack.d.mts",
+        "default": "./pack.mjs"
+      },
+      "require": {
+        "types": "./pack.d.ts",
+        "default": "./pack.js"
+      },
       "default": "./pack.js"
     }
+  },
+  "files": [
+    "pack.js",
+    "pack.mjs",
+    "pack.d.ts",
+    "pack.d.mts",
+    "pack1.js",
+    "index.html",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE-STATUS.md"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "test:types": "tsc -p type-tests/tsconfig.json",
+    "check": "npm test && npm run test:types"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keremdemirer/3dbinpackingjs.git"
+  },
+  "homepage": "https://github.com/keremdemirer/3dbinpackingjs#readme",
+  "bugs": {
+    "url": "https://github.com/keremdemirer/3dbinpackingjs/issues"
+  },
+  "keywords": [
+    "3d-bin-packing",
+    "bin-packing",
+    "eb-afit"
+  ],
+  "devDependencies": {
+    "typescript": "5.9.3"
   }
 }

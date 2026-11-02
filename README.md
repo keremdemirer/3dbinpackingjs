@@ -24,8 +24,9 @@ console.log(result.unpacked);   // One remaining instance of sku-A
 
 For Node.js ES modules, use `import { pack } from './pack.mjs'`. The package
 entry point also exposes `pack` for CommonJS and ES module consumers. The
-repository remains private for npm publishing; this change does not publish a
-package or settle upstream licensing.
+package remains marked `private: true`; version `0.1.0` is an unreleased
+package preparation. See [license status and provenance](LICENSE-STATUS.md) for
+the outstanding license decision and [the changelog](CHANGELOG.md) for changes.
 
 For a browser without a bundler, load the core and use its namespace:
 
@@ -89,6 +90,40 @@ A packed record from the example above looks like:
 }
 ```
 
+## TypeScript
+
+Declarations are included for CommonJS, Node.js ES modules, and the browser
+namespace. No separate `@types` package is needed. After installing a local
+package archive, import the function and types from the package name:
+
+```ts
+import { pack } from '3dbinpackingjs';
+import type { PackInput, PackResult } from '3dbinpackingjs';
+
+const input: PackInput = {
+  container: { width: 2, height: 1, depth: 1 },
+  items: [{ id: 'sku-A', width: 1, height: 1, depth: 1, quantity: 3 }]
+};
+const result: PackResult = pack(input);
+```
+
+Readonly input arrays and frozen dimension/item objects are accepted; results
+are mutable copies. Declarations describe the data shape, while runtime
+validation still checks finite dimensions and valid quantities. Type checks
+cover NodeNext resolution for CommonJS and ES modules. TypeScript browser
+scripts can reference `pack.d.ts` to use `BinPacking` after loading `pack.js`.
+
+## Package archive
+
+Node.js 22 or later is supported; CI runs on Node.js 22 and 24. The runtime has
+no dependencies. The archive includes the core, both module/declaration entry
+points, browser example, README, changelog, and license-status notes. Tests,
+compiler dependencies, and CI configuration are excluded.
+
+For local inspection, `npm pack` creates `3dbinpackingjs-0.1.0.tgz`. A separate
+application can install that file with `npm install /path/to/3dbinpackingjs-0.1.0.tgz`.
+Public npm publication remains disabled pending the license decision.
+
 ## Browser example
 
 Open `index.html`, enter container dimensions and box types, then select
@@ -106,16 +141,24 @@ calling thread; large problems may block the browser UI.
 
 ## Correctness checks
 
-With Node.js 22 or 24 installed, run:
+With Node.js 22 or later installed, run:
 
 ```sh
-npm test
+npm ci
+npm run check
 ```
 
-No dependencies need to be installed. Tests independently check bounds,
+`npm ci` installs the pinned development-only TypeScript compiler. `npm run check`
+runs the runtime/package tests and strict type checks; `npm test` and
+`npm run test:types` can also be run individually. Tests independently check bounds,
 non-overlap, dimensions, instance identities, counts, and volume. They retain the
 historical issue examples and focused skyline regressions, test both the API
 and browser form adapter, and include 250 seeded mixed-box cases. Recorded
 fingerprints from merged correctness release `0236195` verify that extraction
 preserves the same placements and search decisions for that corpus. API checks
 cover imports, invalid input, immutable inputs, and isolated/nested calls.
+
+The package test creates an archive, checks its exact contents, installs it in a
+temporary consumer outside the checkout with network access and lifecycle
+scripts disabled, then checks CommonJS/ES module imports and type resolution
+against that installed copy. Temporary files are removed after the test.

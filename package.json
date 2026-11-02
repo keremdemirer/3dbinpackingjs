@@ -35,7 +35,10 @@
   "scripts": {
     "test": "node --test",
     "test:types": "tsc -p type-tests/tsconfig.json",
-    "check": "npm test && npm run test:types"
+    "check": "npm test && npm run test:types",
+    "bench": "node bench/run.js",
+    "bench:quick": "node bench/run.js --quick --samples 1 --warmup 0",
+    "bench:check": "node bench/run.js --samples 1 --warmup 0 --baseline bench/baseline.json --check-quality"
   },
   "engines": {
     "node": ">=22"

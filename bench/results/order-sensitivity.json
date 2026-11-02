@@ -1,0 +1,127 @@
+{
+  "solverHash": "3eafe75897e7e0368fec75ae2c71052bf9e440e4f5d2028a2bbadcda6a9f43b1",
+  "cases": [
+    {
+      "id": "cut-fill-12",
+      "bestVolume": 912,
+      "trials": [
+        {
+          "order": "original",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "volume-desc",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "volume-asc",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-1",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-2",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-3",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-4",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-5",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-6",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-7",
+          "packedVolume": 912,
+          "utilization": 0.95
+        },
+        {
+          "order": "shuffle-8",
+          "packedVolume": 912,
+          "utilization": 0.95
+        }
+      ]
+    },
+    {
+      "id": "cut-fill-24",
+      "bestVolume": 882,
+      "trials": [
+        {
+          "order": "original",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "volume-desc",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "volume-asc",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-1",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-2",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-3",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-4",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-5",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-6",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-7",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        },
+        {
+          "order": "shuffle-8",
+          "packedVolume": 882,
+          "utilization": 0.91875
+        }
+      ]
+    }
+  ]
+}

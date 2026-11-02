@@ -15,3 +15,12 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci --ignore-scripts
       - run: npm run check
+      - run: npm run bench:check -- --output bench/results/ci.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmarks-node-${{ matrix.node }}
+          path: |
+            bench/results/ci.json
+            bench/results/ci.md
+          if-no-files-found: ignore

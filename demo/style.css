@@ -611,3 +611,13 @@ canvas:active {
   padding: 6px 26px 6px 8px;
   font-size: 10px;
 }
+
+.support-warning {
+  padding: 12px 16px;
+  border: 1px solid #e3c490;
+  background: #fff5e3;
+  border-radius: 8px;
+  color: #795624;
+  font-size: 11px;
+  line-height: 1.6;
+}

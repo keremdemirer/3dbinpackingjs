@@ -1,2 +1,4 @@
 node_modules/
 *.tgz
+bench/results/ci.*
+bench/results/*.cpuprofile

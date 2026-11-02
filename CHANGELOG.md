@@ -6,6 +6,10 @@ No npm version or GitHub release has been published by these changes.
 
 ### Changed
 
+- Reuse repeated eligible-height scores within each layer-selection call, retaining
+  original candidate order, floating-point summation and ties. Scores are discarded
+  between calls as the unpacked set changes. No packing/API behavior changes.
+
 - Reuse each quantity group's first-unpacked cursor within a search trial instead
   of rescanning its packed prefix. Cursors reset for every trial and call; item
   order and packing results remain unchanged. Singleton groups skip cursor work.

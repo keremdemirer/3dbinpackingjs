@@ -636,15 +636,24 @@ var packlayer = function(){
 var findlayer = function(thickness) {
   layerthickness = 0;
   var bestLayerEval = Infinity;
+  // All eligible boxes have zero heightDifference at this height. Excluding
+  // a different candidate therefore removes only a zero term from the same
+  // ordered sum. Reuse that score without changing candidate/tie order.
+  // The unpacked set changes between calls, so keep this cache local.
+  var evaluations = new Map();
   for (x = 1; x <= tbn; x++) {
     if (boxlist[x].packst) continue;
     var heights = [boxlist[x].dim1, boxlist[x].dim2, boxlist[x].dim3];
     for (var y = 0; y < heights.length; y++) {
       var height = heights[y];
       if (height > thickness || !canMakeLayer(boxlist[x], height)) continue;
-      var evaluation = 0;
-      for (var z = 1; z <= tbn; z++) {
-        if (x !== z && !boxlist[z].packst) evaluation += heightDifference(boxlist[z], height);
+      var evaluation = evaluations.get(height);
+      if (evaluation === undefined) {
+        evaluation = 0;
+        for (var z = 1; z <= tbn; z++) {
+          if (x !== z && !boxlist[z].packst) evaluation += heightDifference(boxlist[z], height);
+        }
+        evaluations.set(height, evaluation);
       }
       if (evaluation < bestLayerEval) {
         bestLayerEval = evaluation;

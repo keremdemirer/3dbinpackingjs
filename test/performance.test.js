@@ -6,7 +6,7 @@ const {parityCases}=require('../bench/performance-cases.js');
 const {validate}=require('../bench/validate.js');
 const fixture=require('./fixtures/performance-parity.json');
 const hash=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
-test('cursor optimization preserves complete results from the merged reference solver',()=>{
+test('performance optimizations preserve complete results from the merged reference solver',()=>{
   const entries=parityCases();
   assert.equal(entries.length,fixture.cases.length);
   entries.forEach((entry,i)=>{

@@ -1,0 +1,109 @@
+{
+  "solverHash": "3eafe75897e7e0368fec75ae2c71052bf9e440e4f5d2028a2bbadcda6a9f43b1",
+  "node": "v24.22.1",
+  "totalSamples": 6886,
+  "solverSamples": 6778,
+  "attribution": "Self samples; V8 inlining may attribute callee work to callers.",
+  "functions": [
+    {
+      "name": "execiterations",
+      "samples": 2584,
+      "percentOfTotal": 37.52541388324136
+    },
+    {
+      "name": "pack",
+      "samples": 1194,
+      "percentOfTotal": 17.33952948010456
+    },
+    {
+      "name": "findlayer",
+      "samples": 883,
+      "percentOfTotal": 12.823119372640141
+    },
+    {
+      "name": "analyzebox",
+      "samples": 820,
+      "percentOfTotal": 11.908219575951206
+    },
+    {
+      "name": "packlayer",
+      "samples": 629,
+      "percentOfTotal": 9.134475747894278
+    },
+    {
+      "name": "findbox",
+      "samples": 570,
+      "percentOfTotal": 8.277664827185593
+    },
+    {
+      "name": "listcanditlayers",
+      "samples": 23,
+      "percentOfTotal": 0.33401103688643624
+    },
+    {
+      "name": "heightDifference",
+      "samples": 18,
+      "percentOfTotal": 0.26139994191112403
+    },
+    {
+      "name": "checkfound",
+      "samples": 13,
+      "percentOfTotal": 0.1887888469358118
+    },
+    {
+      "name": "copybox",
+      "samples": 13,
+      "percentOfTotal": 0.1887888469358118
+    },
+    {
+      "name": "initialize",
+      "samples": 5,
+      "percentOfTotal": 0.07261109497531222
+    },
+    {
+      "name": "(anonymous)",
+      "samples": 4,
+      "percentOfTotal": 0.05808887598024978
+    },
+    {
+      "name": "volumecheck",
+      "samples": 4,
+      "percentOfTotal": 0.05808887598024978
+    },
+    {
+      "name": "findsmallestz",
+      "samples": 4,
+      "percentOfTotal": 0.05808887598024978
+    },
+    {
+      "name": "scrappad",
+      "samples": 4,
+      "percentOfTotal": 0.05808887598024978
+    },
+    {
+      "name": "canMakeLayer",
+      "samples": 3,
+      "percentOfTotal": 0.04356665698518734
+    },
+    {
+      "name": "readInput",
+      "samples": 3,
+      "percentOfTotal": 0.04356665698518734
+    },
+    {
+      "name": "orientationsFor",
+      "samples": 2,
+      "percentOfTotal": 0.02904443799012489
+    },
+    {
+      "name": "qsort",
+      "samples": 1,
+      "percentOfTotal": 0.014522218995062446
+    },
+    {
+      "name": "boxinfo",
+      "samples": 1,
+      "percentOfTotal": 0.014522218995062446
+    }
+  ]
+}

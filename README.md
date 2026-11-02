@@ -183,7 +183,7 @@ view of the geometry, not a physical stability assessment.
 
 `pack1.js` remains the form/report adapter and emits `packing:result` and
 `packing:error` browser events for the demo. The included page loads `pack.js`,
-`pack1.js`, `demo/viewer.js`, and `demo/app.js` in that order and uses
+`pack1.js`, `demo/viewer.js`, `demo/support.js`, and `demo/app.js` in that order and uses
 `demo/style.css`. Custom pages that only need the original text adapter still
 load `pack.js` before `pack1.js`. The library entry points and solver are unchanged.
 
@@ -237,3 +237,24 @@ The live demo is served from `master` at the repository root using GitHub Pages.
 Merging changes to `master` updates the hosted demo; unmerged PRs are not deployed.
 The `.nojekyll` marker keeps this a plain static site. All asset URLs are relative,
 so the app works under the `/3dbinpackingjs/` project path.
+
+## Performance and packing quality
+
+From a checkout, run `npm run bench -- --output bench/results/current.json` for
+reproducible timing and quality measurements, or `npm run bench:quick` for a
+shorter run. `npm run bench:check` validates the full corpus against a recorded
+packed-volume baseline; CI runs this check and uploads reports without enforcing
+machine-dependent speed thresholds. Benchmarks and the tiny integer-grid oracle
+are development tools, excluded from the runtime package.
+
+See the [benchmark guide and initial findings](https://github.com/keremdemirer/3dbinpackingjs/blob/master/bench/README.md)
+for methodology, known-fill witnesses, bounded exact references, profiling,
+and recorded results. The initial known-fill cases expose 95.0% and 91.875%
+utilization where a valid 100% arrangement is known, giving future quality
+improvements concrete targets.
+
+The demo and benchmark reports distinguish geometric fit from direct base
+contact. A warning appears for boxes with partial or zero contact under their
+bases, and inspection shows the percentage. This does not check balance,
+strength, load bearing, or the stability of supporting boxes. The solver still
+optimizes geometric volume; it does not enforce a physically supported load.

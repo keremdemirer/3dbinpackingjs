@@ -6,6 +6,16 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Direct base-contact diagnostics in benchmark reports and the demo, including
+  the reported 78.125% arrangement. Warnings and box inspection expose partial
+  or absent contact without claiming physical stability or changing the solver.
+
+- Reproducible performance/quality benchmark corpus with independent geometry
+  validation, bounded worker execution, raw timing reports, constructive full-fill
+  witnesses, and a bounded exact integer-grid oracle for tiny instances.
+- Recorded quality baseline, profiling/order-sensitivity experiments, and a CI
+  packed-volume regression check with downloadable reports and no timing gate.
+
 - Per-item `rotation` rules: free rotation (default), upright with height on Y,
   or fixed X/Y/Z dimensions, enforced during layer selection, scoring, placement,
   and internal-axis transformations. Constrained results record their rule.

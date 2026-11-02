@@ -8,6 +8,7 @@
     orientation:{container:[4,3,2],items:[['Upright carton',2,3,4,1,'upright']]},
     regression:{container:[3,3,3],items:[['Box 1',3,3,2,1],['Box 2',3,2,1,1],['Box 3',3,1,1,1]]}
   };
+  var contact=null;
   var result=null, fresh=false, busy=false, rowId=0, viewAvailable=true;
   function byId(id) { return document.getElementById(id); }
   function text(id,value) { byId(id).textContent=value; }
@@ -50,13 +51,18 @@
     if (!result || index<0 || !result.placements[index]) { details.textContent='Select a box to see its position and rotated dimensions.'; return; }
     var item=result.placements[index], title=document.createElement('p'); title.className='selection-id'; title.textContent=String(item.id); details.appendChild(title);
     var dl=document.createElement('dl');
-    [['INSTANCE',(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')'],['ROTATION',item.rotation || 'free'],['POSITION · X / Y / Z',[item.position.x,item.position.y,item.position.z].join(' / ')],
+    [['INSTANCE',(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')'],['ROTATION',item.rotation || 'free'],['BASE CONTACT',contact?(contact.records[index].fraction*100).toFixed(1)+'% of base':'—'],['POSITION · X / Y / Z',[item.position.x,item.position.y,item.position.z].join(' / ')],
       ['ROTATED · W / H / D',[item.dimensions.width,item.dimensions.height,item.dimensions.depth].join(' / ')],['VOLUME',String(item.dimensions.width*item.dimensions.height*item.dimensions.depth)]].forEach(function(pair) {
       var cell=document.createElement('div'), dt=document.createElement('dt'), dd=document.createElement('dd'); dt.textContent=pair[0]; dd.textContent=pair[1]; cell.append(dt,dd); dl.appendChild(cell);
     }); details.appendChild(dl);
   }
   function update(value) {
-    result=value; fresh=true; viewer.setResult(result);
+    result=value; contact=PackingSupport.analyze(result);
+    var warning=byId('support-warning');
+    warning.hidden=!(contact.noContact||contact.partialContact);
+    var incomplete=contact.noContact+contact.partialContact;
+    warning.textContent='Geometric fit only: '+incomplete+' '+(incomplete===1?'box does':'boxes do')+' not have full base contact ('+contact.noContact+' with no contact, '+contact.partialContact+' partial). This is not a validated loading plan.';
+    fresh=true; viewer.setResult(result);
     text('packed-count',result.packedCount+' / '+result.totalCount); text('utilization',(result.utilization*100).toFixed(1)+'%'); text('unpacked-count',result.unpacked.length);
     text('view-state',result.container.width+' × '+result.container.height+' × '+result.container.depth+' · original container axes');
     var select=byId('placement-select'); select.replaceChildren(new Option('Select a packed box','')); select.disabled=!result.placements.length;
@@ -96,7 +102,7 @@
   }
   window.addEventListener('packing:result',function(event) { update(event.detail); });
   window.addEventListener('packing:error',function(event) {
-    result=null; fresh=false; viewer.setResult(null); selectBox(-1); byId('placement-select').replaceChildren(new Option('No packed boxes','')); byId('placement-select').disabled=true;
+    result=null; contact=null; byId('support-warning').hidden=true; fresh=false; viewer.setResult(null); selectBox(-1); byId('placement-select').replaceChildren(new Option('No packed boxes','')); byId('placement-select').disabled=true;
     ['packed-count','utilization','unpacked-count'].forEach(function(id) { text(id,'—'); });
     text('view-state','Check your input'); text('legend',''); text('unpacked-list','No current result.'); jsonButton.disabled=true; pngButton.disabled=true; state(event.detail,true);
   });

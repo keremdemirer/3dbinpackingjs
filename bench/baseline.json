@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "corpusHash": "a6b101ac5d6cd233c368ad5e6faf0ceade8fd6457e29fa99d2aab4c82664cd97",
+  "solverHash": "3eafe75897e7e0368fec75ae2c71052bf9e440e4f5d2028a2bbadcda6a9f43b1",
+  "cases": [
+    {
+      "id": "empty",
+      "inputHash": "3a741cc4a11e20ce4a7430be7ea0b7de63f6a332891dc14033633db01856b822",
+      "packedVolume": 0
+    },
+    {
+      "id": "no-fit",
+      "inputHash": "6e72fe7209e6612ae046884745c0a3bd55304da23852ef91806930cb56a041f6",
+      "packedVolume": 0
+    },
+    {
+      "id": "exact-cubes",
+      "inputHash": "ed4cd84b6963e3fc92aa488a9855d0b928f8e78d2da54f53bc96c7267d990611",
+      "packedVolume": 512
+    },
+    {
+      "id": "cut-fill-12",
+      "inputHash": "393da40b710841522b38abd71454572e11aa3c2ac899b9b1fee281714cddde7f",
+      "packedVolume": 912
+    },
+    {
+      "id": "cut-fill-24",
+      "inputHash": "b075de92de8346699ab14e22b5b3b6cc1012c2ad43499c02b953543b555db209",
+      "packedVolume": 882
+    },
+    {
+      "id": "reported-overhang",
+      "inputHash": "6bbf837f1d7d56ab390483c017896203ec75bfba1a8bb552686bda62e56d53ca",
+      "packedVolume": 750
+    },
+    {
+      "id": "issue-6",
+      "inputHash": "3d8e9a52a83ed3c8df10053a6004a125189d279905eb7aadb3b4dd211e2fc209",
+      "packedVolume": 2475000
+    },
+    {
+      "id": "paper-example",
+      "inputHash": "fa7860dcdc0c26b19e7829c023a5a8ec7bff5d4e69164fdc8fa88a070247f909",
+      "packedVolume": 838656
+    },
+    {
+      "id": "upright-swap",
+      "inputHash": "8a1c69e07114b5df23f68549d247129e66c34c27a4419c9301a05babe171acbd",
+      "packedVolume": 24
+    },
+    {
+      "id": "fixed-no-fit",
+      "inputHash": "dd63233473137fea8a1cf30acd3e2a629d844846c7e6671eace8847decd1f519",
+      "packedVolume": 0
+    },
+    {
+      "id": "quantity-100",
+      "inputHash": "b5c34c91d6cb5236e508b79e2ae52d4e47ffe58021c9850ccb9b6dd9c98ce6d5",
+      "packedVolume": 800
+    },
+    {
+      "id": "types-100",
+      "inputHash": "1c9a66ec7988362204bbb8db5ab8663be23a66be3cdd4c748843b3a648d4892c",
+      "packedVolume": 800
+    },
+    {
+      "id": "quantity-300",
+      "inputHash": "7412ec59176be72ed5ec114f91c1bd89914a66e3885cf9b65f1871444138e387",
+      "packedVolume": 2400
+    },
+    {
+      "id": "types-300",
+      "inputHash": "721975ab201b7652561842a2c15682df43519051a2b5e0d17ba5783aa4200fee",
+      "packedVolume": 2400
+    },
+    {
+      "id": "mixed-24",
+      "inputHash": "bc4d78e372cbad211d60b524facf45556871c632c27d6a704aca30ba304bce56",
+      "packedVolume": 4016
+    },
+    {
+      "id": "mixed-48",
+      "inputHash": "c993a930bedb5fedfe9d38009badd18ebbf69f1ac1adbff6aab5e98161d3b512",
+      "packedVolume": 7641
+    },
+    {
+      "id": "mixed-96",
+      "inputHash": "37c1594faca907a5bc3d6f29d681a7528ded92d206ff3fa049bb2b16279bfd28",
+      "packedVolume": 7680
+    },
+    {
+      "id": "rules-48",
+      "inputHash": "2e02f8c280244b3d5686d1028a55df82a72e9e82b6293891c0221deb310b8e25",
+      "packedVolume": 7451
+    },
+    {
+      "id": "tiny-cubes-no-room",
+      "inputHash": "43f02a8788fb803aeba23feb1d818192964f8f4cf34c6fd625d299e45647587a",
+      "packedVolume": 8
+    },
+    {
+      "id": "tiny-5",
+      "inputHash": "79dc09ada8ec0b0d84b5c390c8afee10bc478841a6163f1335c0417476828ce8",
+      "packedVolume": 18
+    },
+    {
+      "id": "tiny-17",
+      "inputHash": "bbb70cb74b0dd62e5871e2084c69aaf33f139a0cb7d4691d5940cfea3d62fd7b",
+      "packedVolume": 18
+    },
+    {
+      "id": "tiny-29",
+      "inputHash": "5d3003f75f38e9933850538cc71ec2c974fd09ec671485206296362dca73ffac",
+      "packedVolume": 16
+    },
+    {
+      "id": "tiny-41",
+      "inputHash": "dc8b6154740d5f0c92dc23dc6c96a1a30ca833253891e492b14ebd6025b37450",
+      "packedVolume": 18
+    },
+    {
+      "id": "tiny-53",
+      "inputHash": "b833e4050b35e5578c7b18d686c0055fd2f5d385d4a6d7b7d62e8acee4853cdf",
+      "packedVolume": 15
+    },
+    {
+      "id": "tiny-67",
+      "inputHash": "e67d609f3e2f4ff4715319aafbc43b1da0efcd10df89496d01e70c0d5ba5c25a",
+      "packedVolume": 18
+    }
+  ]
+}

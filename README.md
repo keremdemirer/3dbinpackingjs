@@ -4,6 +4,8 @@ JavaScript conversion of [wknechtel/3d-bin-pack](https://github.com/wknechtel/3d
 A single-container, volume-maximizing packing heuristic with a standalone
 JavaScript API and a browser example.
 
+**[Try the live demo](https://keremdemirer.github.io/3dbinpackingjs/)**
+
 ## JavaScript API
 
 From a checkout, use CommonJS in Node.js:
@@ -50,7 +52,8 @@ the error in its report field.
 
 - `container`: an object with numeric `width`, `height`, and `depth`.
 - `items`: an array of objects with the same three dimension fields, optional
-  `id`, and optional `quantity` (defaults to `1`). An empty array is allowed.
+  `id`, optional `quantity` (defaults to `1`), and optional `rotation` (defaults
+  to `"free"`). An empty array is allowed.
 - Dimensions must be positive finite numbers in one consistent unit. API values
   are not coerced from strings. Computed volumes must stay positive and finite.
 - Quantities must be positive safe integers. Quantities are expanded into
@@ -58,6 +61,30 @@ the error in its report field.
 - IDs may be strings or finite numbers. An omitted ID defaults to the item's
   zero-based array index. Duplicate IDs are allowed: `itemIndex` and
   `instanceIndex` distinguish every instance.
+
+### Rotation rules
+
+Set `rotation` independently on each item type:
+
+| Rule | Allowed orientations in the original container axes |
+| --- | --- |
+| `"free"` (default) | All six width/height/depth permutations. |
+| `"upright"` | Height stays on Y; width and depth may swap around that axis. |
+| `"fixed"` | Width stays on X, height on Y, and depth on Z. |
+
+```js
+const result = pack({
+  container: { width: 4, height: 3, depth: 2 },
+  items: [{ id: 'carton', width: 2, height: 3, depth: 4, rotation: 'upright' }]
+});
+// Fits as 4 × 3 × 2. With rotation: 'fixed', this carton would be unpacked.
+```
+
+The rules remain relative to the **original** container axes throughout the
+search, even when the solver changes its internal layer axes. They describe
+axis-aligned dimensions, not labeled faces, weight, or physical stability.
+Invalid rule values throw `TypeError`. Omitting the rule preserves the previous
+free-rotation behavior and result shape.
 
 ### Results
 
@@ -77,7 +104,9 @@ Each record contains `id`, `itemIndex` (zero-based input array index),
 `instanceIndex` (zero-based within that item's quantity), and `dimensions`.
 Packed records also contain `position: { x, y, z }`, the minimum corner in the
 **original container axes**. Width maps to X, height to Y, and depth to Z.
-For packed records, `dimensions` describes the rotated width/height/depth in
+Constrained records include `rotation: "upright"` or `rotation: "fixed"` in both
+`placements` and `unpacked`. Free-rotation records omit this field for backward
+compatibility. For packed records, `dimensions` describes the rotated width/height/depth in
 those axes. Unpacked records keep the original dimensions and have no position.
 
 A packed record from the example above looks like:
@@ -122,15 +151,18 @@ compiler dependencies, and CI configuration are excluded.
 
 For local inspection, `npm pack` creates `3dbinpackingjs-0.1.0.tgz`. A separate
 application can install that file with `npm install /path/to/3dbinpackingjs-0.1.0.tgz`.
-Public npm publication remains disabled pending the license decision.
+Public npm publication remains disabled pending verified upstream permissions.
 
 ## Interactive browser demo
 
-Open `index.html` directly in a modern browser. No build step, server, CDN, or
-additional runtime dependency is required. Choose one of four examples (mixed
-cartons, exact fit, partial fit, or the three-box regression), or edit the
+Use the [online demo](https://keremdemirer.github.io/3dbinpackingjs/) or open
+`index.html` directly in a modern browser. No build step, server, CDN, or
+additional runtime dependency is required. Choose one of five examples (mixed
+cartons, exact fit, partial fit, upright rotation, or the three-box regression), or edit the
 container and add/remove box types, then select **Calculate packing**.
 
+- Set each box type’s rotation rule with its **Rotation** selector. The “Keep it
+  upright” example fits with a width/depth swap; choosing Fixed makes it unpacked.
 - Drag to orbit, Shift-drag or right-drag to pan, and scroll to zoom.
 - Touch: one finger orbits; two fingers pan and pinch to zoom.
 - With the canvas focused, arrow keys orbit, Shift + arrows pan, + / − zoom,
@@ -157,8 +189,8 @@ load `pack.js` before `pack1.js`. The library entry points and solver are unchan
 
 ## Limitations
 
-The heuristic does not guarantee optimality. Boxes may rotate freely, and the
-solver does not model weight, load bearing, support, or upright-only constraints.
+The heuristic does not guarantee optimality. Items rotate according to their
+rotation rules. The solver does not model weight, load bearing, or support.
 Decimal inputs are accepted, but a general decimal precision policy is not yet
 provided; prefer consistent integer units where possible. The solver runs on the
 calling thread; large problems may block the browser UI.
@@ -193,3 +225,15 @@ controls, snapshot callbacks, and unavailable-WebGL fallback. These are unit
 checks with a mocked WebGL context, not GPU-rendering tests. Browser rendering,
 example loading, box inspection, responsive layout, and downloaded PNG/JSON
 outputs were also checked manually during development.
+
+Rotation tests force all six internal axis variants, independently validate
+allowed dimensions, and cover mixed rules, quantities, repeated dimensions/IDs,
+layer selection/scoring, cubic-container search, invalid rules, and 300 seeded
+mixed-rule cases. Existing free-rotation placement fingerprints remain unchanged.
+
+## GitHub Pages
+
+The live demo is served from `master` at the repository root using GitHub Pages.
+Merging changes to `master` updates the hosted demo; unmerged PRs are not deployed.
+The `.nojekyll` marker keeps this a plain static site. All asset URLs are relative,
+so the app works under the `/3dbinpackingjs/` project path.

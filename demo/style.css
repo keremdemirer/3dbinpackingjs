@@ -596,3 +596,18 @@ canvas:active {
     grid-template-columns:minmax(60px,1.4fr) repeat(4,minmax(35px,1fr)) 24px;
   }
 }
+
+.rotation-field {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 3px 0 10px;
+  color: #708078;
+  font-size: 10px;
+}
+.rotation-field select {
+  flex: 1;
+  padding: 6px 26px 6px 8px;
+  font-size: 10px;
+}

@@ -9,11 +9,16 @@ export interface Dimensions {
 
 export type ItemId = string | number;
 
+/** Upright preserves original Y height and permits width/depth swaps; fixed preserves X/Y/Z. */
+export type RotationRule = 'free' | 'upright' | 'fixed';
+
 export interface Item extends Dimensions {
   /** Defaults to the item's zero-based input array index. Duplicate IDs are allowed. */
   id?: ItemId;
   /** Positive safe integer; defaults to 1. */
   quantity?: number;
+  /** Defaults to free. Rules are measured in the original container axes. */
+  rotation?: RotationRule;
 }
 
 export interface PackInput {
@@ -28,6 +33,8 @@ export interface Position {
 }
 
 export interface ItemInstance {
+  /** Present for upright/fixed instances; omitted for free rotation for compatibility. */
+  rotation?: Exclude<RotationRule, 'free'>;
   id: ItemId;
   /** Zero-based index in the input items array. */
   itemIndex: number;

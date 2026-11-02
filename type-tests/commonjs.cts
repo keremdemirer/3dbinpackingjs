@@ -24,3 +24,7 @@ api.pack();
 api.pack({ container: { width: '2', height: 1, depth: 1 }, items: [] });
 // @ts-expect-error Item IDs must be strings or numbers.
 api.pack({ container: input.container, items: [{ id: {}, width: 1, height: 1, depth: 1 }] });
+
+const constrained = api.pack({ container: input.container, items: [{ width: 1, height: 1, depth: 1, rotation: 'fixed' }] });
+const rule: 'upright' | 'fixed' | undefined = constrained.placements[0]?.rotation;
+void rule;

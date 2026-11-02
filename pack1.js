@@ -14,18 +14,18 @@
       'PERCENTAGE OF PACKED BOXES (VOLUME) : ' + (result.totalItemVolume ? result.packedVolume / result.totalItemVolume * 100 : 0),
       '',
       '*** PACKED BOXES ***',
-      'ID | Item index | Instance index | X Y Z | Packed width height depth'
+      'ID | Item index | Instance index | Rotation | X Y Z | Packed width height depth'
     ];
     result.placements.forEach(function(item) {
       var p = item.position;
       var d = item.dimensions;
-      lines.push([item.id, item.itemIndex, item.instanceIndex,
+      lines.push([item.id, item.itemIndex, item.instanceIndex, item.rotation || 'free',
         [p.x, p.y, p.z].join(' '), [d.width, d.height, d.depth].join(' ')].join(' | '));
     });
     lines.push('', '*** LIST OF UNPACKED BOXES ***');
     result.unpacked.forEach(function(item) {
       var d = item.dimensions;
-      lines.push([item.id, item.itemIndex, item.instanceIndex,
+      lines.push([item.id, item.itemIndex, item.instanceIndex, item.rotation || 'free',
         [d.width, d.height, d.depth].join(' ')].join(' | '));
     });
     return lines.join('\n');
@@ -41,12 +41,14 @@
           depth: Number(document.getElementById('strzz').value)
         },
         items: Array.from(document.getElementsByClassName('box-inputs'), function(row) {
+          var rotation = row.querySelector ? row.querySelector('[name="rotation"]') : row.children.rotation;
           return {
             id: row.children.lbl.value,
             width: Number(row.children.dim1.value),
             height: Number(row.children.dim2.value),
             depth: Number(row.children.dim3.value),
-            quantity: Number(row.children.boxn.value)
+            quantity: Number(row.children.boxn.value),
+            rotation: rotation ? rotation.value : undefined
           };
         })
       });

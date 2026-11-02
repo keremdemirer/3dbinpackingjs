@@ -51,9 +51,15 @@
         })
       });
       screen.value = formatReport(result);
+      if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
+        root.dispatchEvent(new root.CustomEvent('packing:result', { detail: result }));
+      }
       return 0;
     } catch (error) {
       screen.value = error.message;
+      if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
+        root.dispatchEvent(new root.CustomEvent('packing:error', { detail: error.message }));
+      }
       return 1;
     }
   };

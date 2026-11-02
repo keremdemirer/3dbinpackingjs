@@ -6,6 +6,12 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Interactive 3D browser demo for [issue #5], with orbit/pan/zoom, mouse/touch/
+  keyboard controls, box inspection, four examples, utilization and unpacked-item
+  summaries, JSON export, and PNG export. Works without a server or CDN.
+- Viewer geometry/control tests, WebGL fallback, and demo assets in the package
+  archive. Changes to inputs disable exports until the result is recalculated.
+
 - Standalone `pack({ container, items })` API for CommonJS, Node.js ES modules,
   and plain browser scripts, with structured placements, unpacked instances,
   item IDs, coordinates, dimensions, volumes, counts, and diagnostics. [#12]
@@ -39,3 +45,5 @@ clarification before public publication; see [license status](LICENSE-STATUS.md)
 
 [#11]: https://github.com/keremdemirer/3dbinpackingjs/pull/11
 [#12]: https://github.com/keremdemirer/3dbinpackingjs/pull/12
+
+[issue #5]: https://github.com/keremdemirer/3dbinpackingjs/issues/5

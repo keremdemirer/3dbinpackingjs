@@ -29,7 +29,8 @@
     "index.html",
     "README.md",
     "CHANGELOG.md",
-    "LICENSE-STATUS.md"
+    "LICENSE-STATUS.md",
+    "demo/"
   ],
   "scripts": {
     "test": "node --test",

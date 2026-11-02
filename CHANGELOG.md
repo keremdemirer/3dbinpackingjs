@@ -4,7 +4,17 @@
 
 No npm version or GitHub release has been published by these changes.
 
+### Changed
+
+- Reuse each quantity group's first-unpacked cursor within a search trial instead
+  of rescanning its packed prefix. Cursors reset for every trial and call; item
+  order and packing results remain unchanged. Singleton groups skip cursor work.
+
 ### Added
+
+- Complete-result parity fixtures from the pre-optimization solver for 176
+  benchmark/seeded cases, including settling, and an alternating-order timing
+  comparison with raw samples and environment/source hashes.
 
 - Optional `settle: true` downward post-pass in original Y coordinates, preserving
   packed volume, identities and rotation rules. Fixes the reported upright

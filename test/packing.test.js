@@ -149,7 +149,8 @@ test('fresh layers after changing orientation', () => {
 test('item selection never crosses an exhausted group', () => {
   const s = session();
   s.run([4,4,4], [[1,1,1,2],[2,2,2,1]]);
-  s.inspect('boxlist[1].packst=1;boxlist[2].packst=1;boxlist[3].packst=0;findbox(4,4,4,4,4)');
+  // Simulate a fresh trial: resetting packing flags also resets its cursor cache.
+  s.inspect('nextUnpacked=[];boxlist[1].packst=1;boxlist[2].packst=1;boxlist[3].packst=0;findbox(4,4,4,4,4)');
   assert.equal(s.inspect('boxi'), 3);
   s.inspect('boxlist[3].packst=1;findbox(4,4,4,4,4)');
   assert.equal(s.inspect('boxi'), 0);

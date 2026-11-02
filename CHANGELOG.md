@@ -6,6 +6,12 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Optional `settle: true` downward post-pass in original Y coordinates, preserving
+  packed volume, identities and rotation rules. Fixes the reported upright
+  floating stack (base heights 1/3/5 become 0/2/4). Enabled by a demo checkbox;
+  disabled by default in the API. Does not certify stability or remove overhangs.
+- Settling regression/property checks and before/after corpus benchmark reports.
+
 - Direct base-contact diagnostics in benchmark reports and the demo, including
   the reported 78.125% arrangement. Warnings and box inspection expose partial
   or absent contact without claiming physical stability or changing the solver.

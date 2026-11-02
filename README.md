@@ -54,6 +54,7 @@ the error in its report field.
 - `items`: an array of objects with the same three dimension fields, optional
   `id`, optional `quantity` (defaults to `1`), and optional `rotation` (defaults
   to `"free"`). An empty array is allowed.
+- `settle`: optional boolean, defaults to `false`. See downward settling below.
 - Dimensions must be positive finite numbers in one consistent unit. API values
   are not coerced from strings. Computed volumes must stay positive and finite.
 - Quantities must be positive safe integers. Quantities are expanded into
@@ -85,6 +86,33 @@ search, even when the solver changes its internal layer axes. They describe
 axis-aligned dimensions, not labeled faces, weight, or physical stability.
 Invalid rule values throw `TypeError`. Omitting the rule preserves the previous
 free-rotation behavior and result shape.
+
+### Optional downward settling
+
+Set `settle: true` on the request to close vertical gaps after packing:
+
+```js
+const result = pack({
+  container: { width: 12, height: 10, depth: 8 },
+  items: [{ width: 2, height: 7, depth: 5, quantity: 5, rotation: 'upright' }],
+  settle: true
+});
+console.log(result.diagnostics.settling); // { movedCount, totalDrop }
+```
+
+This deterministic post-pass lowers boxes along the original **Y axis**, bottom
+first, until the floor or another box blocks the fall. X/Z coordinates,
+orientations, identities, placement order, packed count, and volume are preserved.
+The API defaults to disabled for compatibility; the demo enables it with a
+“Settle boxes downward” checkbox. Uncheck it to inspect the original arrangement.
+JSON exports and the text report use the same final coordinates as the viewer.
+
+Settling uses O(n²) footprint checks and O(n) extra storage for n packed boxes.
+It does not repack leftover items, move boxes sideways, or remove overhangs.
+Any positive area of contact stops a fall; weight, balance, strength, and center
+of mass are not modeled. Contact warnings remain relevant after settling.
+`diagnostics.settling` is present only when enabled: `movedCount` counts changed
+boxes and `totalDrop` sums their vertical distances in the input unit.
 
 ### Results
 

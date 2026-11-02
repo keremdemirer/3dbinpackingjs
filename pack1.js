@@ -35,6 +35,7 @@
     var screen = document.getElementById('screen');
     try {
       var result = root.BinPacking.pack({
+        settle: document.getElementById('settle') ? document.getElementById('settle').checked : false,
         container: {
           width: Number(document.getElementById('strxx').value),
           height: Number(document.getElementById('stryy').value),

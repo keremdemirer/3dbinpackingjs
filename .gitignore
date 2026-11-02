@@ -2,3 +2,5 @@ node_modules/
 *.tgz
 bench/results/ci.*
 bench/results/*.cpuprofile
+
+bench/results/ci-settling.*

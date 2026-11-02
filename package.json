@@ -38,7 +38,8 @@
     "check": "npm test && npm run test:types",
     "bench": "node bench/run.js",
     "bench:quick": "node bench/run.js --quick --samples 1 --warmup 0",
-    "bench:check": "node bench/run.js --samples 1 --warmup 0 --baseline bench/baseline.json --check-quality"
+    "bench:check": "node bench/run.js --samples 1 --warmup 0 --baseline bench/baseline.json --check-quality",
+    "bench:settling": "node bench/settling.js"
   },
   "engines": {
     "node": ">=22"

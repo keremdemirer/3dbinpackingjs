@@ -28,3 +28,9 @@ api.pack({ container: input.container, items: [{ id: {}, width: 1, height: 1, de
 const constrained = api.pack({ container: input.container, items: [{ width: 1, height: 1, depth: 1, rotation: 'fixed' }] });
 const rule: 'upright' | 'fixed' | undefined = constrained.placements[0]?.rotation;
 void rule;
+
+const settled = api.pack({ ...input, settle: true });
+const moved: number | undefined = settled.diagnostics.settling?.movedCount;
+void moved;
+// @ts-expect-error Settling requires a boolean.
+api.pack({ ...input, settle: 'yes' });

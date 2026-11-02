@@ -158,3 +158,16 @@ costs or portable optimization priorities. Raw CPU profiles are ignored by Git.
 CI runs the full one-sample quality check on Node 22/24 and uploads the JSON and
 Markdown reports as artifacts. CI timings are observations on shared runners;
 they never cause a failure merely for being slower.
+
+## Optional settling comparison
+
+Run `npm run bench:settling -- --output bench/results/settling-node24.json` to
+compare the unchanged default mode with `settle: true` across the 25-case corpus
+and the reported upright floating-stack example. Every timed result is validated
+outside timing. The run fails on changed packed count/volume, invalid geometry,
+or any remaining box with no direct base contact. Unit tests also verify downward
+clearance, unchanged identities/rotations/X/Z, determinism and disabled parity.
+The original quality baseline stays unchanged. Recorded timings include search
+and the optional O(n²) settling post-pass; they do not isolate its cost. Compare
+raw samples and environments, not a single ratio. Zero absent contact is not a
+stability guarantee. Reports are in `bench/results/settling-node24.*`.

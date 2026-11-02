@@ -64,7 +64,7 @@
     warning.textContent='Geometric fit only: '+incomplete+' '+(incomplete===1?'box does':'boxes do')+' not have full base contact ('+contact.noContact+' with no contact, '+contact.partialContact+' partial). This is not a validated loading plan.';
     fresh=true; viewer.setResult(result);
     text('packed-count',result.packedCount+' / '+result.totalCount); text('utilization',(result.utilization*100).toFixed(1)+'%'); text('unpacked-count',result.unpacked.length);
-    text('view-state',result.container.width+' × '+result.container.height+' × '+result.container.depth+' · original container axes');
+    text('view-state',result.container.width+' × '+result.container.height+' × '+result.container.depth+' · original container axes'+(result.diagnostics.settling?' · settled downward':''));
     var select=byId('placement-select'); select.replaceChildren(new Option('Select a packed box','')); select.disabled=!result.placements.length;
     result.placements.forEach(function(item,i) { select.add(new Option(String(item.id)+' · instance '+(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')',String(i))); });
     selectBox(-1);

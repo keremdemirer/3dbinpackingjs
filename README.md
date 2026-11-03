@@ -92,7 +92,9 @@ contact. See the [demo guide](docs/DEMO.md) for controls and exports.
   Weight, balance, and load-bearing strength are not modeled; overhangs may remain.
 - Prefer integer dimensions in consistent units. A general decimal precision
   policy is not provided.
-- Large synchronous calculations can block the browser UI.
+- The online demo calculates in a cancellable background worker. The synchronous
+  library API and direct-file demo fallback can block the calling thread; displaying
+  very large results can still pause the demo.
 
 ## Development
 

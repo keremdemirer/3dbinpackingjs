@@ -16,6 +16,11 @@ No npm version or GitHub release has been published by these changes.
 
 ### Added
 
+- Background packing and base-contact analysis in the hosted demo, with Cancel,
+  outdated-result protection, and an explicit synchronous fallback. The library
+  API remains synchronous. Worker lifecycle and result-parity tests cover both
+  search and settling modes.
+
 - Optional `search: 'extended'` two-pass search, retaining the standard winner
   unless the alternate layer-growing policy packs strictly more volume. Standard
   remains the default; rotations and optional settling apply to both modes.

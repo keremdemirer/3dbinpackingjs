@@ -36,3 +36,10 @@ allowed dimensions, and cover mixed rules, quantities, repeated dimensions/IDs,
 layer selection/scoring, cubic-container search, invalid rules, and 300 seeded
 mixed-rule cases. Existing free-rotation placement fingerprints remain unchanged.
 
+
+Demo runner tests cover cancellation, replacement requests, queued stale replies,
+worker errors and explicit synchronous fallback. Worker-protocol tests execute
+the actual worker script with real solver and contact-analysis imports in a
+Node worker harness, comparing both search and settling modes to synchronous
+results and checking invalid-input recovery. This harness does not simulate
+browser worker loading restrictions.

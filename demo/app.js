@@ -1,4 +1,4 @@
-/* Demo-only UI. Packing decisions come entirely from BinPacking.pack via main(). */
+/* Demo UI. The same standalone solver runs in a worker, with an explicit local fallback. */
 (function() {
   'use strict';
   var examples={
@@ -11,7 +11,7 @@
     regression:{container:[3,3,3],items:[['Box 1',3,3,2,1],['Box 2',3,2,1,1],['Box 3',3,1,1,1]]}
   };
   var contact=null;
-  var result=null, fresh=false, busy=false, rowId=0, viewAvailable=true;
+  var result=null, fresh=false, rowId=0, viewAvailable=true;
   function byId(id) { return document.getElementById(id); }
   function text(id,value) { byId(id).textContent=value; }
   var jsonButton=byId('export-json'), pngButton=byId('export-png');
@@ -21,6 +21,7 @@
   });
   function state(message,error) { text('status',message); byId('status').classList.toggle('error',!!error); }
   function stale() {
+    runner.cancel();
     fresh=false; jsonButton.disabled=true; pngButton.disabled=true;
     text('view-state',result?'Previous result · inputs changed':'Calculate to see your load');
     state('Inputs changed. Calculate to update the arrangement.');
@@ -58,8 +59,8 @@
       var cell=document.createElement('div'), dt=document.createElement('dt'), dd=document.createElement('dd'); dt.textContent=pair[0]; dd.textContent=pair[1]; cell.append(dt,dd); dl.appendChild(cell);
     }); details.appendChild(dl);
   }
-  function update(value) {
-    result=value; contact=PackingSupport.analyze(result);
+  function update(value,analysis) {
+    result=value; contact=analysis||PackingSupport.analyze(result);
     var warning=byId('support-warning');
     warning.hidden=!(contact.noContact||contact.partialContact);
     var incomplete=contact.noContact+contact.partialContact;
@@ -89,25 +90,46 @@
     state(result.packedCount+' of '+result.totalCount+' boxes packed. '+result.unpacked.length+' unpacked. '+
       (result.packedCount?'Click a box to inspect it.':result.totalCount?'Change the container or load and calculate again.':'Add a box type to get started.'));
   }
+  var runner=PackingRunner.create({
+    createWorker:typeof Worker==='function'&&location.protocol!=='file:'?function(){return new Worker('demo/packing-worker.js');}:null,
+    solve:function(input) { var value=BinPacking.pack(input);return {result:value,contact:PackingSupport.analyze(value)}; },
+    onMode:function(background) { byId('calculation-notice').hidden=background; },
+    onState:function(value) {
+      byId('packing-form').setAttribute('aria-busy',String(value.busy));
+      byId('calculate').disabled=value.busy;
+      byId('cancel').hidden=!value.busy;
+      byId('cancel').disabled=!value.background;
+    },
+    onResult:function(value) { update(value.result,value.contact);PackingForm.showResult(value.result); },
+    onError:function(message) { PackingForm.showError(message); }
+  });
   function calculate() {
-    if (busy) return;
-    busy=true; fresh=false; jsonButton.disabled=true; pngButton.disabled=true; byId('calculate').disabled=true;
+    if(!byId('packing-form').reportValidity())return;
+    fresh=false;jsonButton.disabled=true;pngButton.disabled=true;
+    text('view-state',result?'Previous result · calculating':'Calculating your arrangement');
     state('Calculating your arrangement…');
-    // Let the busy state paint before invoking the synchronous solver.
-    setTimeout(function() {
-      try { main(); }
-      finally { busy=false; byId('calculate').disabled=false; }
-    },0);
+    try { runner.run(PackingForm.readInput()); }
+    catch(error) { runner.cancel();PackingForm.showError(error.message); }
+  }
+  function cancelCalculation() {
+    if(!runner.cancel())return;
+    fresh=false;jsonButton.disabled=true;pngButton.disabled=true;
+    text('view-state',result?'Previous result · calculation cancelled':'Calculation cancelled');
+    state('Calculation cancelled. Calculate again when ready.');
   }
   function download(href,name) {
     var link=document.createElement('a'); link.href=href; link.download=name; document.body.appendChild(link); link.click(); link.remove();
   }
-  window.addEventListener('packing:result',function(event) { update(event.detail); });
+  window.addEventListener('packing:result',function(event) {
+    if(event.detail!==result){runner.cancel();update(event.detail);}
+  });
   window.addEventListener('packing:error',function(event) {
+    runner.cancel();
     result=null; contact=null; byId('support-warning').hidden=true; fresh=false; viewer.setResult(null); selectBox(-1); byId('placement-select').replaceChildren(new Option('No packed boxes','')); byId('placement-select').disabled=true;
     ['packed-count','utilization','unpacked-count'].forEach(function(id) { text(id,'—'); });
     text('view-state','Check your input'); text('legend',''); text('unpacked-list','No current result.'); jsonButton.disabled=true; pngButton.disabled=true; state(event.detail,true);
   });
+  byId('cancel').addEventListener('click',cancelCalculation);
   byId('packing-form').addEventListener('submit',function(event) { event.preventDefault(); calculate(); });
   byId('packing-form').addEventListener('input',stale);
   byId('example').addEventListener('change',loadExample);

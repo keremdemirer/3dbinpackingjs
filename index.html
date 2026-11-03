@@ -100,7 +100,8 @@
           </section>
           <label class="settle-option"><input id="settle" type="checkbox" checked> Settle boxes downward</label>
           <p class="helper settle-help">Closes gaps below boxes. Overhangs may remain.</p>
-          <button id="calculate" class="primary-button" type="submit">Calculate packing <span aria-hidden="true">→</span></button>
+          <div class="calculation-actions"><button id="calculate" class="primary-button" type="submit">Calculate packing <span aria-hidden="true">→</span></button><button id="cancel" type="button" hidden>Cancel</button></div>
+          <p id="calculation-notice" class="helper" role="status" hidden>Background calculation is unavailable. Calculations run on this page; cancellation is unavailable while they run.</p>
           <p class="helper algorithm-note">Set rotation per box type. This heuristic finds a useful arrangement; it does not guarantee an optimal or physically supported load.</p>
         </form>
       </aside>
@@ -158,6 +159,7 @@ console.log(result.utilization); // 1 (100%)</code></pre>
   <script src="pack1.js"></script>
   <script src="demo/viewer.js"></script>
   <script src="demo/support.js"></script>
+  <script src="demo/runner.js"></script>
   <script src="demo/app.js"></script>
 </body>
 </html>

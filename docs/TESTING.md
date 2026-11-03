@@ -43,3 +43,10 @@ the actual worker script with real solver and contact-analysis imports in a
 Node worker harness, comparing both search and settling modes to synchronous
 results and checking invalid-input recovery. This harness does not simulate
 browser worker loading restrictions.
+
+Demo rendering integration tests exercise the actual app and form adapter with
+a minimal DOM harness: a 10,001-placement result keeps at most 100 selectable
+instances per page, supports final-page and canvas selection, resets for small
+and empty results, and exports all instances. Report tests count formatting
+accesses to verify deferred generation, caching, replacement and error cleanup.
+These checks do not measure browser frame times.

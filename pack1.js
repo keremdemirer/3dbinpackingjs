@@ -54,13 +54,30 @@
       })
     };
   }
+  var pendingReport = null, reportDetails = null;
+  function renderReport() {
+    if (pendingReport && (!reportDetails || reportDetails.open)) {
+      document.getElementById('screen').value = formatReport(pendingReport);
+      pendingReport = null;
+    }
+  }
   function showResult(result) {
-    document.getElementById('screen').value = formatReport(result);
+    var screen = document.getElementById('screen');
+    var details = screen.closest ? screen.closest('details') : null;
+    if (details !== reportDetails) {
+      if (reportDetails) reportDetails.removeEventListener('toggle', renderReport);
+      reportDetails = details;
+      if (reportDetails) reportDetails.addEventListener('toggle', renderReport);
+    }
+    pendingReport = result;
+    screen.value = '';
+    renderReport();
     if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
       root.dispatchEvent(new root.CustomEvent('packing:result', { detail: result }));
     }
   }
   function showError(message) {
+    pendingReport = null;
     document.getElementById('screen').value = message;
     if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
       root.dispatchEvent(new root.CustomEvent('packing:error', { detail: message }));

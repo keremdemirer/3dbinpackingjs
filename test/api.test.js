@@ -110,5 +110,5 @@ test('standalone core needs no DOM or console and exposes only its browser names
 test('the HTML example loads the core before its form adapter', () => {
   const html = readFileSync(path.join(__dirname, '../index.html'), 'utf8');
   const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(scripts, ['pack.js', 'pack1.js', 'demo/viewer.js', 'demo/support.js', 'demo/app.js']);
+  assert.deepEqual(scripts, ['pack.js', 'pack1.js', 'demo/viewer.js', 'demo/support.js', 'demo/runner.js', 'demo/app.js']);
 });

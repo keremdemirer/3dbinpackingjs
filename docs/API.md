@@ -38,7 +38,8 @@ For a browser without a bundler, load the core and use its namespace:
 ```
 
 The core does not access the DOM, print output, or store shared solver state.
-`pack()` is synchronous. Input objects are not modified, and returned objects
+`pack()` is synchronous. The included hosted demo runs it in a Web Worker and
+provides cancellation without changing this library API. Input objects are not modified, and returned objects
 belong to that call. Invalid input throws `TypeError`; the browser form displays
 the error in its report field.
 

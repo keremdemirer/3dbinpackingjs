@@ -635,3 +635,7 @@ canvas:active {
 .project-guide pre { max-width:100%; overflow-x:auto; padding:20px; border-radius:10px; background:#f2f5f1; font-size:13px; line-height:1.6; }
 .no-script { padding:18px; margin-bottom:24px; }
 @media(max-width:760px) { .project-guide { padding:22px; } .project-guide h2 { font-size:21px; } }
+
+.calculation-actions { display:flex; align-items:stretch; gap:10px; }
+.calculation-actions .primary-button { flex:1; min-width:0; }
+.calculation-actions #cancel { border-color:#c2a186; color:#7b4726; }

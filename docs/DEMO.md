@@ -8,6 +8,9 @@ additional runtime dependency is required. Choose one of six examples (mixed
 cartons, exact fit, partial fit, upright rotation, the known full-container fit, or the three-box regression), or edit the
 container and add/remove box types, then select **Calculate packing**.
 
+- On the hosted demo, packing and base-contact analysis run in a background
+  worker. **Cancel** stops the active calculation. Editing inputs or loading an
+  example cancels the previous request, and outdated results are ignored.
 - **Search effort** defaults to Standard. Extended runs one extra search pass
   when useful and can take longer. Choose **Known full-container fit** to compare
   the standard 95% result with the extended 100% arrangement. Changing search
@@ -32,9 +35,11 @@ is unavailable, the summary, box selector, text report, and JSON export still
 work. The 3D viewer and PNG export are unavailable in that case. The image is a
 view of the geometry, not a physical stability assessment.
 
-`pack1.js` remains the form/report adapter and emits `packing:result` and
+`pack1.js` exposes `PackingForm` helpers for reading inputs and displaying reports.
+Its legacy `main()` function remains synchronous. It is the form/report adapter and emits `packing:result` and
 `packing:error` browser events for the demo. The included page loads `pack.js`,
-`pack1.js`, `demo/viewer.js`, `demo/support.js`, and `demo/app.js` in that order and uses
+`pack1.js`, `demo/viewer.js`, `demo/support.js`, `demo/runner.js`, and `demo/app.js`
+in that order and uses
 `demo/style.css`. Custom pages that only need the original text adapter still
 load `pack.js` before `pack1.js`. 
 
@@ -43,6 +48,17 @@ load `pack.js` before `pack1.js`.
 The heuristic does not guarantee optimality. Items rotate according to their
 rotation rules. The solver does not model weight, load bearing, or support.
 Decimal inputs are accepted, but a general decimal precision policy is not yet
-provided; prefer consistent integer units where possible. The solver runs on the
-calling thread; large problems may block the browser UI.
+provided; prefer consistent integer units where possible.
+
+Opening `index.html` directly uses an explicitly labelled synchronous fallback:
+Cancel is unavailable once computation begins. Browsers without worker support
+also use this fallback. A background-worker runtime failure shows an error; the
+next explicit calculation uses local mode, without silently repeating expensive
+work. Serve the checkout over HTTP to use workers locally, for example with
+`python3 -m http.server 8765`, then open `http://localhost:8765/`.
+
+The worker loads `pack.js` and `demo/support.js` using relative same-origin paths,
+including on GitHub project Pages. Rendering, building the report and populating
+inspection controls still happen on the page; very large results can pause these
+steps. The standalone `pack()` API remains synchronous.
 

@@ -32,39 +32,47 @@
     return lines.join('\n');
   }
 
+  function readInput() {
+    return {
+      search: document.getElementById('search') ? document.getElementById('search').value : undefined,
+      settle: document.getElementById('settle') ? document.getElementById('settle').checked : false,
+      container: {
+        width: Number(document.getElementById('strxx').value),
+        height: Number(document.getElementById('stryy').value),
+        depth: Number(document.getElementById('strzz').value)
+      },
+      items: Array.from(document.getElementsByClassName('box-inputs'), function(row) {
+        var rotation = row.querySelector ? row.querySelector('[name="rotation"]') : row.children.rotation;
+        return {
+          id: row.children.lbl.value,
+          width: Number(row.children.dim1.value),
+          height: Number(row.children.dim2.value),
+          depth: Number(row.children.dim3.value),
+          quantity: Number(row.children.boxn.value),
+          rotation: rotation ? rotation.value : undefined
+        };
+      })
+    };
+  }
+  function showResult(result) {
+    document.getElementById('screen').value = formatReport(result);
+    if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
+      root.dispatchEvent(new root.CustomEvent('packing:result', { detail: result }));
+    }
+  }
+  function showError(message) {
+    document.getElementById('screen').value = message;
+    if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
+      root.dispatchEvent(new root.CustomEvent('packing:error', { detail: message }));
+    }
+  }
+  root.PackingForm = { readInput: readInput, formatReport: formatReport, showResult: showResult, showError: showError };
   root.main = function() {
-    var screen = document.getElementById('screen');
     try {
-      var result = root.BinPacking.pack({
-        search: document.getElementById('search') ? document.getElementById('search').value : undefined,
-        settle: document.getElementById('settle') ? document.getElementById('settle').checked : false,
-        container: {
-          width: Number(document.getElementById('strxx').value),
-          height: Number(document.getElementById('stryy').value),
-          depth: Number(document.getElementById('strzz').value)
-        },
-        items: Array.from(document.getElementsByClassName('box-inputs'), function(row) {
-          var rotation = row.querySelector ? row.querySelector('[name="rotation"]') : row.children.rotation;
-          return {
-            id: row.children.lbl.value,
-            width: Number(row.children.dim1.value),
-            height: Number(row.children.dim2.value),
-            depth: Number(row.children.dim3.value),
-            quantity: Number(row.children.boxn.value),
-            rotation: rotation ? rotation.value : undefined
-          };
-        })
-      });
-      screen.value = formatReport(result);
-      if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
-        root.dispatchEvent(new root.CustomEvent('packing:result', { detail: result }));
-      }
+      showResult(root.BinPacking.pack(readInput()));
       return 0;
     } catch (error) {
-      screen.value = error.message;
-      if (typeof root.dispatchEvent === 'function' && typeof root.CustomEvent === 'function') {
-        root.dispatchEvent(new root.CustomEvent('packing:error', { detail: error.message }));
-      }
+      showError(error.message);
       return 1;
     }
   };

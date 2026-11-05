@@ -6,6 +6,10 @@ No npm version or GitHub release has been published by these changes.
 
 ### Changed
 
+- Page the demo packed-box selector in groups of 100 and generate text reports
+  only when opened. Every instance remains reachable and JSON exports stay
+  complete; standalone text-adapter pages retain immediate reports.
+
 - Reuse repeated eligible-height scores within each layer-selection call, retaining
   original candidate order, floating-point summation and ties. Scores are discarded
   between calls as the unpacked set changes. No packing/API behavior changes.

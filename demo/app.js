@@ -11,6 +11,7 @@
     regression:{container:[3,3,3],items:[['Box 1',3,3,2,1],['Box 2',3,2,1,1],['Box 3',3,1,1,1]]}
   };
   var contact=null;
+  var placementPage=0, pageSize=100;
   var result=null, fresh=false, rowId=0, viewAvailable=true;
   function byId(id) { return document.getElementById(id); }
   function text(id,value) { byId(id).textContent=value; }
@@ -48,7 +49,24 @@
     ['strxx','stryy','strzz'].forEach(function(id,i) { byId(id).value=example.container[i]; });
     byId('box-input-screen').replaceChildren(); example.items.forEach(addRow); stale(); calculate();
   }
+  function showPlacementPage(page) {
+    var count=result?result.placements.length:0, pages=Math.max(1,Math.ceil(count/pageSize));
+    placementPage=Math.max(0,Math.min(pages-1,page));
+    var select=byId('placement-select'); select.replaceChildren(new Option('Select a packed box','')); select.disabled=!count;
+    var start=placementPage*pageSize, end=Math.min(count,start+pageSize);
+    for(var i=start;i<end;i++) {
+      var item=result.placements[i];
+      select.add(new Option(String(item.id)+' · instance '+(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')',String(i)));
+    }
+    byId('placement-pages').hidden=count<=pageSize;
+    byId('placement-page').value=placementPage+1; byId('placement-page').max=pages;
+    byId('placement-page').disabled=!count;
+    byId('placement-previous').disabled=placementPage===0;
+    byId('placement-next').disabled=placementPage===pages-1;
+    text('placement-range',count?'Boxes '+(start+1)+'–'+end+' of '+count+' · '+pages+' pages':'No packed boxes');
+  }
   function selectBox(index) {
+    if(result&&index>=0&&index<result.placements.length&&Math.floor(index/pageSize)!==placementPage)showPlacementPage(Math.floor(index/pageSize));
     var select=byId('placement-select'); select.value=index<0?'':String(index); viewer.select(index);
     var details=byId('inspection-details'); details.replaceChildren();
     if (!result || index<0 || !result.placements[index]) { details.textContent='Select a box to see its position and rotated dimensions.'; return; }
@@ -68,14 +86,14 @@
     fresh=true; viewer.setResult(result);
     text('packed-count',result.packedCount+' / '+result.totalCount); text('utilization',(result.utilization*100).toFixed(1)+'%'); text('unpacked-count',result.unpacked.length);
     text('view-state',result.container.width+' × '+result.container.height+' × '+result.container.depth+' · original container axes'+(result.diagnostics.settling?' · settled downward':''));
-    var select=byId('placement-select'); select.replaceChildren(new Option('Select a packed box','')); select.disabled=!result.placements.length;
-    result.placements.forEach(function(item,i) { select.add(new Option(String(item.id)+' · instance '+(item.instanceIndex+1)+' (item '+(item.itemIndex+1)+')',String(i))); });
+    showPlacementPage(0);
     selectBox(-1);
     var groups=new Map();
-    result.placements.concat(result.unpacked).forEach(function(item) {
+    function countItem(item) {
       if (!groups.has(item.itemIndex)) groups.set(item.itemIndex,{id:item.id,packed:0,total:0,unpacked:0,dimensions:item.dimensions,rotation:item.rotation});
       var group=groups.get(item.itemIndex); group.total++; if (item.position) group.packed++; else { group.unpacked++; group.dimensions=item.dimensions; }
-    });
+    }
+    result.placements.forEach(countItem); result.unpacked.forEach(countItem);
     var legend=byId('legend'), remaining=byId('unpacked-list'); legend.replaceChildren(); remaining.replaceChildren();
     Array.from(groups.entries()).sort(function(a,b) { return a[0]-b[0]; }).forEach(function(entry) {
       var index=entry[0], group=entry[1], row=document.createElement('div'); row.className='legend-row';
@@ -125,7 +143,7 @@
   });
   window.addEventListener('packing:error',function(event) {
     runner.cancel();
-    result=null; contact=null; byId('support-warning').hidden=true; fresh=false; viewer.setResult(null); selectBox(-1); byId('placement-select').replaceChildren(new Option('No packed boxes','')); byId('placement-select').disabled=true;
+    result=null; contact=null; byId('support-warning').hidden=true; fresh=false; viewer.setResult(null); selectBox(-1); showPlacementPage(0);
     ['packed-count','utilization','unpacked-count'].forEach(function(id) { text(id,'—'); });
     text('view-state','Check your input'); text('legend',''); text('unpacked-list','No current result.'); jsonButton.disabled=true; pngButton.disabled=true; state(event.detail,true);
   });
@@ -134,6 +152,17 @@
   byId('packing-form').addEventListener('input',stale);
   byId('example').addEventListener('change',loadExample);
   byId('add-box').addEventListener('click',function() { addRow(['Box '+(rowId+1),1,1,1,1]); stale(); byId('box-input-screen').lastElementChild.querySelector('input').focus(); });
+  byId('placement-previous').addEventListener('click',function() { showPlacementPage(placementPage-1);selectBox(-1); });
+  byId('placement-next').addEventListener('click',function() { showPlacementPage(placementPage+1);selectBox(-1); });
+  byId('placement-page').addEventListener('input',function() {
+    var page=Number(this.value);
+    if(Number.isInteger(page)&&page>=1&&page<=Number(this.max)){showPlacementPage(page-1);selectBox(-1);}
+  });
+  byId('placement-page').addEventListener('change',function() {
+    var page=Number(this.value);
+    if(Number.isInteger(page)&&page>=1){showPlacementPage(page-1);selectBox(-1);}
+    else this.value=placementPage+1;
+  });
   byId('placement-select').addEventListener('change',function() { selectBox(this.value===''?-1:Number(this.value)); });
   byId('zoom-in').addEventListener('click',function() { viewer.zoom(1.2); });
   byId('zoom-out').addEventListener('click',function() { viewer.zoom(1/1.2); });

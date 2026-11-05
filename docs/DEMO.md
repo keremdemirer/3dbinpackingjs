@@ -21,11 +21,17 @@ container and add/remove box types, then select **Calculate packing**.
 - Touch: one finger orbits; two fingers pan and pinch to zoom.
 - With the canvas focused, arrow keys orbit, Shift + arrows pan, + / − zoom,
   and 0 resets the view. Buttons also provide zoom and reset controls.
+- The packed-box selector shows up to 100 instances per page. Use Previous/Next
+  or enter a page number to reach every instance. Clicking a box in the 3D view
+  automatically opens its selector page.
 - Click a box to inspect its ID, instance, position, rotated dimensions, and
   volume and direct base contact. The selector reaches occluded boxes too; the selected box has an
   orange outline. Colors follow input item type, with an eight-color palette.
 - Summary cards show packed counts and volume utilization. The breakdown lists
   packed quantities by type and groups unpacked instances.
+- **View text report** generates the complete report when opened. A collapsed
+  report does no formatting work when results arrive; reopening an unchanged
+  report reuses its text.
 - **Export JSON** downloads the API result. **Save PNG** downloads the current
   3D camera view, including its selected-box outline. Changing inputs disables
   exports until recalculation; the old view is clearly marked as a previous result.
@@ -58,7 +64,8 @@ work. Serve the checkout over HTTP to use workers locally, for example with
 `python3 -m http.server 8765`, then open `http://localhost:8765/`.
 
 The worker loads `pack.js` and `demo/support.js` using relative same-origin paths,
-including on GitHub project Pages. Rendering, building the report and populating
-inspection controls still happen on the page; very large results can pause these
-steps. The standalone `pack()` API remains synchronous.
+including on GitHub project Pages. Rendering and grouping the result still happen on the page. The selector
+creates at most 100 instance options at a time, while full text reports and JSON
+exports are generated only on request and include every instance. Very large
+results can still pause rendering or these explicitly requested operations. The standalone `pack()` API remains synchronous.
 

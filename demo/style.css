@@ -639,3 +639,9 @@ canvas:active {
 .calculation-actions { display:flex; align-items:stretch; gap:10px; }
 .calculation-actions .primary-button { flex:1; min-width:0; }
 .calculation-actions #cancel { border-color:#c2a186; color:#7b4726; }
+
+.placement-pages { margin-top: 12px; }
+.placement-pages p { font-size: .85rem; color: var(--muted); }
+.placement-navigation { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.placement-navigation label { display: flex; align-items: center; gap: 6px; }
+.placement-navigation input { width: 5.5em; padding: 8px; }

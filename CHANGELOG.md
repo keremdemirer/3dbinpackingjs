@@ -6,6 +6,11 @@ No npm version or GitHub release has been published by these changes.
 
 ### Changed
 
+- Cache demo box, container and grid geometry in WebGL buffers across camera
+  changes and snapshots. Selection updates only its outline. New results, clearing
+  and graphics-context restoration refresh the cache. Includes upload regression
+  tests and a reproducible CPU-side comparison against the previous viewer.
+
 - Page the demo packed-box selector in groups of 100 and generate text reports
   only when opened. Every instance remains reachable and JSON exports stay
   complete; standalone text-adapter pages retain immediate reports.

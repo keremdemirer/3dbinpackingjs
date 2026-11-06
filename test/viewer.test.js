@@ -98,13 +98,18 @@ test('legacy form adapter emits successful results and input errors for the demo
 });
 
 function viewerHarness(available=true) {
-  const handlers={}, selected=[], messages=[], matrices=[];
-  const gl={isContextLost:()=>false,createShader:()=>({}),createProgram:()=>({}),createBuffer:()=>({}),
+  const handlers={}, selected=[], messages=[], matrices=[], uploads=[], draws=[];
+  let bound, nextBuffer=0, lost=false;
+  const buffers=new Map();
+  const gl={isContextLost:()=>lost,createShader:()=>({}),createProgram:()=>({}),createBuffer:()=>++nextBuffer,
     getShaderParameter:()=>true,getProgramParameter:()=>true,getAttribLocation:()=>0,getUniformLocation:()=>({}),
     uniformMatrix4fv:(_location,_transpose,matrix)=>matrices.push(Array.from(matrix))};
   for (const name of ['shaderSource','compileShader','attachShader','linkProgram','deleteShader','enable','depthFunc',
-    'bindBuffer','bufferData','enableVertexAttribArray','vertexAttribPointer','drawArrays','viewport',
+    'enableVertexAttribArray','vertexAttribPointer','drawArrays','viewport',
     'clearColor','clear','useProgram','polygonOffset','disable']) gl[name]=()=>{};
+  gl.bindBuffer=(_target,buffer)=>{bound=buffer;};
+  gl.bufferData=(_target,data)=>{buffers.set(bound,Array.from(data));uploads.push({buffer:bound,length:data.length});};
+  gl.drawArrays=(mode,start,count)=>draws.push({buffer:bound,mode,start,count,data:buffers.get(bound)});
   const captured=new Set();
   const canvas={width:800,height:400,getContext:()=>available?gl:null,
     getBoundingClientRect:()=>({left:0,top:0,width:800,height:400}),
@@ -116,7 +121,7 @@ function viewerHarness(available=true) {
   const viewer=context.PackingView.create(canvas,index=>selected.push(index),message=>messages.push(message));
   viewer.setResult(pack({container:{width:1,height:1,depth:2},items:[{width:1,height:1,depth:1,quantity:2}]}));
   function fire(name,values={}) { handlers[name]({preventDefault(){},pointerId:1,clientX:400,clientY:200,buttons:1,...values}); }
-  return {viewer,fire,selected,messages,matrices,last:()=>matrices.at(-1)};
+  return {viewer,fire,selected,messages,matrices,uploads,draws,buffers,lose:value=>{lost=value;},last:()=>matrices.at(-1)};
 }
 
 test('pointer dragging orbits without selecting, while a click selects a box', () => {
@@ -144,4 +149,49 @@ test('snapshot uses PNG blobs and a missing WebGL context has a usable fallback'
   assert.match(fallback.messages[0],/unavailable/);
   fallback.viewer.snapshot(value=>blob=value); assert.equal(blob,null);
   fallback.viewer.reset(); fallback.viewer.zoom(1.2); fallback.viewer.select(0);
+});
+
+
+test('camera changes and snapshots reuse geometry; selection uploads only its small overlay', () => {
+  const h=viewerHarness();
+  const initial=h.uploads.length, geometry=h.draws.slice(-3).map(draw=>draw.data);
+  assert.deepEqual(h.draws.slice(-3).map(draw=>draw.count),[72,74,48]);
+  h.viewer.zoom(1.1);h.fire('keydown',{key:'ArrowRight'});h.fire('keydown',{key:'ArrowUp',shiftKey:true});h.viewer.reset();
+  h.viewer.snapshot(()=>{});
+  assert.equal(h.uploads.length,initial);
+  assert.deepEqual(h.draws.slice(-3).map(draw=>draw.data),geometry);
+  h.viewer.select(1);
+  assert.equal(h.uploads.length,initial+1);
+  assert.equal(h.uploads.at(-1).length,144);
+  assert.equal(h.draws.at(-1).count,24);
+  h.viewer.select(1);h.viewer.zoom(1.1);
+  assert.equal(h.uploads.length,initial+1);
+  h.viewer.select(-1);
+  assert.equal(h.uploads.at(-1).length,0);
+  assert.equal(h.uploads.length,initial+2);
+});
+
+test('result replacement, clearing and context restoration invalidate cached buffers', () => {
+  const h=viewerHarness(), first=h.draws.slice(-3).map(draw=>draw.data);
+  const value=pack({container:{width:3,height:2,depth:1},items:[{id:'new',width:1,height:1,depth:1}]});
+  let before=h.uploads.length;
+  h.viewer.setResult(value);
+  assert.equal(h.uploads.length,before+4);
+  assert.equal(h.draws.at(-3).count,36);
+  assert.notDeepEqual(h.draws.at(-3).data,first[0]);
+  h.viewer.select(0);
+  const scene=h.draws.slice(-4).map(draw=>draw.data);
+  before=h.uploads.length;
+  h.lose(true);h.fire('webglcontextlost');h.viewer.zoom(1.1);
+  assert.equal(h.uploads.length,before);
+  h.lose(false);h.fire('webglcontextrestored');
+  assert.equal(h.uploads.length,before+4);
+  assert.deepEqual(h.draws.slice(-4).map(draw=>draw.data),scene);
+  assert.ok(h.draws.at(-1).buffer>4);
+  const drawCount=h.draws.length;
+  h.viewer.setResult(null);
+  assert.equal(h.draws.length,drawCount);
+  assert.deepEqual(h.uploads.slice(-4).map(upload=>upload.length),[0,0,0,0]);
+  h.viewer.setResult({...value,placements:[]});
+  assert.equal(h.draws.at(-1).count,74); // empty container frame and grid remain visible
 });

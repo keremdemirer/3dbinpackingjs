@@ -1,0 +1,151 @@
+{
+  "description": "CPU geometry and mocked WebGL command submission only; excludes GPU execution, browser layout and actual frame latency.",
+  "node": "v24.22.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M1 Max",
+  "baselineRef": "05e09785aeeca24d37828c20901b2d8a955a72da",
+  "baselineSourceSha256": "f6157fc4b62cf5ed5744a4f004eef57adc9fd7d7be5ab501e57bf643bd4b9643",
+  "currentSourceSha256": "9e485e0d073aae52cb8399b23d78ef5e46970ccd15a81cb99efabb93064e5159",
+  "drawPayloadParity": true,
+  "rows": [
+    {
+      "placements": 100,
+      "frames": 20,
+      "samples": {
+        "baseline": [
+          {
+            "setupMs": 1.5250839999999997,
+            "cameraMs": 25.132292,
+            "cameraUploads": 60,
+            "cameraBytes": 2915520
+          },
+          {
+            "setupMs": 1.886958000000007,
+            "cameraMs": 21.40854200000001,
+            "cameraUploads": 60,
+            "cameraBytes": 2915520
+          },
+          {
+            "setupMs": 1.3732499999999987,
+            "cameraMs": 19.924583999999996,
+            "cameraUploads": 60,
+            "cameraBytes": 2915520
+          }
+        ],
+        "current": [
+          {
+            "setupMs": 1.6949999999999932,
+            "cameraMs": 0.11700000000000443,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          },
+          {
+            "setupMs": 1.6766659999999973,
+            "cameraMs": 0.07387500000000102,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          },
+          {
+            "setupMs": 5.014582999999988,
+            "cameraMs": 0.06366700000000947,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          }
+        ]
+      }
+    },
+    {
+      "placements": 1000,
+      "frames": 20,
+      "samples": {
+        "baseline": [
+          {
+            "setupMs": 12.121499999999997,
+            "cameraMs": 202.98012500000002,
+            "cameraUploads": 60,
+            "cameraBytes": 28835520
+          },
+          {
+            "setupMs": 10.719499999999982,
+            "cameraMs": 209.38750000000005,
+            "cameraUploads": 60,
+            "cameraBytes": 28835520
+          },
+          {
+            "setupMs": 11.527207999999973,
+            "cameraMs": 200.25633300000004,
+            "cameraUploads": 60,
+            "cameraBytes": 28835520
+          }
+        ],
+        "current": [
+          {
+            "setupMs": 10.59212500000001,
+            "cameraMs": 0.12633399999998574,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          },
+          {
+            "setupMs": 12.525000000000034,
+            "cameraMs": 0.06749999999999545,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          },
+          {
+            "setupMs": 9.676541000000043,
+            "cameraMs": 0.06404199999997218,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          }
+        ]
+      }
+    },
+    {
+      "placements": 10000,
+      "frames": 20,
+      "samples": {
+        "baseline": [
+          {
+            "setupMs": 107.88570900000002,
+            "cameraMs": 2054.305709,
+            "cameraUploads": 60,
+            "cameraBytes": 288035520
+          },
+          {
+            "setupMs": 102.01774999999998,
+            "cameraMs": 1975.498083,
+            "cameraUploads": 60,
+            "cameraBytes": 288035520
+          },
+          {
+            "setupMs": 102.140042,
+            "cameraMs": 1970.4232919999995,
+            "cameraUploads": 60,
+            "cameraBytes": 288035520
+          }
+        ],
+        "current": [
+          {
+            "setupMs": 103.39125000000013,
+            "cameraMs": 0.06624999999985448,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          },
+          {
+            "setupMs": 94.42224999999962,
+            "cameraMs": 0.06141699999989214,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          },
+          {
+            "setupMs": 100.68162500000017,
+            "cameraMs": 0.06387499999982538,
+            "cameraUploads": 0,
+            "cameraBytes": 0
+          }
+        ]
+      }
+    }
+  ]
+}

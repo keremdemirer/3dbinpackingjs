@@ -50,3 +50,33 @@ instances per page, supports final-page and canvas selection, resets for small
 and empty results, and exports all instances. Report tests count formatting
 accesses to verify deferred generation, caching, replacement and error cleanup.
 These checks do not measure browser frame times.
+
+## Viewer geometry reuse
+
+Viewer tests track buffer uploads across camera changes, snapshots and selection.
+They check result replacement, clearing, empty loads and context restoration.
+The initial geometry is uploaded once per result; selecting another box uploads
+only its 24-vertex outline. Camera-only redraws upload no vertex data.
+
+To compare against the viewer before caching:
+
+```sh
+node bench/viewer.js --baseline-ref 05e09785aeeca24d37828c20901b2d8a955a72da
+```
+
+The benchmark first compares draw-time vertex payloads across initialization,
+selection, camera changes, snapshot, context restoration and result replacement.
+It then alternates baseline/current measurement order over three samples at
+100, 1,000 and 10,000 placements, with 20 camera redraws per sample. Raw samples,
+source hashes and environment details are in
+[`bench/reports/viewer-cache.json`](../bench/reports/viewer-cache.json).
+
+On the recorded machine, 20 redraws at 10,000 placements took a median 1,975.5 ms
+before caching and 0.064 ms afterward in the mock harness. Camera vertex uploads
+fell to zero. These are CPU geometry/submission measurements with mocked WebGL,
+not browser frame times or GPU speedups. Initial geometry construction, GPU
+drawing and linear ray picking still scale with the number of placements.
+
+Caching retains approximately 1,440 bytes of face/edge vertex data per placement
+on the GPU, plus the small frame and selection buffers and driver overhead.
+The cache is refreshed per result and emptied when the result is cleared.

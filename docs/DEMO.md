@@ -36,6 +36,10 @@ container and add/remove box types, then select **Calculate packing**.
   3D camera view, including its selected-box outline. Changing inputs disables
   exports until recalculation; the old view is clearly marked as a previous result.
 
+Box, container and grid geometry stays in GPU buffers between camera changes.
+Selecting a box updates only its outline; new results and graphics-context
+restoration rebuild the geometry. Clearing a result clears the cached buffers.
+
 Rendering uses WebGL with depth testing and original-axis coordinates. If WebGL
 is unavailable, the summary, box selector, text report, and JSON export still
 work. The 3D viewer and PNG export are unavailable in that case. The image is a

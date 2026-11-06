@@ -61,7 +61,7 @@
     return found;
   }
   function create(canvas,onSelect,onStatus) {
-    var result=null, selected=-1, gl, program, buffer;
+    var result=null, selected=-1, gl, program, meshes, geometryDirty=true, selectionDirty=true;
     var camera={yaw:0.68,pitch:0.48,zoom:1.25,panX:0,panY:0};
     var pointers=new Map(), gesture=null, moved=false, travel=0;
     function init() {
@@ -78,35 +78,29 @@
       gl.attachShader(program,vertex); gl.attachShader(program,fragment); gl.linkProgram(program);
       gl.deleteShader(vertex); gl.deleteShader(fragment);
       if (!gl.getProgramParameter(program,gl.LINK_STATUS)) throw new Error('Unable to initialize the 3D viewer.');
-      buffer=gl.createBuffer();
+      meshes={};
+      ['solid','outlines','frame','selection'].forEach(function(name) { meshes[name]={buffer:gl.createBuffer(),count:0}; });
+      geometryDirty=true; selectionDirty=true;
       gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL);
       onStatus('');
     }
-    function draw(vertices,mode) {
-      if (!vertices.length) return;
-      gl.bindBuffer(gl.ARRAY_BUFFER,buffer);
-      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.DYNAMIC_DRAW);
+    function upload(name,vertices) {
+      var mesh=meshes[name]; mesh.count=vertices.length/6;
+      gl.bindBuffer(gl.ARRAY_BUFFER,mesh.buffer);
+      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(vertices),gl.STATIC_DRAW);
+    }
+    function draw(name,mode) {
+      var mesh=meshes[name]; if (!mesh.count) return;
+      gl.bindBuffer(gl.ARRAY_BUFFER,mesh.buffer);
       var p=gl.getAttribLocation(program,'a_position'), c=gl.getAttribLocation(program,'a_color');
       gl.enableVertexAttribArray(p); gl.vertexAttribPointer(p,3,gl.FLOAT,false,24,0);
       gl.enableVertexAttribArray(c); gl.vertexAttribPointer(c,3,gl.FLOAT,false,24,12);
-      gl.drawArrays(mode,0,vertices.length/6);
+      gl.drawArrays(mode,0,mesh.count);
     }
-    function render() {
-      if (!gl || gl.isContextLost()) return;
-      var rect=canvas.getBoundingClientRect(), ratio=Math.min(root.devicePixelRatio||1,2);
-      var width=Math.max(1,Math.round(rect.width*ratio)), height=Math.max(1,Math.round(rect.height*ratio));
-      if (canvas.width!==width || canvas.height!==height) { canvas.width=width; canvas.height=height; }
-      gl.viewport(0,0,width,height); gl.clearColor(0.955,0.967,0.96,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
-      if (!result) return;
-      gl.useProgram(program);
-      var b=basis(camera), h=halfSize(camera,width,height), r=b.right, u=b.up, n=b.toward;
-      gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_matrix'),false,new Float32Array([
-        r[0]/h[0],u[0]/h[1],-n[0]/4,0, r[1]/h[0],u[1]/h[1],-n[1]/4,0,
-        r[2]/h[0],u[2]/h[1],-n[2]/4,0, camera.panX/h[0],camera.panY/h[1],0,1
-      ]));
-      var solid=[], outlines=[], frame=[], selection=[];
-      function line(list,a,z,color) { list.push.apply(list,a.concat(color,z,color)); }
-      result.placements.forEach(function(item,index) {
+    function line(list,a,z,color) { list.push.apply(list,a.concat(color,z,color)); }
+    function buildGeometry() {
+      var solid=[], outlines=[], frame=[];
+      result.placements.forEach(function(item) {
         var points=corners(bounds(result,item)), color=rgb(colorFor(item.itemIndex));
         faces.forEach(function(face,f) {
           [0,1,2,0,2,3].forEach(function(i) {
@@ -114,7 +108,6 @@
           });
         });
         edges.forEach(function(e) { line(outlines,points[e[0]],points[e[1]],[0.16,0.27,0.25]); });
-        if (index===selected) edges.forEach(function(e) { line(selection,points[e[0]],points[e[1]],[0.98,0.34,0.12]); });
       });
       var box=corners(bounds(result,{position:{x:0,y:0,z:0},dimensions:result.container}));
       edges.forEach(function(e) { line(frame,box[e[0]],box[e[1]],[0.36,0.46,0.43]); });
@@ -126,10 +119,42 @@
       [[0,[0.82,0.32,0.29]],[1,[0.22,0.53,0.34]],[2,[0.29,0.45,0.78]]].forEach(function(pair) {
         var end=box[0].slice(); end[pair[0]]+=0.16; line(frame,box[0],end,pair[1]);
       });
-      gl.enable(gl.POLYGON_OFFSET_FILL); gl.polygonOffset(1,1); draw(solid,gl.TRIANGLES); gl.disable(gl.POLYGON_OFFSET_FILL);
-      draw(frame,gl.LINES); draw(outlines,gl.LINES);
+      upload('solid',solid); upload('outlines',outlines); upload('frame',frame);
+      geometryDirty=false;
+    }
+    function buildSelection() {
+      var selection=[], item=result.placements[selected];
+      if(item) {
+        var points=corners(bounds(result,item));
+        edges.forEach(function(e) { line(selection,points[e[0]],points[e[1]],[0.98,0.34,0.12]); });
+      }
+      upload('selection',selection); selectionDirty=false;
+    }
+    function render() {
+      if (!gl || gl.isContextLost()) return;
+      var rect=canvas.getBoundingClientRect(), ratio=Math.min(root.devicePixelRatio||1,2);
+      var width=Math.max(1,Math.round(rect.width*ratio)), height=Math.max(1,Math.round(rect.height*ratio));
+      if (canvas.width!==width || canvas.height!==height) { canvas.width=width; canvas.height=height; }
+      gl.viewport(0,0,width,height); gl.clearColor(0.955,0.967,0.96,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+      if (!result) {
+        if(geometryDirty) {
+          Object.keys(meshes).forEach(function(name) { upload(name,[]); });
+          geometryDirty=false; selectionDirty=false;
+        }
+        return;
+      }
+      gl.useProgram(program);
+      var b=basis(camera), h=halfSize(camera,width,height), r=b.right, u=b.up, n=b.toward;
+      gl.uniformMatrix4fv(gl.getUniformLocation(program,'u_matrix'),false,new Float32Array([
+        r[0]/h[0],u[0]/h[1],-n[0]/4,0, r[1]/h[0],u[1]/h[1],-n[1]/4,0,
+        r[2]/h[0],u[2]/h[1],-n[2]/4,0, camera.panX/h[0],camera.panY/h[1],0,1
+      ]));
+      if(geometryDirty)buildGeometry();
+      if(selectionDirty)buildSelection();
+      gl.enable(gl.POLYGON_OFFSET_FILL); gl.polygonOffset(1,1); draw('solid',gl.TRIANGLES); gl.disable(gl.POLYGON_OFFSET_FILL);
+      draw('frame',gl.LINES); draw('outlines',gl.LINES);
       // A selected box stays identifiable even when another box occludes it.
-      gl.disable(gl.DEPTH_TEST); draw(selection,gl.LINES); gl.enable(gl.DEPTH_TEST);
+      gl.disable(gl.DEPTH_TEST); draw('selection',gl.LINES); gl.enable(gl.DEPTH_TEST);
     }
     function clamp() { camera.pitch=Math.max(-1.45,Math.min(1.45,camera.pitch)); camera.zoom=Math.max(0.35,Math.min(8,camera.zoom)); }
     function zoom(factor) { camera.zoom*=factor; clamp(); render(); }
@@ -190,8 +215,8 @@
     else root.addEventListener('resize',render);
     try { init(); render(); } catch(error) { gl=null; onStatus(error.message); }
     return {
-      setResult:function(value) { result=value; selected=-1; reset(); },
-      select:function(index) { selected=index; render(); },
+      setResult:function(value) { result=value; selected=-1; geometryDirty=true; selectionDirty=true; reset(); },
+      select:function(index) { if(selected!==index) { selected=index; selectionDirty=true; } render(); },
       zoom:zoom, reset:reset,
       snapshot:function(callback) {
         if (!gl || gl.isContextLost()) return callback(null);
